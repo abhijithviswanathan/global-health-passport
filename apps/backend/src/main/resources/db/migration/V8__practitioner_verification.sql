@@ -1,0 +1,1 @@
+CREATE TABLE practitioner_verification(user_id VARCHAR(36) PRIMARY KEY REFERENCES app_user(id),status VARCHAR(30) NOT NULL,evidence_reference VARCHAR(300) NOT NULL,verified_at VARCHAR(40) NOT NULL,reviewer_id VARCHAR(36) REFERENCES app_user(id));

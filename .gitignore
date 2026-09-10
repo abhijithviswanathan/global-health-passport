@@ -21,3 +21,10 @@ playwright-report/
 *.key
 *.p12
 .DS_Store
+.maven/
+*.tsbuildinfo
+apps/mobile/dist-android/
+
+__pycache__/
+*.pyc
+LOCAL_ACCESS.txt

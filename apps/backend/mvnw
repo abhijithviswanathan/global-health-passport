@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+set -eu
+cd "$(dirname "$0")"
+MAVEN_VERSION=3.9.11
+MAVEN_BASE="${MAVEN_CACHE_DIR:-./.maven}"
+if command -v mvn >/dev/null 2>&1; then exec mvn "$@"; fi
+if [ ! -x "$MAVEN_BASE/apache-maven-$MAVEN_VERSION/bin/mvn" ]; then
+ mkdir -p "$MAVEN_BASE"
+ base="https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/$MAVEN_VERSION/apache-maven-$MAVEN_VERSION-bin.tar.gz"
+ curl -fsSL "$base" -o "$MAVEN_BASE/maven.tar.gz"
+ curl -fsSL "$base.sha512" -o "$MAVEN_BASE/maven.sha512"
+ expected=$(tr -d '\r\n ' < "$MAVEN_BASE/maven.sha512")
+ actual=$(shasum -a 512 "$MAVEN_BASE/maven.tar.gz" | cut -d ' ' -f 1)
+ [ "$expected" = "$actual" ] || { echo 'Maven checksum verification failed' >&2; exit 1; }
+ tar -xzf "$MAVEN_BASE/maven.tar.gz" -C "$MAVEN_BASE"
+fi
+exec "$MAVEN_BASE/apache-maven-$MAVEN_VERSION/bin/mvn" "-Dmaven.repo.local=$MAVEN_BASE/repository" "$@"
