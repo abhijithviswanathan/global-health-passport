@@ -126,10 +126,7 @@ public class PassportApi {
       String uid = id();
       String health = null;
       if (role.equals("patient")) {
-        byte[] bits = new byte[16];
-        new SecureRandom().nextBytes(bits);
-        String raw = HexFormat.of().formatHex(bits).toUpperCase();
-        health = "HP-" + String.join("-", raw.split("(?<=\\G.{4})"));
+        health = HealthIds.generate();
       }
       db.update(
           "insert into app_user(id,username,display_name,role,password_hash,health_id,organization)"
@@ -544,7 +541,12 @@ public class PassportApi {
       throw error(403, "Clinical role required");
     String health = field(b, "healthId", 64), purpose = field(b, "purpose", 40);
     if (!purpose.equals("treatment")) throw error(400, "Only treatment is supported");
-    var found = db.queryForList("select id from app_user where health_id=?", health);
+    var found =
+        db.queryForList(
+            "select id from app_user where health_id=? union select user_id as id from"
+                + " health_id_alias where alias=?",
+            HealthIds.normalize(health),
+            HealthIds.normalize(health));
     if (!found.isEmpty()) {
       String p = found.getFirst().get("id").toString();
       String rid = id();

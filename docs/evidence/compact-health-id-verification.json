@@ -1,0 +1,16 @@
+{
+  "canonicalIdLength": 9,
+  "alphabet": "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+  "randomBits": 45,
+  "legacyAliasesPreserved": true,
+  "localDataMigration": "V8 to V10 passed, private pre-migration backup retained",
+  "migrationTests": "H2 preservation and restart stability; existing PostgreSQL data and alias association verified",
+  "collisionRetry": "forced real-database duplicate retried in new transaction; passed",
+  "backendPassed": 26,
+  "postgresWorkflowPassed": 7,
+  "browserPassed": 7,
+  "webBuild": "pass",
+  "typecheck": "pass",
+  "lint": "pass",
+  "format": "pass"
+}

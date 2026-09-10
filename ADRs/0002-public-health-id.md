@@ -1,5 +1,7 @@
 # ADR 0002: Random public Health ID
 
+The length decision below is superseded by ADR 0011 at the user’s request.
+
 Status: Accepted.
 
 ## Decision

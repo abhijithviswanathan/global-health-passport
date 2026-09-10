@@ -27,6 +27,7 @@ class IdentityTest {
   @Autowired ObjectMapper mapper;
   @Autowired JdbcTemplate db;
   @Autowired IdentityService identity;
+  @Autowired IdentityApi identityApi;
 
   class Client {
     HttpClient http =
@@ -235,7 +236,7 @@ class IdentityTest {
                 "New Patient",
                 "password",
                 "strong-test-password"));
-    assertTrue(registration.get("healthId").asText().matches("HP-[A-F0-9]{32}"));
+    assertTrue(registration.get("healthId").asText().matches("[A-HJ-NP-Z2-9]{9}"));
     assertFalse(registration.has("id"));
     assertEquals(
         409,
@@ -285,5 +286,40 @@ class IdentityTest {
                 "/auth/recover",
                 Map.of("username", "patient", "recoveryCode", "invalid", "newPassword", tooLong))
             .statusCode());
+  }
+
+  @Test
+  void registrationRetriesAnIdCollisionWithoutLosingUniqueness() throws Exception {
+    String existing =
+        db.queryForObject("select health_id from app_user where username='patient'", String.class);
+    String fresh = HealthIds.generate();
+    try (var generator =
+        org.mockito.Mockito.mockStatic(HealthIds.class, org.mockito.Mockito.CALLS_REAL_METHODS)) {
+      generator.when(HealthIds::generate).thenReturn(existing, fresh);
+      var request = new org.springframework.mock.web.MockHttpServletRequest();
+      request.setRemoteAddr("192.0.2.5");
+      request.getSession().setAttribute("csrf", "synthetic-test-csrf");
+      request.addHeader("X-CSRF-TOKEN", "synthetic-test-csrf");
+      var result =
+          identityApi.register(
+              Map.of(
+                  "username",
+                  "collisionpatient",
+                  "displayName",
+                  "Collision Patient",
+                  "password",
+                  "strong-test-password"),
+              request);
+      assertEquals(fresh, result.get("healthId"));
+      generator.verify(HealthIds::generate, org.mockito.Mockito.times(2));
+      assertEquals(
+          1,
+          db.queryForObject(
+              "select count(*) from app_user where health_id=?", Integer.class, existing));
+      assertEquals(
+          1,
+          db.queryForObject(
+              "select count(*) from app_user where health_id=?", Integer.class, fresh));
+    }
   }
 }

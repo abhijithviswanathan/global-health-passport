@@ -21,3 +21,7 @@ V4 adds encrypted-document metadata and scan state, V5 passkey credentials/one-t
 V8 adds practitioner verification status, evidence reference and verifying actor. Suspension atomically revokes active consents/sessions and pending passkey challenges. Organization membership remains simplified on the user record.
 
 Real-engine evidence: PostgreSQL 17.11 applied migrations V1–V8 and six HTTP workflow tests passed. Logical restoration matched 13 application tables, 7 sequence states and 36 audit events. This verifies the bounded fixture, not every domain/feature or production database operation; see backend POSTGRES_VERIFICATION.md.
+
+## Compact Health ID revision
+
+V9 adds `health_id_alias`; V10 migrates existing long IDs to unique nine-character IDs while preserving legacy lookup. Historical PostgreSQL restore evidence covers V1–V8; include `health_id_alias` in all future logical snapshots and restores.

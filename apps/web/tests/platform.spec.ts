@@ -63,6 +63,7 @@ async function createPatient(page: Page) {
   await dialog.getByRole("button", { name: "Return to sign in" }).click();
   await signIn(page, username, password);
   const me = await (await page.request.get("/api/me")).json();
+  expect(me.healthId).toMatch(/^[A-HJ-NP-Z2-9]{9}$/);
   return { username, name, password, id: me.id, healthId: me.healthId };
 }
 async function grant(page: Page, name: string) {

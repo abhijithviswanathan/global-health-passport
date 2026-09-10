@@ -5,7 +5,7 @@ This register retains all 46 sections of the original master prompt. **Partial m
 | Original section | Status | Delivered artifact/behavior | Remaining acceptance or dependency |
 |---|---|---|---|
 | 1 Product vision | Partial | Executable patient/provider records and sharing foundation | Complete typed lifetime history, institutional operations and real authorized participation |
-| 2 Global Health ID | Partial | Random 128-bit public ID, separate hidden numerical keys, synthetic registration | Verified contact linking/change, multiple channels, duplicate detection/reconciliation; never unsafe merge |
+| 2 Global Health ID | Partial | Nine-character random public ID (user-requested revision; historical IDs retained as aliases), separate hidden numerical keys, synthetic registration | Verified contact linking/change, multiple channels, duplicate detection/reconciliation; never unsafe merge |
 | 3 Patient application | Partial | Dashboard, records/timeline, sharing, medication records and history; bounded upload API | Full immunization/procedure/hospitalization/referral/diet/insurance/cost/appointment workflows and verified document UX |
 | 4 Medical timeline | Partial | Source-labelled chronological records, filtering, source-linked excerpts | All requested structured filters, clinical-time precision and full source/version mapping |
 | 5 Doctor portal | Partial | Requests, permitted records, encounters, orders, prescriptions and amendments | External credential validation, full clinical forms, QR scan, referral/signature and governed imaging workflows |

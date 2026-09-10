@@ -22,6 +22,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 class WorkflowTest {
   @LocalServerPort int port;
   @Autowired ObjectMapper mapper;
+  @Autowired org.springframework.jdbc.core.JdbcTemplate db;
 
   class Client {
     HttpClient http =
@@ -83,7 +84,8 @@ class WorkflowTest {
         "/access-requests",
         Map.of("healthId", p.identity.get("healthId").asText(), "purpose", "treatment"));
     long pendingRequests = 0;
-    for(var request:p.get("/access-requests")) if(request.get("status").asText().equals("pending")) pendingRequests++;
+    for (var request : p.get("/access-requests"))
+      if (request.get("status").asText().equals("pending")) pendingRequests++;
     assertEquals(1, pendingRequests);
     var cg =
         p.post(
@@ -513,5 +515,38 @@ class WorkflowTest {
     p.post("/access-requests/" + request + "/deny", Map.of());
     assertEquals(
         404, p.call("POST", "/access-requests/" + request + "/deny", Map.of()).statusCode());
+  }
+
+  @Test
+  void compactAndHistoricalIdsResolveWithoutGrantingClinicalAccess() throws Exception {
+    Client p = new Client().login("patient"), doctor = new Client().login("doctor");
+    String pid = p.identity.get("id").asText();
+    String compact = p.identity.get("healthId").asText();
+    assertTrue(HealthIds.isCompact(compact));
+    String legacy = "HP-" + UUID.randomUUID().toString().replace("-", "").toUpperCase();
+    db.update(
+        "insert into health_id_alias(alias,user_id) values(?,?)", HealthIds.normalize(legacy), pid);
+    String grantsBefore = p.get("/consents").toString();
+    int before = p.get("/access-requests").size();
+    doctor.post(
+        "/access-requests",
+        Map.of(
+            "healthId",
+            " "
+                + compact.substring(0, 3).toLowerCase()
+                + "-"
+                + compact.substring(3).toLowerCase()
+                + " ",
+            "purpose",
+            "treatment"));
+    doctor.post(
+        "/access-requests", Map.of("healthId", legacy.toLowerCase(), "purpose", "treatment"));
+    assertEquals(before + 2, p.get("/access-requests").size());
+    assertEquals(grantsBefore, p.get("/consents").toString());
+    assertEquals(compact, p.get("/me").get("healthId").asText());
+    var unknown =
+        doctor.post("/access-requests", Map.of("healthId", "NOTANID", "purpose", "treatment"));
+    assertTrue(unknown.has("message"));
+    assertEquals(before + 2, p.get("/access-requests").size());
   }
 }

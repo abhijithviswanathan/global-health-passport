@@ -5,7 +5,7 @@ MUST denotes a product obligation. Described target behavior is not proof of imp
 
 | ID | Requirement | Verification |
 |---|---|---|
-| SRS-ID-01 | Public Health IDs MUST contain at least 128 bits of cryptographic randomness, contain no PII, remain immutable and be unique | Generate samples, inspect generator, unique constraint and mutation test |
+| SRS-ID-01 | Public Health IDs MUST be 9 unambiguous letters/digits (45 cryptographically random bits), contain no PII, remain stable after assignment and be unique; preserve previous long IDs as lookup aliases | Generate samples, inspect generator, unique constraint and mutation test |
 | SRS-ID-02 | Recovery MUST require evidence beyond Health ID, DOB or a phone number | Recovery abuse tests; blocked until real recovery exists |
 | SRS-AUTH-01 | Server MUST authenticate protected operations and derive roles from trusted identity | Missing, expired, forged identity tests |
 | SRS-AUTH-02 | Provider production access MUST require verified organization/practitioner and strong authentication | OIDC/MFA/verification integration tests |

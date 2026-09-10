@@ -11,3 +11,7 @@
 - Executed backend/H2, real PostgreSQL workflow, bounded logical restore, FHIR, mobile, seven-test live-browser E2E/accessibility and dependency checks; retained exact evidence and limitations.
 - Remediated dependency advisories and password timing/UTF-8 boundary defects.
 - Added local startup/configuration, Docker recipes and verification/runbook documentation. Production deployment and complete master-product scope remain open.
+
+## Compact Health ID revision
+
+Health IDs now contain nine memorable letters/digits. Existing records retain stable UUIDs and historical long IDs remain valid for lookup. Case and separators are normalized; random ID collisions retry safely.

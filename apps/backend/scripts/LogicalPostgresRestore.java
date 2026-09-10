@@ -21,7 +21,8 @@ class LogicalPostgresRestore {
           "passkey_credential",
           "passkey_challenge",
           "medication_passport",
-          "practitioner_verification");
+          "practitioner_verification",
+          "health_id_alias");
 
   static String q(String n) {
     return "\"" + n.replace("\"", "\"\"") + "\"";

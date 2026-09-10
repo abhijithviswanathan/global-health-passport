@@ -34,29 +34,34 @@ public class IdentityApi {
         || (password.length() < 12 || password.getBytes(StandardCharsets.UTF_8).length > 72))
       throw error(400, "Use a valid username and at least 12 password characters");
     String uid = id();
-    byte[] random = new byte[16];
-    new SecureRandom().nextBytes(random);
-    String health = "HP-" + HexFormat.of().formatHex(random).toUpperCase();
-    try {
-      identity.tx.executeWithoutResult(
-          s -> {
-            api.db.update(
-                "insert into"
-                    + " app_user(id,username,display_name,role,password_hash,health_id,organization)"
-                    + " values(?,?,?,?,?,?,?)",
-                uid,
-                username,
-                name + " (Synthetic)",
-                "patient",
-                api.passwords.encode(password),
-                health,
-                "Synthetic self-registration");
-            api.audit(uid, uid, "PATIENT_REGISTERED", health);
-          });
-    } catch (DuplicateKeyException e) {
-      throw error(409, "Registration could not be completed");
+    String hash = api.passwords.encode(password);
+    for (int attempt = 0; attempt < 10; attempt++) {
+      String health = HealthIds.generate();
+      try {
+        identity.tx.executeWithoutResult(
+            s -> {
+              api.db.update(
+                  "insert into"
+                      + " app_user(id,username,display_name,role,password_hash,health_id,organization)"
+                      + " values(?,?,?,?,?,?,?)",
+                  uid,
+                  username,
+                  name + " (Synthetic)",
+                  "patient",
+                  hash,
+                  health,
+                  "Synthetic self-registration");
+              api.audit(uid, uid, "PATIENT_REGISTERED", health);
+            });
+        return Map.of("healthId", health, "username", username, "synthetic", true);
+      } catch (DuplicateKeyException e) {
+        // Retry a random Health ID collision in a fresh transaction (including PostgreSQL).
+        if (api.db.queryForObject(
+                "select count(*) from app_user where username=?", Integer.class, username)
+            > 0) throw error(409, "Registration could not be completed");
+      }
     }
-    return Map.of("healthId", health, "username", username, "synthetic", true);
+    throw error(503, "Unable to allocate a Health ID. Please retry.");
   }
 
   @GetMapping("/security/status")

@@ -1842,7 +1842,9 @@ export default function Home() {
                     onChange={(e) => setHealthId(e.target.value)}
                     required
                     maxLength={64}
-                    placeholder="HP-…"
+                    placeholder="e.g. K7M4RT9WX"
+                    autoCapitalize="characters"
+                    spellCheck={false}
                   />
                 </label>
                 <p className="field-help">
