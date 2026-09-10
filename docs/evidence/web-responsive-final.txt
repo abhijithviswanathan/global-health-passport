@@ -1,0 +1,12 @@
+
+> @health-passport/web@0.1.0 test:e2e
+> playwright test --grep responsive light --reporter=list
+
+
+Running 1 test using 1 worker
+
+(node:37172) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/platform.spec.ts:328:1 › responsive light/dark patient views meet automated WCAG checks (2.8s)
+
+  1 passed (3.3s)

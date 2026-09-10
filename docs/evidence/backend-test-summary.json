@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-10",
+  "command": "mvn -f apps/backend/pom.xml package",
+  "java": "21",
+  "springBoot": "3.5.16",
+  "result": "BUILD SUCCESS",
+  "tests": 29,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 6,
+  "suites": [
+    {
+      "suite": "org.healthpassport.WorkflowTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.PostgresWorkflowTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 6
+    },
+    {
+      "suite": "org.healthpassport.FhirMapperTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.PasskeyTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.IdentityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.OrganizationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.MedicationPassportTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.LearningTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.DocumentTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "org.healthpassport.FhirApiTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "limitations": [
+    "Passkeys protocol tests use generated authenticator material",
+    "Document tests use fake scanner; real ClamAV unverified",
+    "FHIR validation local official-R4 subset only",
+    "Six PostgreSQL cases skipped in default invocation; separate real PostgreSQL invocation passed six workflow cases, documented separately."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "scannedFiles": 127,
+  "findingCount": 2,
+  "findings": [
+    {
+      "path": "apps/backend/src/main/java/org/healthpassport/IdentityApi.java",
+      "line": 106,
+      "rule": "hardcoded_secret_assignment"
+    },
+    {
+      "path": "apps/backend/src/main/java/org/healthpassport/PassportApi.java",
+      "line": 115,
+      "rule": "hardcoded_secret_assignment"
+    }
+  ],
+  "notice": "Heuristic source-only pattern scan; fixture literals and descriptive strings may match. Values omitted. Not an independent secret scanner."
+}

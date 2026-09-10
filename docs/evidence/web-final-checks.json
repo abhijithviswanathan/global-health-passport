@@ -1,0 +1,16 @@
+{
+  "build": "pass: static export served through local API proxy",
+  "typecheck": "pass",
+  "lint": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "format": "pass",
+  "browserSuite": {
+    "passed": 7,
+    "failed": 0
+  },
+  "responsiveRecheck": "pass: populated synthetic patient, five widths, export-button bounds, dark mode, 200% text, WCAG tagged axe checks",
+  "productionDeployment": "not performed",
+  "nativeBinaryCompilation": "not verified"
+}

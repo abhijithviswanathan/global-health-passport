@@ -1,0 +1,28 @@
+{
+  "engine": "PostgreSQL 17.11",
+  "sourceDatabase": "passport_test",
+  "restoredDatabase": "passport_restored",
+  "migrationCount": 8,
+  "method": "Logical application-table snapshot via JDBC, freshly Flyway-migrated target, parameterized inserts",
+  "counts": {
+    "app_user": 6,
+    "consent": 3,
+    "clinical_record": 13,
+    "access_request": 2,
+    "audit_event": 36,
+    "identity_mfa": 0,
+    "recovery_code": 0,
+    "identity_session": 11,
+    "medical_document": 0,
+    "passkey_credential": 0,
+    "passkey_challenge": 0,
+    "medication_passport": 0,
+    "practitioner_verification": 3
+  },
+  "applicationDataSha256": "02ed66cc1cb19d80923a385c8f246c2290508c58a32a12edd0b42052ff1b6b52",
+  "sequenceCount": 7,
+  "sequenceStateEqual": true,
+  "auditEventsVerified": 36,
+  "allCanonicalRowsEqual": true,
+  "limitation": "Not pg_dump, physical backup, point-in-time recovery, external document blob restoration, key recovery, or a production disaster-recovery drill; empty feature tables do not establish populated-row restore coverage"
+}
