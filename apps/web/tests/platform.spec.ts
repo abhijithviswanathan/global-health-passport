@@ -106,6 +106,7 @@ test("complete registration, consent, clinician, laboratory, pharmacy and audit 
   const patient = await createPatient(page);
   await signOut(page);
   await signIn(page, "doctor");
+  await nav(page, "Patients");
   await page
     .getByRole("button", { name: "Request access", exact: true })
     .click();
@@ -127,6 +128,7 @@ test("complete registration, consent, clinician, laboratory, pharmacy and audit 
   await grant(page, "Harbor Pharmacy (Synthetic)");
   await signOut(page);
   await signIn(page, "doctor");
+  await nav(page, "Patient overview");
   await pick(page, "Select authorized patient", patient.name + " (Synthetic)");
   await nav(page, "Medical timeline");
   await page.getByRole("button", { name: "Add record", exact: true }).click();
@@ -166,8 +168,8 @@ test("complete registration, consent, clinician, laboratory, pharmacy and audit 
   await saveRecord(page);
   await signOut(page);
   await signIn(page, "lab");
-  await pick(page, "Select authorized patient", patient.name + " (Synthetic)");
   await nav(page, "Labs & imaging");
+  await pick(page, "Select authorized patient", patient.name + " (Synthetic)");
   await page.getByRole("button", { name: "Add a record", exact: true }).click();
   await addRecord(
     page,
@@ -178,8 +180,8 @@ test("complete registration, consent, clinician, laboratory, pharmacy and audit 
   await saveRecord(page);
   await signOut(page);
   await signIn(page, "pharmacy");
-  await pick(page, "Select authorized patient", patient.name + " (Synthetic)");
   await nav(page, "Medication Passport");
+  await pick(page, "Select authorized patient", patient.name + " (Synthetic)");
   await page
     .getByRole("button", { name: "Record dispensing", exact: true })
     .click();
@@ -240,6 +242,9 @@ test("patient notes preserve source and amendments; unsafe markup remains text",
   await expect(page.getByRole("dialog")).toContainText("Patient entered");
   await expect(page.getByRole("dialog").locator("img")).toHaveCount(0);
   await page.getByRole("button", { name: "Amend this record" }).click();
+  await page
+    .getByLabel("Correction reason", { exact: true })
+    .fill("Correcting the patient-reported detail after review");
   await page
     .getByRole("dialog")
     .getByRole("textbox", { name: "Clinical details", exact: true })

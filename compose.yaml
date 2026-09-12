@@ -22,13 +22,16 @@ services:
       DATABASE_USER: passport
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DOCUMENT_STORAGE_PATH: /app/data/documents
+      PHOTO_STORAGE_PATH: /app/data/photos
     depends_on:
       database:
         condition: service_healthy
     volumes:
       - clinical_files:/app/data
   web:
-    build: ./apps/web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
     ports:
       - '127.0.0.1:5173:8080'
     depends_on: [api]

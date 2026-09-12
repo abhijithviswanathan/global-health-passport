@@ -410,6 +410,8 @@ class WorkflowTest {
                 "Corrected note",
                 "details",
                 "Correction",
+                "correctionReason",
+                "Correcting the original patient report",
                 "replacesId",
                 first.get("id").asText()));
     assertEquals(first.get("id"), next.get("replaces_id"));
@@ -437,6 +439,8 @@ class WorkflowTest {
                     "Stale correction",
                     "details",
                     "No",
+                    "correctionReason",
+                    "Correcting the original patient report",
                     "replacesId",
                     first.get("id").asText()))
             .statusCode());

@@ -1,0 +1,17 @@
+**/node_modules
+**/target
+**/dist
+**/dist-android
+**/data
+**/.venv
+**/.env
+**/.env.*
+**/.git
+**/.runtime
+**/.maven
+**/.expo
+**/test-results
+**/playwright-report
+LOCAL_ACCESS.txt
+docs
+work

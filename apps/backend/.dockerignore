@@ -3,3 +3,6 @@ target
 .maven
 data
 .env*
+
+photo-check/.venv
+__pycache__

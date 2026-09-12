@@ -125,6 +125,13 @@ export type Audit = {
   event_hash: string;
 };
 export const kinds: Record<string, string> = {
+  vital: "Vitals",
+  history: "Medical history",
+  nursing_observation: "Nursing observations",
+  imaging_order: "Imaging requests",
+  referral: "Referrals",
+  follow_up: "Follow-up",
+  discharge: "Discharge",
   allergy: "Allergies",
   condition: "Conditions",
   medication: "Medications",

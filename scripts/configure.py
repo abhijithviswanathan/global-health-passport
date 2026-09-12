@@ -14,6 +14,6 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--show-accounts',action='store_true',help='Display the locally generated synthetic account password');args=parser.parse_args();path=configure();print(f'Local configuration: {path}')
     if args.show_accounts:
         settings=dict(line.split('=',1) for line in path.read_text().splitlines() if line and not line.startswith('#'))
-        print('Synthetic usernames: patient, doctor, lab, pharmacy, admin, security')
+        print('Synthetic usernames: patient, doctor, nurse, reception, lab, diagnostic, coordinator, pharmacy, admin, security')
         print('Initial seed password: '+settings.get('DEMO_PASSWORD','See backend data/demo-credentials.txt'))
         print('Changing this file does not reset existing accounts. These accounts are for local testing only.')

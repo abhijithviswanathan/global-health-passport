@@ -38,3 +38,12 @@ Start with one region, bounded connection pools, pagination and explicit indexes
 A runnable development bundle cannot establish production separation, KMS, protected audit retention, OIDC lifecycle, trusted clinical signing authority, backup recovery or partner interoperability. The source-of-truth and test reports identify actual implementation evidence; this document defines the destination and boundaries.
 
 Implemented bounded modules now include encrypted TOTP/recovery/session registry, maintained-library WebAuthn, encrypted file quarantine, local signed medication credentials and immutable synthetic-case search/source excerpts. These do not establish external identity verification, malware-scanner effectiveness, production key custody or clinical validation.
+
+
+## Organization ecosystem integration (V15–V18)
+
+The existing modular monolith is retained. `TenantService` provides stable tenancy, employment and privilege checks to legacy and new endpoints. `EcosystemApi` owns organization/workforce orchestration; `ClinicalOperationsApi` links existing clinical records/tasks to structured orders and nursing/handoffs; `InsuranceApi` separates consent-scoped coverage data from marketplace plans. `OrganizationEventsApi` emits bounded generic SSE/cursor notifications. `OrganizationFhirApi` projects authorized resources. `apps/shared/ecosystem-model.ts` provides both UI contracts.
+
+A single database and application authorization isolate tenants; this is not physical database isolation or PostgreSQL row-level security. Tenant foreign keys and composite organization/node/employee references prevent invalid local hierarchy relationships. Row/version checks and existing transactional locks protect mutation. Process-local sessions and synchronization remain single-instance deployment limitations. External-provider calls are bounded but synchronous; production workload/queue sizing must be validated.
+
+See ADRs 0012–0014 and [Organization ecosystem](ORGANIZATION_ECOSYSTEM.md). The actual application now includes staff as well as patient native screens; earlier patient-only architecture descriptions are superseded by this section.

@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-10",
+  "scope": "Mobile parity for short Health ID, Back/Home navigation and doctor scheduling/documentation",
+  "unitAndTransportTests": {
+    "passed": 14,
+    "failed": 0
+  },
+  "typeScript": "passed",
+  "nativeExports": {
+    "ios": {
+      "status": "passed",
+      "kind": "Metro/Hermes JavaScript bundle, not signed native binary",
+      "sha256": "39d53f232588fb410768acf36367fbfe293a606607826325a4892127e8f7c801"
+    },
+    "android": {
+      "status": "passed",
+      "kind": "Metro/Hermes JavaScript bundle, not signed native binary",
+      "sha256": "383fa669985f21657a30d784082b9b353c97a15743f0c2b0d4fcb203640c6b98"
+    }
+  },
+  "uiHarness": {
+    "stats": {
+      "startTime": "2026-09-10T11:34:47.396Z",
+      "duration": 6313.1230000000005,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "actualSource": "apps/mobile/App.tsx and src/ClinicianWorkspace.tsx rendered with React Native Web",
+    "crossClientJourney": "Mobile booking/rescheduling/check-in; save draft on mobile; edit same draft in actual web portal; reject stale mobile write; reload and complete once on mobile",
+    "otherJourneys": [
+      "patient navigation and nine-character ID",
+      "revoked consent removes mobile chart"
+    ],
+    "responsiveWidths": [
+      390,
+      320,
+      768
+    ],
+    "automatedAxe": "No violations in checked doctor home widths",
+    "nativeSubstitutes": [
+      "SecureStore",
+      "LocalAuthentication",
+      "StatusBar",
+      "Alert confirmation"
+    ]
+  },
+  "notVerified": [
+    "Native iOS/Android compilation and signed application packages",
+    "Native cookie sessions, biometrics, secure storage and background snapshots",
+    "Hardware Back and VoiceOver/TalkBack on devices"
+  ],
+  "toolchain": "Unrestricted xcrun simctl inventory returned no available devices; no native simulator run performed",
+  "evidenceScreenshots": [
+    "native-doctor-today-browser.png",
+    "native-doctor-visit-browser.png",
+    "native-patient-browser.png"
+  ]
+}

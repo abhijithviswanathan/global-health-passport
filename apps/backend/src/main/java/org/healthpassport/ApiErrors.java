@@ -7,6 +7,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestControllerAdvice
 public class ApiErrors {
+  @ExceptionHandler(org.springframework.dao.DuplicateKeyException.class)
+  ResponseEntity<Map<String,Object>> duplicate(){return ResponseEntity.status(409).body(Map.of("status",409,"message","This item already exists or changed. Refresh and review before retrying."));}
+
   @ExceptionHandler(ResponseStatusException.class)
   ResponseEntity<Map<String, Object>> expected(ResponseStatusException e) {
     return ResponseEntity.status(e.getStatusCode())

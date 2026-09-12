@@ -29,3 +29,14 @@ Structured prescription/order controls now include recipient assignment, supply 
 
 ## Dependency and source scan
 See SECURITY_SCAN.md and evidence artifacts for the exact Maven/OSV scan, upgrades and review coverage. A zero-match vulnerability scan is limited to the database and package versions queried; it is not proof that the application or dependencies are fully secure.
+
+
+## Organization security controls
+
+Stable organization IDs are derived from authenticated staff membership. Resource reads additionally enforce tenant, clinical privilege ceiling, active credential/employment dates, clinic/care assignment and patient consent. Location/department membership constrains scheduling and team operations; it is not a universal permission to every chart in that unit. Pending/suspended organizations have no trusted clinical access. Platform review authority is explicit and separate from hospital administration.
+
+Offboarding revokes appropriate sessions, active care assignments and future shifts while preserving signed records/audit. Clinical role permissions cannot be elevated through a selected login tab or client fields. Ordinary staff directories exclude encrypted licenses and credential details. All mutation and file boundaries retain CSRF/session checks. SSE signals contain no clinical content and revalidate sessions; they are limited to three connections per user and 500 total per process.
+
+Insurance identifiers are encrypted and never sent to marketplace APIs. Insurance cards use independent document classification and grants, quarantined scanning and no-store delivery. Consent to a clinical document does not authorize insurance access. Eligibility checks require a purpose-specific active share. Insurer accounts are denied patient clinical data. Sponsored advertising is disabled; no diagnosis-targeting pipeline exists.
+
+These controls passed bounded synthetic integration tests; they do not establish HIPAA certification or production suitability. Row-level security, independently retained audit copies, distributed sessions/throttling, validated MFA provisioning, endpoint/device controls and partner validation remain production prerequisites. See [threat model](THREAT_MODEL.md).

@@ -20,3 +20,10 @@ Classify each object as provider legal record, patient contribution, imported/pl
 
 ## Required release dossier
 Approved intended use; jurisdiction applicability opinion; signed customer/subprocessor agreements; data inventory and processing register; privacy notice; DPIA/risk assessment as applicable; tested rights and retention workflows; incident notification decision process; training and access-review records; vendor/security review; independent penetration findings/resolution; clinical safety acceptance; partner/terminology licenses; production restore and regional-storage evidence. All remain pending unless an evidence report explicitly says otherwise.
+
+
+## Organization and insurance boundary
+
+This revision does not verify real institutions/licenses, adjudicate insurance benefits, prescribe treatment or authorize production use. Clinical scope-of-practice and medication/report-signature policies require institution-specific clinical/legal review. Recorded report content hashes/attestations are not certificate-backed legal digital signatures. Patient sharing controls remain distinct from healthcare-provider retention obligations.
+
+Marketplace plan information is separated from clinical PHI. No PHI sale, diagnosis-based advertising or concealed paid ranking is implemented. Sponsorship is disabled pending jurisdiction-specific legal/commercial decisions. Synthetic eligibility is visibly fictional; live eligibility requires an approved provider contract, credentials and validation. Comparisons state objective fields and do not call a plan "best". Prior authorization/claims/EOB remain future integrations. No compliance certification or clinical validation was performed.

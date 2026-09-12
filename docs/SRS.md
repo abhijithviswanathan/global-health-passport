@@ -35,3 +35,12 @@ Consent: requested → approved or denied; approved → revoked or expired. Reap
 
 ## Failure behavior
 Unauthorized access returns an appropriate 401/403 or non-disclosing 404. Validation is 400/422, conflicts 409, rate-limits 429. Client retries use bounded backoff and never retry non-idempotent clinical writes blindly. Server errors show a correlation identifier, no clinical payload. An unavailable audit path must fail sensitive mutation closed or persist a transactional audit outbox; it must not silently omit records.
+
+
+## Implemented organization requirements (September 11)
+
+Organization IDs and employment Work IDs are persisted, unique and separate from authentication. Server-derived tenant identity, verified membership, privileges, role, clinic/care assignment, consent category/purpose, resource ownership, session and expiry govern each clinical request. Parent healthcare groups never inherit facility data access. Pending/suspended organizations cannot gain trusted clinical privileges.
+
+Workforce intervals govern newly onboarded tenant appointments; patients receive only explicitly published slots. Tasks support dependence, explicit transitions, cancellation/escalation, completion timestamps and independent verification. Lab patient/specimen mismatches must fail. Imaging report attestation requires a radiologist. Insurance identifiers/cards require their own audited grants, purpose and expiry; insurer marketplace identities must fail clinical access. All client mutations use the shared authenticated API and appropriate concurrency checks.
+
+The implementation/verification map and limitations are in [expansion progress](EXPANSION_PROGRESS.md); the detailed guide is [Organization ecosystem](ORGANIZATION_ECOSYSTEM.md). These additions extend the earlier SRS rather than claiming completion of all original future-product requirements.

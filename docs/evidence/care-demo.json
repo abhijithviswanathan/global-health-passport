@@ -1,0 +1,95 @@
+{
+  "patient": {
+    "id": "20953ad4-bbdc-49ce-9436-67711f720d47",
+    "username": "carepatient",
+    "role": "patient",
+    "health_id": "K9Z8CKBLF",
+    "organization": "Synthetic self-registration",
+    "name": "Casey Rivera (Synthetic) (Synthetic)",
+    "displayName": "Casey Rivera (Synthetic) (Synthetic)",
+    "healthId": "K9Z8CKBLF"
+  },
+  "staff": {
+    "doctor": {
+      "id": "d706ff8a-4ca8-4b69-958c-2fc129769170",
+      "username": "doctor",
+      "role": "doctor",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "Dr. Jordan Chen (Synthetic)",
+      "displayName": "Dr. Jordan Chen (Synthetic)",
+      "healthId": null
+    },
+    "nurse": {
+      "id": "3571c0e4-351b-42a3-bec8-df9252d4f2be",
+      "username": "nurse",
+      "role": "nurse",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "nurse (Synthetic)",
+      "displayName": "nurse (Synthetic)",
+      "healthId": null
+    },
+    "reception": {
+      "id": "62b1395a-b898-4eb6-a591-52a0e026f80d",
+      "username": "reception",
+      "role": "reception",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "reception (Synthetic)",
+      "displayName": "reception (Synthetic)",
+      "healthId": null
+    },
+    "lab": {
+      "id": "ea829372-26ee-4c7b-85ca-6edaf54c5336",
+      "username": "lab",
+      "role": "lab",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "Northstar Laboratory (Synthetic)",
+      "displayName": "Northstar Laboratory (Synthetic)",
+      "healthId": null
+    },
+    "diagnostic": {
+      "id": "a7663675-0d2d-43ec-bde0-3d6b50a0716a",
+      "username": "diagnostic",
+      "role": "diagnostic",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "diagnostic (Synthetic)",
+      "displayName": "diagnostic (Synthetic)",
+      "healthId": null
+    },
+    "coordinator": {
+      "id": "3100a7b2-1715-43e8-9ae1-8c98d51c29c9",
+      "username": "coordinator",
+      "role": "coordinator",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "coordinator (Synthetic)",
+      "displayName": "coordinator (Synthetic)",
+      "healthId": null
+    },
+    "admin": {
+      "id": "1cd2b23e-6931-4660-9cda-8c370636828a",
+      "username": "admin",
+      "role": "admin",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "admin (Synthetic)",
+      "displayName": "admin (Synthetic)",
+      "healthId": null
+    },
+    "pharmacy": {
+      "id": "4fbb9c97-9365-48be-93b2-ebee91d66053",
+      "username": "pharmacy",
+      "role": "pharmacy",
+      "health_id": null,
+      "organization": "Northstar Demo Network",
+      "name": "Harbor Pharmacy (Synthetic)",
+      "displayName": "Harbor Pharmacy (Synthetic)",
+      "healthId": null
+    }
+  },
+  "labOrder": "e3e3bb3f-3c39-4063-8b0e-b3cf665b5272"
+}

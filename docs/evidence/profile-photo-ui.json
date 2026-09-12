@@ -1,0 +1,155 @@
+{
+  "config": {
+    "argv": [
+      "/Users/rogue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/web/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "playwright.photos.config.ts"
+    ],
+    "configFile": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/web/playwright.photos.config.ts",
+    "rootDir": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/web/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/web/test-results-photos",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/web/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/profile-photos.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../../docs/evidence/profile-photo-ui.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "profile-photos.spec.ts",
+      "file": "profile-photos.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "onboarding, cross-client photo privacy and private clinical holder workflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9001,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:24:19.968Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d908d98350bea859316-34ff7c3eee857cae53a2",
+          "file": "profile-photos.spec.ts",
+          "line": 54,
+          "column": 1
+        },
+        {
+          "title": "mobile registration can skip its optional photo and add one through Settings",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2447,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:24:29.046Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1d908d98350bea859316-321bc60e0944d11701be",
+          "file": "profile-photos.spec.ts",
+          "line": 353,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-11T10:24:19.742Z",
+    "duration": 11795.693,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

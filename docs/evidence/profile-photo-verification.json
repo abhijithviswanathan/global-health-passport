@@ -1,0 +1,235 @@
+{
+  "verifiedAt": "2026-09-10T12:59:42.620891+00:00",
+  "scope": "Synthetic local implementation and tests; no production or signed native release.",
+  "backendDefault": {
+    "tests": 42,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 7,
+    "executed": 35,
+    "command": "Java 21: ./mvnw verify",
+    "database": "H2",
+    "suites": [
+      {
+        "name": "org.healthpassport.WorkflowTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.PostgresWorkflowTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 7
+      },
+      {
+        "name": "org.healthpassport.ProfilePhotoTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.CompactHealthIdTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.FhirApiTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.OrganizationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.ClinicianTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.MedicationPassportTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.IdentityTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.PasskeyTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.LearningTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.DocumentTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.healthpassport.FhirMapperTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "postgresPhotoTests": {
+    "engine": "PostgreSQL 17.11",
+    "testsPassed": 4,
+    "failures": 0,
+    "migrationsApplied": 12,
+    "scope": "Same ProfilePhotoTest authorization/encryption assertions on a fresh isolated real PostgreSQL database; face verdict stub for permission cases.",
+    "evidence": "profile-photos-postgres.txt"
+  },
+  "browserJourneys": {
+    "coreWeb": {
+      "startTime": "2026-09-10T12:54:39.583Z",
+      "duration": 31917.183,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "crossClientPhotos": {
+      "startTime": "2026-09-10T12:49:41.295Z",
+      "duration": 10860.504,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "mobileClinician": {
+      "startTime": "2026-09-10T12:50:32.460Z",
+      "duration": 6545.1050000000005,
+      "expected": 3,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "browserBatchReason": "Core suite uses five registrations per IP per 15 minutes. Photo acceptance runs separately against a fresh local session, without weakening the application throttle.",
+  "faceModel": {
+    "name": "OpenCV YuNet 2023mar",
+    "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+    "realModelChecks": [
+      {
+        "fixture": "portrait",
+        "expectedExit": 0,
+        "actualExit": 0,
+        "passed": true
+      },
+      {
+        "fixture": "no-person",
+        "expectedExit": 23,
+        "actualExit": 23,
+        "passed": true
+      },
+      {
+        "fixture": "group",
+        "expectedExit": 24,
+        "actualExit": 24,
+        "passed": true
+      }
+    ],
+    "scope": "One visible face presence. No identity recognition, demographics or liveness. Fictional generated portrait fixture."
+  },
+  "mobile": {
+    "policyAndTransportTestsPassed": 18,
+    "typescript": "passed",
+    "iosHermesExport": "passed",
+    "androidHermesExport": "passed",
+    "dependencyAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  "web": {
+    "typescript": "passed",
+    "eslint": "0 errors, 0 warnings",
+    "prettier": "passed",
+    "vinextProductionBuild": "passed",
+    "responsiveWidths": [
+      320,
+      390,
+      768,
+      1440,
+      1920
+    ]
+  },
+  "localStorage": {
+    "directoryMode": "0o700",
+    "allEncryptedFilesOwnerOnly": true,
+    "temporaryCheckFilesRemaining": 0,
+    "desktopShortcut": "/Users/rogue/Desktop/Health Passport",
+    "shortcutTarget": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport",
+    "savedLauncherColdStart": "passed; API and web serving on 8080/5173"
+  },
+  "securityCoverage": [
+    "Owner-only default; anonymous public-image retrieval denied",
+    "Selected recipients and treatment grants",
+    "Same organization plus individual consent required",
+    "Doctor-only image denied to a colleague in the same organization",
+    "Patient sees clinical holder/purpose/date, not image",
+    "Admin cannot retrieve private clinical image",
+    "Revoked consent denies image retrieval",
+    "CSRF, expiring one-use registration capability",
+    "Encrypted bytes differ from decoded JPEG; deleted active blobs removed",
+    "No-face, multiple-face and checker-unavailable paths fail closed"
+  ],
+  "nativeBoundary": "Mobile UI/API tests run actual app code through a browser harness. System picker/camera launch, secure storage, biometrics and confirmation dialogs have test substitutes. Web capture uses a controlled video source. Exports are Hermes bundles, not native compilation or device tests.",
+  "notVerified": [
+    "Physical iOS/Android camera/library permissions, orientation, cookies, cache deletion, OS background snapshots and screen readers",
+    "Signed native builds and app-store distribution",
+    "Revised Docker images executed on Docker (not installed here)",
+    "Real-patient production security/compliance/clinical release"
+  ],
+  "sourceSha256": {
+    "apps/backend/src/main/java/org/healthpassport/ProfileApi.java": "38fc0c4e10d371f4248f747ef7dd6b2a696877555c0a5599f49b8ead7cbed478",
+    "apps/backend/src/main/java/org/healthpassport/PhotoService.java": "1cb0f30f36b4d612039c8da8fe9bd26773c4e28997b695ea2e4826bd69f1042e",
+    "apps/backend/src/main/resources/db/migration/V12__profile_photos.sql": "a7eb3f29476f399b3f82747661f987bfbdbd1a0205d2eac4ce827d92327a6d40",
+    "apps/backend/photo-check/check.py": "e1a4999a9113ada6bd0282fefdd505201ffd74b849217a33cc1179813575682b",
+    "apps/web/app/page.tsx": "40ee5609aefd503c77a6a7e2d7e69fb335031477fadc9c90244a4a67916050b4",
+    "apps/web/components/profile-photos.tsx": "e6285224c97213159bc7b00183abeb9f71681409384d5ec563b8942999a8b7b3",
+    "apps/web/components/account-entry.tsx": "caed88752328c1eadcdb40a1a67b25e9479d5f5aa918b753c828a1d27e4adc52",
+    "apps/mobile/App.tsx": "fd4deb4c5b5bee5e993a0e88bd86a649b584b7a6bd01e4bd7fe8f4b24accf34a",
+    "apps/mobile/src/ProfilePhotos.tsx": "b28bb7db4072e07ecae09f9254809054133e8560b44a45b388dba1d03b2c2810",
+    "apps/mobile/src/api.ts": "c9e7e4c0476d77b35d08aa07a7f472dae8ef194ba8f9c32eea37b994ed2d21c1",
+    "scripts/start_saved.py": "43a127b48968eebd67e63848d16ff1cb7cb51b914ca8b2ebae915cfdcc68cff3"
+  },
+  "guide": "README_USER_GUIDE.md",
+  "futureReadmeRule": "Ask user before subsequent README changes; initial illustrated guide is authorized."
+}

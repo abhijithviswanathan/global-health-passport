@@ -40,8 +40,18 @@ public class PassportApi {
   @Value("${spring.profiles.active:}")
   String activeProfiles;
 
+  @org.springframework.beans.factory.annotation.Autowired RecordProvenance provenance;
+  @org.springframework.beans.factory.annotation.Autowired TenantService tenants;
+
   static final Set<String> KINDS =
       Set.of(
+          "vital",
+          "history",
+          "nursing_observation",
+          "imaging_order",
+          "referral",
+          "follow_up",
+          "discharge",
           "allergy",
           "condition",
           "medication",
@@ -226,12 +236,14 @@ public class PassportApi {
     if (s == null || s.getAttribute("uid") == null) throw error(401, "Authentication required");
     identity.validateSession(r);
     var u = db.queryForMap("select * from app_user where id=?", s.getAttribute("uid"));
+    if (Boolean.FALSE.equals(u.get("staff_active"))) throw error(403, "Staff access is suspended");
+    tenants.validate(u);
     verifyPractitioner(u);
     return u;
   }
 
   void verifyPractitioner(Map<String, Object> u) {
-    if (!Set.of("doctor", "lab", "pharmacy").contains(role(u))) return;
+    if (!Set.of("doctor", "nurse", "diagnostic", "lab", "pharmacy").contains(role(u))) return;
     var rows =
         db.queryForList("select status from practitioner_verification where user_id=?", uid(u));
     if (rows.isEmpty()
@@ -255,6 +267,10 @@ public class PassportApi {
     v.put("name", u.get("display_name"));
     v.put("displayName", u.get("display_name"));
     v.put("healthId", u.get("health_id"));
+    v.put("organizationId", u.get("organization_id"));
+    if (u.get("organization_id")!=null) {
+      var e=tenants.employment(u);v.put("workId",e.get("work_id"));v.put("professionalRole",e.get("professional_role"));
+    }
     return v;
   }
 
@@ -310,6 +326,8 @@ public class PassportApi {
     verifyPractitioner(u);
     identity.verifySecondFactor(uid(u), b);
     failures.remove(key);
+    r.getSession().removeAttribute("photoRegistrationOwner");
+    r.getSession().removeAttribute("photoRegistrationUntil");
     r.changeSessionId();
     r.getSession().setAttribute("uid", uid(u));
     identity.registerSession(uid(u), r);
@@ -340,9 +358,11 @@ public class PassportApi {
 
   @GetMapping("/users")
   List<Map<String, Object>> users(HttpServletRequest r) {
-    user(r);
+    var viewer=user(r);
     return db
-        .queryForList("select * from app_user where role in ('doctor','lab','pharmacy')")
+        .queryForList(
+            "select * from app_user where role in ('doctor','nurse','diagnostic','lab','pharmacy')")
+        .stream().filter(v->role(viewer).equals("patient")||Objects.equals(v.get("organization_id"),viewer.get("organization_id"))).toList()
         .stream()
         .map(this::publicUser)
         .toList();
@@ -352,7 +372,8 @@ public class PassportApi {
   List<Map<String, Object>> patients(HttpServletRequest r) {
     var u = user(r);
     if (role(u).equals("patient")) return List.of(publicUser(u));
-    if (!Set.of("doctor", "lab", "pharmacy").contains(role(u))) return List.of();
+    if (!Set.of("doctor", "nurse", "diagnostic", "lab", "pharmacy").contains(role(u)))
+      return List.of();
     return db
         .queryForList(
             "select * from app_user where role='patient' and id in (select patient_id from consent"
@@ -364,8 +385,28 @@ public class PassportApi {
         .toList();
   }
 
+  boolean careAssignmentAllows(Map<String, Object> u, String p, String kind) {
+    if (db.queryForObject(
+            "select count(*) from care_assignment where patient_id=?", Integer.class, p)
+        == 0) return !Set.of("nurse", "diagnostic").contains(role(u));
+    return db
+        .queryForList(
+            "select * from care_assignment where patient_id=? and staff_id=? and active=true",
+            p,
+            uid(u))
+        .stream()
+        .anyMatch(
+            a ->
+                Objects.equals(a.get("organization"), u.get("organization"))
+                    && Objects.equals(a.get("clinic"), u.get("clinic"))
+                    && Instant.parse(a.get("expires_at").toString()).isAfter(Instant.now())
+                    && (kind == null
+                        || Arrays.asList(a.get("scopes").toString().split(",")).contains(kind)));
+  }
+
   boolean hasGrant(Map<String, Object> u, String patient) {
-    if (!Set.of("doctor", "lab", "pharmacy").contains(role(u))) return false;
+    if (!careAssignmentAllows(u, patient, null)) return false;
+    if (!Set.of("doctor", "nurse", "diagnostic", "lab", "pharmacy").contains(role(u))) return false;
     return db
         .queryForList(
             "select expires_at from consent where patient_id=? and grantee_id=? and status='active'"
@@ -377,10 +418,45 @@ public class PassportApi {
   }
 
   boolean allowed(Map<String, Object> u, String p, String kind) {
+    if (Boolean.FALSE.equals(u.get("staff_active"))) return false;
+    if (!tenants.privilege(u, kind, false)) return false;
+    if (Set.of("nurse", "diagnostic").contains(role(u))
+        && db
+            .queryForList(
+                "select * from care_assignment where patient_id=? and staff_id=? and active=true",
+                p,
+                uid(u))
+            .stream()
+            .noneMatch(
+                a ->
+                    Objects.equals(a.get("organization"), u.get("organization"))
+                        && Objects.equals(a.get("clinic"), u.get("clinic"))
+                        && Instant.parse(a.get("expires_at").toString()).isAfter(Instant.now())
+                        && Arrays.asList(a.get("scopes").toString().split(",")).contains(kind)))
+      return false;
     if (role(u).equals("patient")) return uid(u).equals(p);
-    if (!Set.of("doctor", "lab", "pharmacy").contains(role(u))) return false;
-    if (role(u).equals("lab")
-        && !Set.of("lab_order", "lab_result", "imaging_report").contains(kind)) return false;
+    if (!careAssignmentAllows(u, p, kind)) return false;
+    if (!Set.of("doctor", "nurse", "diagnostic", "lab", "pharmacy").contains(role(u))) return false;
+    if (Set.of("lab", "diagnostic").contains(role(u))
+        && !Set.of("lab_order", "lab_result", "imaging_order", "imaging_report").contains(kind))
+      return false;
+    if (role(u).equals("nurse")
+        && !Set.of(
+                "vital",
+                "history",
+                "nursing_observation",
+                "prescription",
+                "allergy",
+                "medication",
+                "condition",
+                "encounter",
+                "note",
+                "lab_order",
+                "lab_result",
+                "document",
+                "follow_up",
+                "discharge")
+            .contains(kind)) return false;
     if (role(u).equals("pharmacy")
         && !Set.of("prescription", "dispense", "allergy", "medication").contains(kind))
       return false;
@@ -415,7 +491,8 @@ public class PassportApi {
                     + " r.author_id=u.id where patient_id=? order by created_at desc",
                 patient)
             .stream()
-            .filter(x -> allowed(u, patient, x.get("kind").toString()))
+            .filter(x -> tenants.recordVisible(u,x) && allowed(u, patient, x.get("kind").toString()))
+            .map(provenance::view)
             .toList();
     if (rows.isEmpty() && !uid(u).equals(patient) && hasGrant(u, patient)) {
       audit(uid(u), patient, "TIMELINE_READ", patient);
@@ -456,7 +533,8 @@ public class PassportApi {
     if (!end.isAfter(Instant.now()) || end.isAfter(Instant.now().plusSeconds(365L * 86400)))
       throw error(400, "Expiry must be within one year");
     if (db.queryForObject(
-            "select count(*) from app_user where id=? and role in ('doctor','lab','pharmacy')",
+            "select count(*) from app_user where id=? and role in"
+                + " ('doctor','nurse','diagnostic','lab','pharmacy')",
             Integer.class,
             g)
         != 1) throw error(400, "Invalid recipient");
@@ -537,7 +615,7 @@ public class PassportApi {
   Map<String, Object> request(@RequestBody Map<String, Object> b, HttpServletRequest r) {
     csrf(r);
     var u = user(r);
-    if (!Set.of("doctor", "lab", "pharmacy").contains(role(u)))
+    if (!Set.of("doctor", "nurse", "diagnostic", "lab", "pharmacy").contains(role(u)))
       throw error(403, "Clinical role required");
     String health = field(b, "healthId", 64), purpose = field(b, "purpose", 40);
     if (!purpose.equals("treatment")) throw error(400, "Only treatment is supported");
@@ -580,6 +658,12 @@ public class PassportApi {
           case "patient" -> Set.of("note", "allergy", "condition", "medication");
           case "doctor" ->
               Set.of(
+                  "vital",
+                  "history",
+                  "imaging_order",
+                  "referral",
+                  "follow_up",
+                  "discharge",
                   "note",
                   "allergy",
                   "condition",
@@ -587,11 +671,28 @@ public class PassportApi {
                   "encounter",
                   "lab_order",
                   "prescription");
-          case "lab" -> Set.of("lab_result", "imaging_report");
+          case "nurse" -> Set.of("vital", "history", "nursing_observation");
+          case "diagnostic", "lab" -> Set.of("lab_result", "imaging_report");
           case "pharmacy" -> Set.of("dispense");
           default -> Set.of();
         };
-    if (!writable.contains(k)) throw error(403, "Role cannot write this record");
+    if (!writable.contains(k) || !tenants.privilege(u,k,true)) throw error(403, "Role cannot write this record");
+    String submission = optional(b, "idempotencyKey");
+    if (!submission.isBlank() && !k.equals("dispense")) {
+      var existing =
+          db.queryForList(
+              "select * from clinical_record where author_id=? and idempotency_key=?",
+              uid(u),
+              submission);
+      if (!existing.isEmpty()) {
+        var old = existing.getFirst();
+        if (!p.equals(old.get("patient_id"))
+            || !k.equals(old.get("kind"))
+            || !title.equals(old.get("title"))
+            || !details.equals(old.get("details"))) throw error(409, "Submission key already used");
+        return provenance.view(old);
+      }
+    }
     String clinicalStatus = optional(b, "clinicalStatus");
     if (b.containsKey("clinicalStatus") && !(b.get("clinicalStatus") instanceof String))
       throw error(400, "clinicalStatus must be a string");
@@ -606,8 +707,26 @@ public class PassportApi {
         throw error(400, "Invalid clinical status for record kind");
     }
     String related = optional(b, "relatedId"), replaces = optional(b, "replacesId");
-    if (Set.of("lab_result", "dispense").contains(k)) {
-      String required = k.equals("dispense") ? "prescription" : "lab_order";
+    String origin = optional(b, "originalRecordId");
+    if (!origin.isBlank()) {
+      var originals =
+          db.queryForList("select * from clinical_record where id=? and patient_id=?", origin, p);
+      if (originals.isEmpty() || !tenants.recordVisible(u,originals.getFirst())) throw error(404, "Original record not found");
+      require(u, p, originals.getFirst().get("kind").toString());
+    }
+    if (!replaces.isBlank() && optional(b, "correctionReason").isBlank())
+      throw error(400, "A correction reason is required");
+    if (b.containsKey("noteState")
+        && (!"draft".equals(b.get("noteState"))
+            || !role(u).equals("doctor")
+            || !Set.of("note", "encounter").contains(k)))
+      throw error(400, "Only doctor notes can be saved as drafts");
+    if (Set.of("lab_result", "imaging_report", "dispense").contains(k)
+        && !(k.equals("imaging_report") && related.isBlank())) {
+      String required =
+          k.equals("dispense")
+              ? "prescription"
+              : k.equals("imaging_report") ? "imaging_order" : "lab_order";
       if (db.queryForObject(
               "select count(*) from clinical_record where id=? and patient_id=? and kind=? and"
                   + " status='active'",
@@ -629,14 +748,18 @@ public class PassportApi {
             != 1) throw error(403, "Only author may amend an active record");
     String recipient = optional(b, "recipientId"), idem = optional(b, "idempotencyKey");
     int quantity = number(b, "quantity", 1, 100000, 1), refills = number(b, "refills", 0, 12, 0);
-    if (Set.of("lab_order", "prescription").contains(k)) {
-      String target = k.equals("prescription") ? "pharmacy" : "lab";
+    if (Set.of("lab_order", "imaging_order", "prescription").contains(k)) {
+      String target =
+          k.equals("prescription") ? "pharmacy" : k.equals("imaging_order") ? "diagnostic" : "lab";
       if (db.queryForObject(
               "select count(*) from app_user where id=? and role=?",
               Integer.class,
               recipient,
               target)
           != 1) throw error(400, "Valid recipientId required");
+      var targetUser=db.queryForMap("select * from app_user where id=?",recipient);
+      if(!Objects.equals(targetUser.get("organization_id"),u.get("organization_id")))throw error(403,"Explicit external integration is required for another organization");
+      tenants.validate(targetUser);
     }
     String dosage = optional(b, "dosage"),
         route = optional(b, "route"),
@@ -649,8 +772,10 @@ public class PassportApi {
       duration = field(b, "duration", 100);
       if (!b.containsKey("quantity")) throw error(400, "Prescription quantity required");
     }
-    if (Set.of("lab_result", "dispense").contains(k)) {
+    if (Set.of("lab_result", "imaging_report", "dispense").contains(k)
+        && !(k.equals("imaging_report") && related.isBlank())) {
       var parent = db.queryForMap("select * from clinical_record where id=?", related);
+      if(!tenants.recordVisible(u,parent))throw error(403,"Related record belongs to another organization");
       if (!uid(u).equals(parent.get("recipient_id")))
         throw error(403, "Order is assigned to another recipient");
       if (k.equals("dispense")) {
@@ -686,8 +811,19 @@ public class PassportApi {
     String rid = id();
     tx.executeWithoutResult(
         s -> {
-          if (!replaces.isBlank())
-            db.update("update clinical_record set status='amended' where id=?", replaces);
+          if (!replaces.isBlank()) {
+            var previous =
+                db.queryForMap("select * from clinical_record where id=? for update", replaces);
+            if (!"active".equals(previous.get("status")))
+              throw error(409, "This record was already amended");
+            db.update(
+                "update clinical_record set"
+                    + " status='amended',updated_at=?,record_version=record_version+1 where id=?",
+                now(),
+                replaces);
+            provenance.revision(
+                replaces, uid(u), "amended", optional(b, "correctionReason"), previous);
+          }
           db.update(
               "insert into"
                   + " clinical_record(id,patient_id,kind,title,details,author_id,source,status,created_at,replaces_id,related_id)"
@@ -720,16 +856,55 @@ public class PassportApi {
               "update clinical_record set clinical_status=? where id=?",
               clinicalStatus.isBlank() ? null : clinicalStatus,
               rid);
+          var metadata = new LinkedHashMap<String, Object>(b);
+          if (!replaces.isBlank()) {
+            var previous = db.queryForMap("select * from clinical_record where id=?", replaces);
+            for (var pair :
+                Map.of(
+                        "observedAt",
+                        "observed_at",
+                        "observedTimezone",
+                        "observed_timezone",
+                        "sourceType",
+                        "source_type",
+                        "source",
+                        "source",
+                        "historical",
+                        "historical")
+                    .entrySet())
+              if (!metadata.containsKey(pair.getKey()))
+                metadata.put(pair.getKey(), previous.get(pair.getValue()));
+          }
+          provenance.stamp(rid, metadata, u);
           audit(uid(u), p, replaces.isBlank() ? "RECORD_CREATED" : "RECORD_AMENDED", rid);
         });
-    return db.queryForMap("select * from clinical_record where id=?", rid);
+    return provenance.view(db.queryForMap("select * from clinical_record where id=?", rid));
+  }
+
+  @GetMapping("/records/{rid}/history")
+  Map<String, Object> recordHistory(@PathVariable String rid, HttpServletRequest r) {
+    var u = user(r);
+    var rows = db.queryForList("select * from clinical_record where id=?", rid);
+    if (rows.isEmpty()) throw error(404, "Record not found");
+    var record = rows.getFirst();
+    require(u, record.get("patient_id").toString(), record.get("kind").toString());
+    if (!tenants.recordVisible(u,record)) throw error(403,"Record belongs to a different organization");
+    audit(uid(u), record.get("patient_id").toString(), "RECORD_HISTORY_READ", rid);
+    return Map.of(
+        "revisions",
+        db.queryForList(
+            "select v.*,u.display_name as actor_name from record_revision v left join app_user u on"
+                + " u.id=v.actor_id where record_id=? order by occurred_at",
+            rid));
   }
 
   @GetMapping("/audit")
   List<Map<String, Object>> auditTrail(HttpServletRequest r) {
     var u = user(r);
-    if (role(u).equals("security"))
-      return db.queryForList("select * from audit_event order by seq desc limit 500");
+    if (role(u).equals("security")) {
+      if(tenants.operator(u))return db.queryForList("select * from audit_event order by seq desc limit 500");
+      return db.queryForList("select a.* from audit_event a join app_user actor on a.actor_id=actor.id where actor.organization_id=? order by a.seq desc limit 500",u.get("organization_id"));
+    }
     return db.queryForList(
         "select * from audit_event where actor_id=? or patient_id=? order by seq desc limit 500",
         uid(u),

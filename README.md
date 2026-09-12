@@ -1,15 +1,17 @@
 # Global Health Passport
 
-An executable synthetic healthcare-record platform with a Java API, responsive patient/provider web portal and Expo patient application. It includes consent-controlled records, laboratory/pharmacy workflows, passkeys/TOTP, audit history, document quarantine, signed medication snapshots, bounded FHIR export and synthetic learning search.
+**Start here:** [Illustrated local app guide — photos, privacy, doctor workflow, running, backup and deployment](README_USER_GUIDE.md). On this Mac, open **Desktop → Health Passport → Start Health Passport.command**.
+
+An executable synthetic healthcare-record platform with a Java API, responsive patient/provider web portal and Expo patient and doctor application. It includes consent-controlled records, laboratory/pharmacy workflows, passkeys/TOTP, audit history, document quarantine, signed medication snapshots, bounded FHIR export and synthetic learning search.
 
 **This is a development delivery, not a completed or approved live-patient service.** The complete original scope and remaining work are recorded in [DELIVERY_REPORT.md](DELIVERY_REPORT.md) and [the 46-section coverage matrix](docs/MASTER_TRACEABILITY.md). Do not enter real patient information. No production deployment was performed.
 
 ## Start locally
 
-Prerequisites: **Java 21**, **Node.js 24 with npm**, **Python 3**, and network access for first dependency installation. A checked-in Maven wrapper downloads Maven 3.9.11 and verifies its checksum. Run these commands from the repository root:
+Prerequisites: **Java 21**, **Node.js 24 with npm**, **Python 3.12+**, and network access for first dependency installation. A checked-in Maven wrapper downloads Maven 3.9.11 and verifies its checksum. Run these commands from the repository root:
 
 ```sh
-python3 scripts/dev.py --install
+python3.12 scripts/dev.py --install
 ```
 
 The launcher creates private local configuration without overwriting an existing `.env`, installs web dependencies, builds/verifies the backend, starts its persistent synthetic H2 database, runs all Flyway migrations, seeds synthetic accounts on an empty database, and starts the web/API. No separate database installation is needed for this default mode.
@@ -45,7 +47,7 @@ Browser and API evidence are distinct: see the delivery report for exactly what 
 |---|---|
 | `DEMO_MODE`, `DEMO_PASSWORD` | Explicit synthetic seeding; credentials apply only at initial seed |
 | `IDENTITY_ENCRYPTION_KEY` | Base64 32-byte key protecting TOTP secrets; missing key blocks enrollment |
-| `DOCUMENT_ENCRYPTION_KEY` | Base64 32-byte key protecting document blobs; missing key blocks upload |
+| `DOCUMENT_ENCRYPTION_KEY` | Base64 32-byte key protecting document and photo blobs; missing key blocks upload |
 | `CLAMAV_EXECUTABLE` | Approved scanner executable; absent scanner leaves uploads quarantined |
 | `WEBAUTHN_RP_ID`, `WEBAUTHN_ORIGINS` | Exact relying party/origin; localhost defaults are development only |
 | `DATABASE_URL`, `DATABASE_USER`, `DATABASE_PASSWORD` | Optional PostgreSQL JDBC connection |
@@ -118,3 +120,20 @@ Open the same localhost web address. Stop with `docker compose down`; volumes pr
 - [Architecture](docs/ARCHITECTURE.md), [API](docs/API.md), [FHIR](docs/FHIR.md)
 - [Security scan evidence](docs/SECURITY_SCAN.md), [testing](docs/TESTING.md), [compliance gates](docs/COMPLIANCE.md)
 - [Operations](docs/OPERATIONS.md), [troubleshooting](docs/TROUBLESHOOTING.md), [ADRs](ADRs)
+
+## Doctor workspace
+
+Open [Doctor sign-in](http://localhost:5173/?portal=doctor) and use the existing local doctor account. Today, Patients and Appointments provide scheduling and saved visit notes with shared chart context. [Workflow and boundaries](docs/CLINICIAN_WORKSPACE.md) · [Verification](docs/evidence/clinician-workspace-verification.json).
+
+## Care coordination revision — 11 September 2026
+
+See [the illustrated care-team guide](docs/CARE_TEAM_WORKFLOWS.md). Web and mobile share clinic assignments, patient consent, observation/entry timestamps, source/author metadata, version history, task acknowledgment, scoped conversations, clinic scheduling, orders/results and doctor review. Flyway migrations V13–V14 are additive. Keep database and encrypted local files backed up together before upgrading.
+
+With the local synthetic app running, `python3 scripts/setup_care_demo.py` prepares a separate Casey Rivera walkthrough. Use the existing local credential file for staff passwords. This creates internal synthetic fixtures, not external orders or notifications.
+
+
+## Hospital ecosystem expansion — September 11
+
+The saved local application now includes organization onboarding, separate staff identities, workforce schedules, clinical work grids/orders, nursing/handoffs, patient insurance and a separated insurer marketplace in both clients. Start with the [illustrated workflow and account guide](docs/ORGANIZATION_ECOSYSTEM.md). The current password remains in the root LOCAL_ACCESS.txt; new hospital usernames start with `hospital`. Existing accounts and local records are preserved.
+
+This remains a synthetic pilot. Live insurer/PACS integration, production MFA provisioning, clinical/legal approval and physical native-device verification are not implied by a successful local build.

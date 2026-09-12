@@ -28,3 +28,17 @@ All seven Playwright E2E tests passed against the final static production-format
 ## Compact Health ID revision
 
 At the user’s request, canonical IDs now contain nine unambiguous letters/digits. V9–V10 preserve old long IDs as lookup aliases without changing patient UUIDs or clinical references. Updated checks passed: 26 backend tests, seven separate PostgreSQL workflow tests and seven browser journeys. Database uniqueness/collision retries, migration stability, case/separator normalization and readable phone layouts are covered. See `docs/evidence/compact-health-id-verification.json` (from the repository root). Earlier logical-restore evidence remains scoped to V1–V8; the restore harness now also includes the alias table.
+
+## Photo acceptance batch
+The normal web suite consumes five synthetic registrations per source address, the actual limit per 15 minutes. Run `npm run test:photos` separately against a fresh isolated local service or after that window expires; do not disable the application limit. It needs the API, built web on 5173 and mobile browser harness on 5174. The photo suite tests real shared API/model/storage flows; browser camera input and native picker launch use explicitly controlled fixtures. Hardware-camera verification remains separate. The latest report is `evidence/profile-photo-ui.json`; aggregate scope/limitations are in `evidence/profile-photo-verification.json`.
+
+## Care coordination revision
+
+See [care verification evidence](evidence/care-coordination-verification.json) for the September 11 results. `CareWorkflowTest` exercises the shared workflow on H2; `PostgresCareWorkflowTest` runs the same ten cases against PostgreSQL when TEST_DATABASE_URL, TEST_DATABASE_USER and TEST_DATABASE_PASSWORD are supplied. Use a separate synthetic database, never a live patient database.
+
+Run the web suite with the local app started, and the mobile browser suite with the harness on port 5174. Prepare the separate fixture with `python3 scripts/setup_care_demo.py` first. Repeated full runs may reach the existing five-account/15-minute registration limit; wait for its window or restart the local synthetic server between suites. Do not disable production throttling. The guide screenshots are produced by `apps/web/tests/care.spec.ts` and `apps/mobile/tests/care-ui.spec.ts`.
+
+
+## September 11 ecosystem evidence
+
+The current expansion verification supersedes older build counts: see [exact commands and executed scope](ECOSYSTEM_VERIFICATION.md), [requirements mapping](EXPANSION_PROGRESS.md), and `evidence/ecosystem-verification.json`. Older care/photo evidence remains historical. H2 and PostgreSQL are run separately; skipped PostgreSQL classes are not counted as H2 passes. Native browser-harness and JavaScript export results never imply device testing.

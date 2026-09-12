@@ -79,7 +79,7 @@ class OrganizationTest {
             Instant.now().plusSeconds(3600).toString()));
     assertEquals(200, d.call("GET", "/patients/" + patient + "/timeline", null).statusCode());
     var members = json.readTree(a.call("GET", "/organization/members", null).body());
-    assertEquals(3, members.size());
+    assertEquals(5, members.size());
     for (var member : members) {
       assertFalse(member.has("password_hash"));
       assertFalse(member.has("healthId"));

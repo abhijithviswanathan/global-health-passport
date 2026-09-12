@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "file": "output/pdf/Health_Passport_Demo_Report.pdf",
+  "pages": 8,
+  "sha256": "a1412f2e93da82cc6dbf0f7457a4c9d1bef0c13cd758234822b0479ceacab1f5",
+  "review": "All rendered pages inspected; detailed review of pages 2, 6, 7 and 8. No clipped text, overflow, broken tables or missing glyphs observed.",
+  "browserCases": 4,
+  "browserFailures": 0,
+  "newBrowserTestLint": "PASS",
+  "pythonSyntax": "PASS",
+  "localAppHealth": {
+    "api": "ok",
+    "web": 200,
+    "mobilePreview": 200
+  }
+}

@@ -1,0 +1,341 @@
+{
+  "config": {
+    "argv": [
+      "/Users/rogue/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/web/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/browser/playwright.config.mjs"
+    ],
+    "configFile": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/mobile/tests/browser/playwright.config.mjs",
+    "rootDir": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/mobile/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/mobile/tests/browser/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/apps/mobile/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*-ui.spec.ts"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/Users/rogue/Documents/Codex/2026-09-10/files-pasted-by-the-user-master/outputs/global-health-passport/docs/evidence/mobile-clinician-ui.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "care-ui.spec.ts",
+      "file": "care-ui.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "mobile nurse acknowledges and completes a doctor-assigned task across clients",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1791,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:04.409Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd6a0e8d1476471840ca-0b8c2d7ae327e4d893b9",
+          "file": "care-ui.spec.ts",
+          "line": 29,
+          "column": 5
+        },
+        {
+          "title": "mobile clinician sees nurse provenance and historical labels",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 862,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:06.290Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "dd6a0e8d1476471840ca-564b853caf7770c79672",
+          "file": "care-ui.spec.ts",
+          "line": 91,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "clinician-ui.spec.ts",
+      "file": "clinician-ui.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "mobile clinician booking, cross-client draft conflict and filing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4055,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:07.178Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "207e5d3a74a2e9a9475d-61cec64706264ada0472",
+          "file": "clinician-ui.spec.ts",
+          "line": 44,
+          "column": 5
+        },
+        {
+          "title": "mobile patient navigation, short ID and doctor entry are preserved",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 992,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:11.238Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "207e5d3a74a2e9a9475d-9eeaed93959485b1f8f3",
+          "file": "clinician-ui.spec.ts",
+          "line": 284,
+          "column": 5
+        },
+        {
+          "title": "revoked permission removes a mobile chart and prevents reopening it",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1597,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:12.234Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "207e5d3a74a2e9a9475d-50f3a319110bdf3c6e3b",
+          "file": "clinician-ui.spec.ts",
+          "line": 309,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "ecosystem-ui.spec.ts",
+      "file": "ecosystem-ui.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "native hospital nurse uses structured nursing and work grid with shared persisted data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 849,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:13.838Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e991fc61902e2792912b-ca69ab8773e4302cc973",
+          "file": "ecosystem-ui.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "native patient can read web-created insurance profiles and approved marketplace plans",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 759,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-11T10:17:14.692Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e991fc61902e2792912b-4ae90d801b58b49bcb89",
+          "file": "ecosystem-ui.spec.ts",
+          "line": 43,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-11T10:17:04.154Z",
+    "duration": 11344.952,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

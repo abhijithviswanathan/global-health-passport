@@ -34,3 +34,12 @@ V7 adds nullable captured clinical_status. New synthetic fixtures explicitly lab
 
 ## Executed local validation
 FhirMapperTest (2 cases) and FhirApiTest (1 case) passed after the status-mapping correction. A local HAPI validator using bundled official R4 definitions accepted the 29-resource historical collection and CapabilityStatement; strict parsing passed. Nine informational/warning messages remained, including the hostile-text fixture and OperationOutcome narrative warning. This validates the tested synthetic subset, not an external partner/profile, terminology license, import round trip or universal FHIR conformance.
+
+
+## Organization and insurance R4 projections
+
+GET `/api/ecosystem/fhir` returns a permission-filtered collection Bundle containing Organization, Location, HealthcareService, PractitionerRole, Schedule, Task, ServiceRequest, Specimen, ImagingStudy references, nursing Observation/MedicationAdministration and handoff Communication where authorized. Internal `open` maps to Task requested; accepted/in_progress/completed/blocked-waiting/cancelled map to the corresponding R4 codes, while businessStatus retains the local state. A staffing interval is a Schedule, not automatically a bookable Slot. ImagingStudy is registered metadata only. Medication orders use the existing MedicationRequest mapping rather than being mislabeled ServiceRequest.
+
+GET `/api/insurance/fhir` projects explicitly authorized, patient-reported Coverage. It omits protected subscriber identifiers and does not assert insurer confirmation. Existing patient exports retain their clinical resources, Consent/Provenance/AuditEvent support. Claims, EOB and prior authorization are future domains; no clearinghouse is implemented.
+
+These are collection projections, not a certified general FHIR CRUD/search server. Integration assertions executed; an external R4 validator/partner conformance suite was not run for the new projections. Design references: [HL7 R4 Task](https://hl7.org/fhir/R4/task.html), [ServiceRequest](https://hl7.org/fhir/R4/servicerequest.html), [Coverage](https://hl7.org/fhir/R4/coverage.html).

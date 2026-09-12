@@ -14,7 +14,8 @@
     "db:generate": "drizzle-kit generate",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "format:check": "prettier --check app lib components/*.tsx scripts/serve-local.mjs tests playwright.config.ts"
+    "format:check": "prettier --check app lib components/*.tsx scripts/serve-local.mjs tests playwright.config.ts",
+    "test:photos": "playwright test --config playwright.photos.config.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

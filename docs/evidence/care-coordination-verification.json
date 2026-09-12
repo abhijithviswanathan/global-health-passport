@@ -1,0 +1,180 @@
+{
+  "verifiedAt": "2026-09-11T09:06:53.942557+00:00",
+  "scope": "Local synthetic development app; actual Java API and persisted records, web client and browser-rendered React Native components",
+  "database": {
+    "migrationVersion": 14,
+    "existingLocalData": "Pre-migration consistent backup retained; additive V13 and V14 applied to existing H2 database",
+    "h2Passed": 45,
+    "postgresCarePassed": 10,
+    "postgresLegacySkipped": 7,
+    "note": "Full H2 run registered 62 tests with 17 PostgreSQL tests skipped. The 10 care tests were then separately executed against PostgreSQL 17 with all 14 migrations. The older seven PostgreSQL tests were not rerun. Latest targeted Care/Organization H2 checks also passed.",
+    "reports": [
+      {
+        "suite": "org.healthpassport.CareWorkflowTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.ClinicianTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.CompactHealthIdTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.DocumentTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.FhirApiTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.FhirMapperTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.IdentityTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.LearningTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.MedicationPassportTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.OrganizationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.PasskeyTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.PostgresCareWorkflowTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.PostgresWorkflowTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 7
+      },
+      {
+        "suite": "org.healthpassport.ProfilePhotoTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "suite": "org.healthpassport.WorkflowTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ]
+  },
+  "web": {
+    "startTime": "2026-09-11T09:00:21.252Z",
+    "duration": 34171.3,
+    "expected": 11,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "mobileBrowserHarness": {
+    "startTime": "2026-09-11T09:06:04.759Z",
+    "duration": 9451.351999999999,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "mobileUnitTestsPassed": 18,
+  "buildChecks": {
+    "webTypecheck": "passed",
+    "webLint": "passed",
+    "webFormatting": "passed",
+    "webProductionBuild": "passed",
+    "mobileTypecheck": "passed",
+    "iosHermesExport": "passed",
+    "androidHermesExport": "passed"
+  },
+  "coveredWorkflows": [
+    "Nurse observation time, author, source and structured vitals shared with doctor",
+    "Historical carry-forward preserves source/date/measurements; separate confirmation",
+    "Reception registration/check-in/booking with direct clinical access rejected",
+    "Doctor-to-nurse task acknowledgment, progress and completion across clients",
+    "Lab order, specimen progress, linked result and doctor review",
+    "Conversation membership, mentions, read states and explicit chat-to-record action",
+    "Organization/clinic/assignment/consent denial through direct backend requests",
+    "Concurrent edits, optimistic versions, signed notes and reasoned amendments",
+    "Linked check-in, triage, consultation, follow-up and discharge stages",
+    "Existing registration, sharing, documents, passkeys, pharmacy, FHIR and doctor journeys"
+  ],
+  "verificationNotes": [
+    "Repeated synthetic account-creation runs hit the existing registration throttle; the local server was restarted between suites without weakening the limiter.",
+    "A mobile preview refresh during a code change interrupted an early test run; the complete suite passed against the final stable source.",
+    "Screenshots capture synthetic data; native secure storage/biometrics/photo picking are harness substitutes."
+  ],
+  "limitations": [
+    "No physical iOS/Android device or signed app binary validation.",
+    "No external EHR, LIS/PACS, pharmacy delivery, billing, insurer or calendar integration.",
+    "Notifications are generic in-app notices, not OS push, SMS, email or background delivery.",
+    "No inpatient bed-management/billing subsystem or department-specific case-sheet template builder.",
+    "Separate photo browser suite was not rerun; four backend photo regression tests passed in the H2 suite.",
+    "No fresh production deployment, disaster restore or real patient certification in this revision."
+  ],
+  "sha256": {
+    "apps/backend/src/main/resources/db/migration/V13__care_coordination.sql": "21a0a9a7384f5e24cea8122d9e7602274a2c14e56502eddaff5e57512f5578d5",
+    "apps/backend/src/main/resources/db/migration/V14__care_workflow_integrity.sql": "63f4e7b1ec284aa6e2bf94b9df86b14c6d6e3b7b4f6b70542bad1c0b74b6e873",
+    "apps/backend/target/health-passport-api-0.1.0.jar": "50b0c8c03f827d2e4bcf105fb9be3e6bdd9b2b2d92a8da19df5f62b8c8728d2f",
+    "apps/web/dist/client/index.html": "188de810807fb4160b5487e3e1f5e1f6bb56f31dd80d251ac49ce0e20bcd3cd3",
+    "apps/mobile/src/CareWorkspace.tsx": "fec2964deb74e8e9b67b877de5150976a37cc35a52e36447cb89834dcf1ac76d",
+    "apps/shared/care-model.ts": "77bb057a5f32c86610b77f76c976921c7e05f0addcd6d49e88dfff3655d1cad5",
+    "apps/mobile/dist/_expo/static/js/ios/index-6993c748ad7c457afcc464c28a9b69c6.hbc": "c1a6b2acdb34b99d6ace6b3f0c2338fe8eface8d7d173cc17597d35ced8f01b9",
+    "apps/mobile/dist-android/_expo/static/js/android/index-c7a12e27e63a9349dd7f2f981c7e4d94.hbc": "1e99ef7ff81bd7227c2444ef82bf1ace92e7107341fe65ae053544396ebf0696"
+  }
+}

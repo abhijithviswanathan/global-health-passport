@@ -10,7 +10,11 @@ for line in configure().read_text().splitlines():
         key,value=line.split('=',1);env.setdefault(key,value)
 for command in ('java','node','npm'):
     if not shutil.which(command):sys.exit(f'Missing {command}. Install Java 21 and Node.js 24 with npm, then retry.')
+if args.install:
+    from setup_photos import setup
+    setup()
 if args.install:subprocess.run(['npm','ci'],cwd=ROOT/'apps/web',env=env,check=True)
+if not (ROOT/'apps/backend/photo-check/.venv').exists():sys.exit('Local photo checker missing. Run Python 3.12+ scripts/setup_photos.py before starting.')
 if not (ROOT/'apps/web/node_modules').is_dir():sys.exit('Web dependencies missing. Run python3 scripts/dev.py --install.')
 if not args.no_build:subprocess.run(['./mvnw','-B','verify'],cwd=ROOT/'apps/backend',env=env,check=True)
 jar=ROOT/'apps/backend/target/health-passport-api-0.1.0.jar'

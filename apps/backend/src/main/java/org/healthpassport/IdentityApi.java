@@ -53,6 +53,8 @@ public class IdentityApi {
                   "Synthetic self-registration");
               api.audit(uid, uid, "PATIENT_REGISTERED", health);
             });
+        r.getSession().setAttribute("photoRegistrationOwner", uid);
+        r.getSession().setAttribute("photoRegistrationUntil", Instant.now().plusSeconds(600));
         return Map.of("healthId", health, "username", username, "synthetic", true);
       } catch (DuplicateKeyException e) {
         // Retry a random Health ID collision in a fresh transaction (including PostgreSQL).

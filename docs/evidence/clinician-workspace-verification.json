@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-10",
+  "scope": "Local synthetic doctor workspace",
+  "backend": {
+    "discovered": 38,
+    "passed": 31,
+    "skipped": 7,
+    "failures": 0,
+    "newClinicianCases": 5,
+    "database": "H2; V11 applied; earlier PostgreSQL verification does not cover V11"
+  },
+  "web": {
+    "build": "passed; direct vinext build after Sites workflow helper could not start",
+    "typecheck": "passed",
+    "eslint": "passed",
+    "prettier": "passed",
+    "playwright": {
+      "startTime": "2026-09-10T11:08:26.046Z",
+      "duration": 30617.162,
+      "expected": 9,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "doctorWidths": [
+      1440,
+      768,
+      390,
+      320
+    ],
+    "visitEditorAxe": "passed after notification fade-in finished",
+    "visualReview": [
+      "doctor-today.png",
+      "doctor-visit.png",
+      "doctor-visit-mobile.png"
+    ],
+    "mobileVisitBounds": {
+      "viewportWidth": 390,
+      "left": 16,
+      "width": 358,
+      "clientWidth": 356,
+      "scrollWidth": 356
+    }
+  },
+  "retestNotes": [
+    "Repeated suite runs reached the unchanged five-per-15-minute registration throttle. A graceful local backend restart cleared transient test rate-limit state without deleting saved data.",
+    "An intermediate contrast check sampled a toast mid-animation. The final assertion waits for opacity 1 before measuring."
+  ],
+  "remaining": [
+    "No external calendar, invitations, reminders or video integration",
+    "No measured clinician time-savings study",
+    "V11 PostgreSQL and full recovery drill remain unverified",
+    "Synthetic local use only"
+  ]
+}

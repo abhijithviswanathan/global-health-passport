@@ -24,3 +24,22 @@ Assets: patient identity links, clinical narratives, prescriptions, grants, sess
 H-01 Wrong patient: require confirmation of appropriate identifiers before attaching information; do not show unrestricted demographics to solve discovery. H-02 Incomplete history: prominently indicate scope/freshness without revealing hidden categories. H-03 Medication units/frequency ambiguity: structured fields, validated units, no inferred regimen. H-04 Stale emergency card: show timestamp and expiry. H-05 Duplicate or overwritten result: immutable provenance and amendments. H-06 Similarity interpreted as recommendation: separate learning use, no automatic treatment selection.
 
 Each hazard needs an accountable clinical safety owner, severity/likelihood assessment, mitigation evidence and signed residual-risk acceptance before a clinical pilot. These roles are currently unassigned; this is a live-release blocker.
+
+
+## Expansion threats and controls
+
+| Threat | Implemented control / remaining boundary |
+|---|---|
+| Fabricated hospital self-registers for clinical access | Pending onboarding, independent platform review, separate work identity and verified clinical credentials |
+| Cross-hospital object ID or parent-group escalation | Server tenant resource filters, composite hierarchy FKs; parentage grants no clinical access |
+| Employee leaves but keeps a session or assignment | Request-time membership/expiry checks and timed sweep, session/assignment/future-shift revocation |
+| Nurse/technician/insurer uses physician APIs | Role ceilings plus explicit privileges and consent; negative integration tests |
+| Wrong specimen reaches wrong patient | Generated specimen reference plus matching patient Health ID before collection stage |
+| Unreviewed imaging text appears signed | Radiologist identity required for report attestation; ordering clinician review is distinct |
+| Card exposed under ordinary chart-document consent | Separate insurance purpose, filtered document/timeline APIs, grant-controlled card endpoints |
+| Insurance information leaks to advertising | Marketplace has no patient linkage; insurer clinical denial; sponsorship disabled |
+| Forged/stale workflow update | CSRF, server transitions, current version, scoped recipients, dependencies and idempotency on supported submissions |
+| Notification/push reveals patient data | Generic bounded tenant change signals; details require authorized workspace fetch |
+| Malicious eligibility endpoint/response | Deployment-only HTTPS endpoint, protected token, disabled redirects, time/size/status bounds; live integration not validated |
+
+Residuals: one-process application authorization/locks, no independent audit retention, no dedicated clinical paging SLA, external partner/device verification, and organizational policy review. A limited synthetic test suite is not a comprehensive penetration test.

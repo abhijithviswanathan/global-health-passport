@@ -5,8 +5,33 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "ios": {"supportsTablet": true, "bundleIdentifier": "org.example.healthpassport", "infoPlist": {"NSFaceIDUsageDescription": "Unlock your health passport on this device."}},
-    "android": {"package": "org.example.healthpassport", "allowBackup": false},
-    "plugins": ["expo-secure-store", ["expo-local-authentication", {"faceIDPermission": "Unlock your health passport on this device."}]]
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "org.example.healthpassport",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Unlock your health passport on this device."
+      }
+    },
+    "android": {
+      "package": "org.example.healthpassport",
+      "allowBackup": false
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Unlock your health passport on this device."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Choose a profile or authorized care identification photo.",
+          "cameraPermission": "Take a profile or authorized care identification photo.",
+          "microphonePermission": false
+        }
+      ]
+    ]
   }
 }

@@ -147,7 +147,9 @@ public class DocumentService {
               : verdict == Verdict.INFECTED ? "rejected" : "quarantined";
       reauthorize.run();
       db.update(
-          "insert into medical_document values(?,?,?,?,?,?,?,?,?,?)",
+          "insert into"
+              + " medical_document(id,patient_id,author_id,filename,media_type,size_bytes,status,source,sha256,created_at)"
+              + " values(?,?,?,?,?,?,?,?,?,?)",
           id,
           patient,
           author,

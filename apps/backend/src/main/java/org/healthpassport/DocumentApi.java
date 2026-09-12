@@ -23,7 +23,7 @@ public class DocumentApi {
     var user = api.user(request);
     api.require(user, patient, "document");
     api.audit(api.uid(user), patient, "DOCUMENTS_READ", patient);
-    return documents.list(patient).stream().map(this::publicMetadata).toList();
+    return documents.list(patient).stream().filter(row->!"insurance".equals(row.get("document_purpose"))).filter(row->api.tenants.recordVisible(user,row)).map(this::publicMetadata).toList();
   }
 
   @PostMapping(
@@ -49,6 +49,33 @@ public class DocumentApi {
             source,
             file,
             () -> api.require(api.user(request), patient, "document"));
+    String rid = metadata.get("id").toString();
+    api.tx.executeWithoutResult(
+        tx -> {
+          api.db.update(
+              "insert into"
+                  + " clinical_record(id,patient_id,kind,title,details,author_id,source,status,created_at)"
+                  + " values(?,?,'document',?,?,?,?,?,?)",
+              rid,
+              patient,
+              metadata.get("filename"),
+              "Uploaded document. Open Clinical documents to view scan status and download.",
+              api.uid(user),
+              source,
+              "active",
+              metadata.get("created_at"));
+          api.provenance.stamp(
+              rid,
+              Map.of(
+                  "sourceType",
+                  "uploaded_document",
+                  "source",
+                  api.role(user).equals("patient")
+                      ? "Patient entered — unverified"
+                      : "Provider upload"),
+              user);
+          api.db.update("update medical_document set provenance_record_id=?,tenant_id=? where id=?", rid, user.get("organization_id"),rid);
+        });
     api.audit(
         api.uid(user),
         patient,
@@ -61,8 +88,10 @@ public class DocumentApi {
   ResponseEntity<byte[]> download(@PathVariable String id, HttpServletRequest request) {
     var user = api.user(request);
     var metadata = documents.metadata(id);
+    if("insurance".equals(metadata.get("document_purpose")))throw PassportApi.error(403,"Use the separately authorized insurance card workflow");
     String patient = metadata.get("patient_id").toString();
     api.require(user, patient, "document");
+    if(!api.tenants.recordVisible(user,metadata))throw PassportApi.error(403,"Document belongs to another organization");
     byte[] contents = documents.download(metadata);
     // Recheck immediately before disclosure; a grant may have expired during decryption.
     api.require(user, patient, "document");
@@ -93,6 +122,22 @@ public class DocumentApi {
     result.put("status", row.get("status"));
     result.put("source", row.get("source"));
     result.put("createdAt", row.get("created_at"));
+    var records =
+        api.db.queryForList(
+            "select * from clinical_record where id=?", row.get("provenance_record_id"));
+    result.put(
+        "provenance",
+        records.isEmpty()
+            ? Map.of(
+                "observed_at",
+                "Unknown",
+                "author_role",
+                "Unknown",
+                "updated_at",
+                "Unknown",
+                "source_type",
+                "uploaded_document")
+            : api.provenance.view(records.getFirst()));
     return result;
   }
 }

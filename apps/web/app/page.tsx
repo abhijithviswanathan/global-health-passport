@@ -1,4 +1,19 @@
 "use client";
+import { EcosystemWorkspace } from "@/components/ecosystem-workspace";
+import { CareWorkspace } from "@/components/care-workspace";
+import { provenanceLines } from "../../shared/care-model";
+import {
+  ProfilePanel,
+  ProfileAvatar,
+  ClinicalPhotos,
+} from "@/components/profile-photos";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
 import {
   useState,
   useEffect,
@@ -40,7 +55,14 @@ import {
   Filter,
   Shield,
   CalendarDays,
+  ArrowLeft,
 } from "lucide-react";
+import Link from "next/link";
+import {
+  ClinicianWorkspace,
+  type ClinicianView,
+} from "@/components/clinician-workspace";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -106,6 +128,9 @@ import {
 } from "@/lib/api";
 
 type View =
+  | ClinicianView
+  | "care"
+  | "hospital"
   | "overview"
   | "timeline"
   | "medications"
@@ -115,8 +140,15 @@ type View =
   | "security"
   | "labs"
   | "learning"
-  | "organization";
+  | "organization"
+  | "profile";
 const titles: Record<View, string> = {
+  hospital: "Hospital workspace",
+  care: "Care team",
+  profile: "Profile",
+  today: "Today",
+  patients: "Patients",
+  appointments: "Appointments",
   overview: "Your health, in perspective",
   timeline: "Medical timeline",
   medications: "Medication Passport",
@@ -129,6 +161,11 @@ const titles: Record<View, string> = {
   organization: "Organization administration",
 };
 const nav = [
+  { id: "hospital", label: "Hospital workspace", icon: LayoutDashboard },
+  { id: "care", label: "Care team", icon: Users },
+  { id: "today", label: "Today", icon: LayoutDashboard },
+  { id: "patients", label: "Patients", icon: Users },
+  { id: "appointments", label: "Appointments", icon: CalendarDays },
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "timeline", label: "Medical timeline", icon: Clock3 },
   { id: "medications", label: "Medication Passport", icon: Pill },
@@ -140,16 +177,28 @@ const nav = [
   { id: "learning", label: "Clinical learning", icon: Search },
   { id: "organization", label: "Organization", icon: Users },
 ] as const;
-function Brand() {
+function Brand({ onHome }: { onHome?: () => void }) {
   return (
-    <div className="brand">
+    <Link
+      className="brand"
+      href="/"
+      aria-label="Health Passport home"
+      onClick={
+        onHome
+          ? (e) => {
+              e.preventDefault();
+              onHome();
+            }
+          : undefined
+      }
+    >
       <span className="brand-mark">
         <HeartPulse size={25} />
       </span>
       <span>
         Health Passport<small>GLOBAL HEALTH RECORDS</small>
       </span>
-    </div>
+    </Link>
   );
 }
 function Empty({
@@ -234,13 +283,42 @@ function RecordRow({
           {record.source}
         </span>
       </span>
-      <span className="record-date">{date(record.created_at)}</span>
+      <span className="record-date">
+        {String(record.freshness_label || "Observation date unknown")}
+        <br />
+        Entered {date(record.created_at)}
+      </span>
       <ChevronRight size={16} />
     </button>
   );
 }
 
+function homeView(u: User): View {
+  if (["billing", "insurer", "security"].includes(u.role)) return "hospital";
+  if (
+    [
+      "nurse",
+      "reception",
+      "diagnostic",
+      "coordinator",
+      "admin",
+      "lab",
+      "pharmacy",
+    ].includes(u.role)
+  )
+    return "care";
+  return u.role === "doctor"
+    ? "today"
+    : ["admin", "security"].includes(u.role)
+      ? "activity"
+      : "overview";
+}
 export default function Home() {
+  const [loginPortal, setLoginPortal] = useState("patient");
+  const unsaved = useRef(false);
+  const onDirtyChange = useCallback((dirty: boolean) => {
+    unsaved.current = dirty;
+  }, []);
   const [user, setUser] = useState<User | null>(null),
     [ready, setReady] = useState(false),
     [dark, setDark] = useState(false);
@@ -270,6 +348,7 @@ export default function Home() {
     [recordText, setRecordText] = useState(""),
     [related, setRelated] = useState(""),
     [amending, setAmending] = useState(""),
+    [correctionReason, setCorrectionReason] = useState(""),
     [recipient, setRecipient] = useState(""),
     [grantScopes, setGrantScopes] = useState<string[]>([
       "allergy",
@@ -299,6 +378,29 @@ export default function Home() {
   const changeSession = useCallback((next: User | null) => {
     requestGeneration.current++;
     setUser(next);
+    unsaved.current = false;
+    if (next) {
+      const requested = window.location.hash.slice(1) as View;
+      const target =
+        Object.keys(titles).includes(requested) &&
+        (next.role === "doctor" ||
+          !["today", "patients", "appointments"].includes(requested))
+          ? requested
+          : homeView(next);
+      setView(target);
+      window.history.replaceState(
+        { ghpView: target, ghpDepth: 0 },
+        "",
+        `#${target}`,
+      );
+    } else {
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
+      setLoginPortal("patient");
+    }
     setPatientId("");
     setPatients([]);
     setRecords([]);
@@ -319,6 +421,9 @@ export default function Home() {
     setLoading(true);
   }
   const patient = user?.role === "patient";
+  const doctor = user?.role === "doctor";
+  const clinicianView =
+    doctor && ["today", "patients", "appointments"].includes(view);
   const admin = user?.role === "admin" || user?.role === "security";
   const selected = patients.find((p) => p.id === patientId);
   const active = records.filter((r) => r.status === "active");
@@ -358,12 +463,18 @@ export default function Home() {
   };
   useEffect(() => {
     const controller = new AbortController();
+    // Synchronize the portal deep link after hydration.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoginPortal(
+      new URLSearchParams(window.location.search).get("portal") === "doctor"
+        ? "doctor"
+        : "patient",
+    );
     const saved = localStorage.getItem("ghp-theme");
     const value = saved
       ? saved === "dark"
       : matchMedia("(prefers-color-scheme: dark)").matches;
     // Browser-only preferences are synchronized after hydration to preserve server/client markup.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDark(value);
     document.documentElement.classList.toggle("dark", value);
     api<User>("/me", { signal: controller.signal })
@@ -390,9 +501,18 @@ export default function Home() {
       const next = ps.some((p) => p.id === patientId)
         ? patientId
         : ps[0]?.id || "";
-      const nextRecords = next
-        ? await api<ClinicalRecord[]>(`/patients/${next}/timeline`, options)
-        : [];
+      const nextRecords =
+        next &&
+        ![
+          "reception",
+          "coordinator",
+          "admin",
+          "billing",
+          "insurer",
+          "security",
+        ].includes(user.role)
+          ? await api<ClinicalRecord[]>(`/patients/${next}/timeline`, options)
+          : [];
       return { ps, cs, rs, as, us, next, nextRecords };
     },
     [user, patientId],
@@ -485,12 +605,15 @@ export default function Home() {
         method: "POST",
         body: { username, password, otp, totp: otp, code: otp },
       });
+      window.history.replaceState(
+        null,
+        "",
+        window.location.pathname + window.location.search,
+      );
       changeSession(u);
       setPassword("");
       setOtp("");
-      setView(
-        u.role === "admin" || u.role === "security" ? "activity" : "overview",
-      );
+      setView(homeView(u));
     } catch (e) {
       setLoginError(e instanceof Error ? e.message : "Sign in failed.");
     } finally {
@@ -498,6 +621,11 @@ export default function Home() {
     }
   }
   async function logout() {
+    if (
+      unsaved.current &&
+      !window.confirm("Sign out without saving the latest visit draft changes?")
+    )
+      return;
     requestGeneration.current++;
     setRecords([]);
     try {
@@ -514,6 +642,7 @@ export default function Home() {
     setRecordTitle(amend?.title || "");
     setRecordText(amend?.details || "");
     setAmending(amend?.id || "");
+    setCorrectionReason("");
     setRelated(amend?.related_id || "");
     setRecipient("");
     setQuantity("30");
@@ -583,7 +712,7 @@ export default function Home() {
               ? { clinicalStatus }
               : {}),
             ...(related ? { relatedId: related } : {}),
-            ...(amending ? { replacesId: amending } : {}),
+            ...(amending ? { correctionReason, replacesId: amending } : {}),
             ...(recipient ? { recipientId: recipient } : {}),
             ...(["prescription", "dispense"].includes(recordKind)
               ? {
@@ -632,12 +761,59 @@ export default function Home() {
       toast.error(e instanceof Error ? e.message : "Export failed.");
     }
   }
-  function navigate(v: View) {
-    setView(v);
-    setSearch("");
-    setKind("all");
-    setFrom("");
-  }
+  const navigate = useCallback(
+    (v: View) => {
+      if (
+        unsaved.current &&
+        !window.confirm("Leave without saving your latest changes?")
+      )
+        return;
+      if (v !== view)
+        window.history.pushState(
+          { ghpView: v, ghpDepth: (window.history.state?.ghpDepth || 0) + 1 },
+          "",
+          `#${v}`,
+        );
+      unsaved.current = false;
+      setView(v);
+      setSearch("");
+      setKind("all");
+      setFrom("");
+    },
+    [view],
+  );
+  useEffect(() => {
+    if (!user) return;
+    const pop = () => {
+      if (
+        unsaved.current &&
+        !window.confirm("Leave without saving your latest changes?")
+      ) {
+        window.history.pushState(
+          { ghpView: view, ghpDepth: 1 },
+          "",
+          `#${view}`,
+        );
+        return;
+      }
+      const requested = window.location.hash.slice(1) as View;
+      const next =
+        Object.keys(titles).includes(requested) &&
+        (user.role === "doctor" ||
+          !["today", "patients", "appointments"].includes(requested))
+          ? requested
+          : homeView(user);
+      unsaved.current = false;
+      setView(next);
+      setDetail(null);
+      setDialog(null);
+      setSearch("");
+      setKind("all");
+      setFrom("");
+    };
+    window.addEventListener("popstate", pop);
+    return () => window.removeEventListener("popstate", pop);
+  }, [user, view]);
   useEffect(() => {
     type MC = {
       registerTool: (
@@ -675,7 +851,7 @@ export default function Home() {
       );
     } catch {}
     return () => life.abort();
-  }, []);
+  }, [navigate]);
   if (!ready)
     return (
       <main className="startup" aria-label="Loading Health Passport">
@@ -731,8 +907,40 @@ export default function Home() {
             <div className="login-icon">
               <LockKeyhole />
             </div>
-            <h2>Welcome back</h2>
-            <p className="muted">Sign in to your Health Passport.</p>
+            <Tabs
+              value={loginPortal}
+              onValueChange={(value) => {
+                setLoginPortal(value);
+                setLoginError("");
+                window.history.replaceState(
+                  null,
+                  "",
+                  value === "doctor"
+                    ? "?portal=doctor"
+                    : window.location.pathname,
+                );
+              }}
+              className="portal-choice"
+            >
+              <TabsList aria-label="Choose sign-in portal">
+                <TabsTrigger value="patient">
+                  <HeartPulse size={16} />
+                  Patient
+                </TabsTrigger>
+                <TabsTrigger value="doctor">
+                  <Stethoscope size={16} />
+                  Doctor / care team
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <h2>
+              {loginPortal === "doctor" ? "Staff sign in" : "Welcome back"}
+            </h2>
+            <p className="muted">
+              {loginPortal === "doctor"
+                ? "Your schedule, patients and visit notes in one workspace."
+                : "Sign in to your Health Passport."}
+            </p>
             <form className="form-stack" onSubmit={login}>
               <label htmlFor="username">
                 Username
@@ -789,13 +997,14 @@ export default function Home() {
                 try {
                   if (!username) throw new Error("Enter your username first.");
                   const u = await signInWithPasskey(username);
+                  window.history.replaceState(
+                    null,
+                    "",
+                    window.location.pathname + window.location.search,
+                  );
                   changeSession(u);
                   setPassword("");
-                  setView(
-                    u.role === "admin" || u.role === "security"
-                      ? "activity"
-                      : "overview",
-                  );
+                  setView(homeView(u));
                 } catch (e) {
                   setLoginError(
                     e instanceof Error ? e.message : "Passkey sign-in failed.",
@@ -808,7 +1017,14 @@ export default function Home() {
               <KeyRound size={17} />
               Sign in with a passkey
             </Button>
-            <AccountEntry />
+            <AccountEntry allowRegistration={loginPortal === "patient"} />
+            {loginPortal === "doctor" && (
+              <p className="clinician-login-help">
+                Use your organization-provisioned staff account. Doctors open
+                their clinician workspace; other care-team roles open their own
+                tools. New staff accounts require organization approval.
+              </p>
+            )}
             <div className="login-note">
               <ShieldCheck size={18} />
               <p>
@@ -831,7 +1047,7 @@ export default function Home() {
       </a>
       <Sidebar className="passport-sidebar">
         <SidebarHeader>
-          <Brand />
+          <Brand onHome={() => navigate(homeView(user))} />
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
@@ -844,31 +1060,44 @@ export default function Home() {
             </SidebarGroupLabel>
             <SidebarMenu>
               {nav
-                .filter(
-                  (n) =>
-                    (!admin ||
-                      ["activity", "security", "organization"].includes(
-                        n.id,
-                      )) &&
-                    (n.id !== "organization" || user.role === "admin") &&
-                    (n.id !== "learning" || user.role === "doctor") &&
-                    (user.role !== "pharmacy" ||
-                      [
-                        "overview",
-                        "medications",
-                        "sharing",
-                        "activity",
-                        "security",
-                      ].includes(n.id)) &&
-                    (user.role !== "lab" ||
-                      [
-                        "overview",
-                        "labs",
-                        "sharing",
-                        "activity",
-                        "security",
-                      ].includes(n.id)),
-                )
+                .filter((n) => {
+                  if (n.id === "hospital") return true;
+                  if (["billing", "insurer"].includes(user.role))
+                    return ["activity", "security"].includes(n.id);
+                  if (n.id === "care")
+                    return !patient && user.role !== "security";
+                  if (["today", "patients", "appointments"].includes(n.id))
+                    return doctor;
+                  if (n.id === "organization") return user.role === "admin";
+                  if (n.id === "learning") return doctor;
+                  if (admin) return ["activity", "security"].includes(n.id);
+                  if (
+                    [
+                      "nurse",
+                      "reception",
+                      "coordinator",
+                      "diagnostic",
+                    ].includes(user.role)
+                  )
+                    return ["activity", "security", "sharing"].includes(n.id);
+                  if (user.role === "pharmacy")
+                    return [
+                      "overview",
+                      "medications",
+                      "sharing",
+                      "activity",
+                      "security",
+                    ].includes(n.id);
+                  if (user.role === "lab")
+                    return [
+                      "overview",
+                      "labs",
+                      "sharing",
+                      "activity",
+                      "security",
+                    ].includes(n.id);
+                  return true;
+                })
                 .map(({ id, label, icon: Icon }) => (
                   <SidebarMenuItem key={id}>
                     <SidebarMenuButton
@@ -899,7 +1128,7 @@ export default function Home() {
             <p>Access is limited by your role and sharing permissions.</p>
           </div>
           <div className="account-row">
-            <span className="avatar">{user.name?.charAt(0) || "H"}</span>
+            <ProfileAvatar owner={user.id} name={user.name} size={34} />
             <span>
               <strong>{user.name.replace(" (Synthetic)", "")}</strong>
               <small>{user.role} account</small>
@@ -914,6 +1143,19 @@ export default function Home() {
         <header className="topbar">
           <div className="topbar-left">
             <SidebarTrigger />
+            <Button
+              variant="ghost"
+              className="workspace-back"
+              onClick={() => {
+                if ((window.history.state?.ghpDepth || 0) > 0)
+                  window.history.back();
+                else navigate(homeView(user));
+              }}
+              aria-label="Go back"
+            >
+              <ArrowLeft size={17} />
+              <span>Back</span>
+            </Button>
             <span>
               {patient
                 ? "Patient portal"
@@ -921,10 +1163,39 @@ export default function Home() {
             </span>
             <ChevronRight size={14} />
             <span className="muted">
-              {nav.find((n) => n.id === view)?.label}
+              {nav.find((n) => n.id === view)?.label || titles[view]}
             </span>
           </div>
           <div className="topbar-right">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="account-menu-trigger"
+                  aria-label="Open account menu"
+                >
+                  <ProfileAvatar owner={user.id} name={user.name} size={30} />
+                  <span aria-hidden>☰</span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+                <DropdownMenuItem onSelect={() => navigate("profile")}>
+                  Profile & photo
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate("security")}>
+                  Settings & security
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate("activity")}>
+                  Access history
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => void logout()}>
+                  Sign out
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={toggleTheme}>
+                  {dark ? "Light appearance" : "Dark appearance"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <span className="synthetic-badge">Synthetic data</span>
             <button
               className="theme-toggle"
@@ -936,101 +1207,142 @@ export default function Home() {
           </div>
         </header>
         <main id="main-content" className="workspace" tabIndex={-1}>
-          <div className="page-heading">
-            <div>
-              <span className="eyebrow">
-                {patient ? "YOUR PERSONAL HEALTH RECORD" : user.organization}
-              </span>
-              <h1>
-                {view === "overview" && !patient
-                  ? "Patient workspace"
-                  : titles[view]}
-              </h1>
-              <p>
-                {view === "overview"
-                  ? "A connected view of your records, care, and next steps."
-                  : view === "sharing"
-                    ? "Choose who can access your information, and for how long."
-                    : view === "timeline"
-                      ? "Every record, with its source and history preserved."
-                      : view === "medications"
-                        ? "Medication details and dispensing history, together."
-                        : view === "activity"
-                          ? "A record of access, changes, and sharing decisions."
-                          : view === "security"
-                            ? "Manage how you sign in and protect your account."
-                            : view === "labs"
-                              ? "Orders and reports from your care team."
-                              : "Notes and reports, with clear provenance."}
-              </p>
-            </div>
-            <div className="heading-actions">
-              <Button
-                variant="outline"
-                className="icon-button"
-                aria-label="Refresh records"
-                onClick={() => void refresh()}
-                disabled={loading}
-              >
-                <RefreshCw size={17} />
-              </Button>
-              {!patient && !admin && (
-                <Button
-                  className="primary-button"
-                  onClick={() => {
-                    setFormError("");
-                    setHealthId("");
-                    setDialog("request");
-                  }}
-                >
-                  <Users size={17} />
-                  Request access
-                </Button>
-              )}
-              {patient && view === "sharing" && (
-                <Button className="primary-button" onClick={() => openGrant()}>
-                  <Plus size={17} />
-                  Grant access
-                </Button>
-              )}
-              {patient && view === "overview" && (
+          {view === "hospital" && (
+            <EcosystemWorkspace user={user} onDirtyChange={onDirtyChange} />
+          )}
+          {view === "care" && (
+            <CareWorkspace user={user} onDirtyChange={onDirtyChange} />
+          )}
+          {clinicianView && (
+            <ClinicianWorkspace
+              view={view as ClinicianView}
+              user={user}
+              patients={patients}
+              onNavigate={navigate}
+              onDirtyChange={onDirtyChange}
+              onOpenChart={(id, section = "overview") => {
+                if (
+                  unsaved.current &&
+                  !window.confirm("Leave without saving your latest changes?")
+                )
+                  return;
+                unsaved.current = false;
+                changePatient(id);
+                navigate(section);
+              }}
+              onRequestAccess={() => {
+                setFormError("");
+                setHealthId("");
+                setDialog("request");
+              }}
+            />
+          )}
+          {!clinicianView && view !== "care" && view !== "hospital" && (
+            <div className="page-heading">
+              <div>
+                <span className="eyebrow">
+                  {patient ? "YOUR PERSONAL HEALTH RECORD" : user.organization}
+                </span>
+                <h1>
+                  {view === "overview" && !patient
+                    ? "Patient workspace"
+                    : titles[view]}
+                </h1>
+                <p>
+                  {view === "profile"
+                    ? "Choose your photo and who can see it."
+                    : view === "overview"
+                      ? "A connected view of your records, care, and next steps."
+                      : view === "sharing"
+                        ? "Choose who can access your information, and for how long."
+                        : view === "timeline"
+                          ? "Every record, with its source and history preserved."
+                          : view === "medications"
+                            ? "Medication details and dispensing history, together."
+                            : view === "activity"
+                              ? "A record of access, changes, and sharing decisions."
+                              : view === "security"
+                                ? "Manage how you sign in and protect your account."
+                                : view === "labs"
+                                  ? "Orders and reports from your care team."
+                                  : "Notes and reports, with clear provenance."}
+                </p>
+              </div>
+              <div className="heading-actions">
                 <Button
                   variant="outline"
-                  className="action-button"
-                  onClick={() => exportData("export")}
+                  className="icon-button"
+                  aria-label="Refresh records"
+                  onClick={() => void refresh()}
+                  disabled={loading}
                 >
-                  <Download size={17} />
-                  Export records
+                  <RefreshCw size={17} />
                 </Button>
-              )}
+                {!patient && !admin && (
+                  <Button
+                    className="primary-button"
+                    onClick={() => {
+                      setFormError("");
+                      setHealthId("");
+                      setDialog("request");
+                    }}
+                  >
+                    <Users size={17} />
+                    Request access
+                  </Button>
+                )}
+                {patient && view === "sharing" && (
+                  <Button
+                    className="primary-button"
+                    onClick={() => openGrant()}
+                  >
+                    <Plus size={17} />
+                    Grant access
+                  </Button>
+                )}
+                {patient && view === "overview" && (
+                  <Button
+                    variant="outline"
+                    className="action-button"
+                    onClick={() => exportData("export")}
+                  >
+                    <Download size={17} />
+                    Export records
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
+          )}
           {error && (
             <div role="alert" className="error-message">
               {error} <button onClick={() => void refresh()}>Try again</button>
             </div>
           )}
-          {!patient && !admin && (
-            <div className="patient-picker">
-              <label>
-                Patient
-                <Pick
-                  label="Select authorized patient"
-                  value={patientId}
-                  onChange={changePatient}
-                  options={patients.map((p) => ({
-                    value: p.id,
-                    label: p.name,
-                  }))}
-                />
-              </label>
-              <span>
-                <ShieldCheck size={16} /> Only patients with active permission
-                appear here.
-              </span>
-            </div>
-          )}
-          {loading && records.length === 0 && (
+          {!patient &&
+            !admin &&
+            !clinicianView &&
+            view !== "care" &&
+            view !== "hospital" && (
+              <div className="patient-picker">
+                <label>
+                  Patient
+                  <Pick
+                    label="Select authorized patient"
+                    value={patientId}
+                    onChange={changePatient}
+                    options={patients.map((p) => ({
+                      value: p.id,
+                      label: p.name,
+                    }))}
+                  />
+                </label>
+                <span>
+                  <ShieldCheck size={16} /> Only patients with active permission
+                  appear here.
+                </span>
+              </div>
+            )}
+          {!clinicianView && loading && records.length === 0 && (
             <div
               className="loading-grid"
               aria-label="Loading records"
@@ -1040,6 +1352,9 @@ export default function Home() {
               <Skeleton className="h-28" />
               <Skeleton className="h-28" />
             </div>
+          )}
+          {view === "profile" && (
+            <ProfilePanel id={user.id} name={user.name} patient={!!patient} />
           )}
           {view === "overview" && (
             <>
@@ -1055,11 +1370,19 @@ export default function Home() {
                 </div>
               ) : (
                 <>
+                  {user.role === "doctor" && patientId && (
+                    <details className="clinical-photo-disclosure">
+                      <summary>Identification photos</summary>
+                      <ClinicalPhotos key={patientId} patientId={patientId} />
+                    </details>
+                  )}
                   <section className="identity-strip">
                     <div className="identity-name">
-                      <span className="large-avatar">
-                        {selected?.name?.charAt(0) || "A"}
-                      </span>
+                      <ProfileAvatar
+                        owner={patientId}
+                        name={selected?.name || "Patient"}
+                        size={48}
+                      />
                       <div>
                         <h2>{selected?.name?.replace(" (Synthetic)", "")}</h2>
                         <p>
@@ -1727,7 +2050,16 @@ export default function Home() {
           )}
           {view === "learning" && user.role === "doctor" && <LearningPanel />}
           {view === "security" && (
-            <SecurityPanel user={user} onLogout={logout} />
+            <>
+              <Button
+                variant="outline"
+                className="mb-4"
+                onClick={() => navigate("profile")}
+              >
+                Manage profile photo
+              </Button>
+              <SecurityPanel user={user} onLogout={logout} />
+            </>
           )}
           <footer className="workspace-footer">
             <span>
@@ -1744,7 +2076,7 @@ export default function Home() {
             <DialogTitle>{detail?.title}</DialogTitle>
             <DialogDescription>
               {detail && kinds[detail.kind]} ·{" "}
-              {detail && date(detail.created_at, true)}
+              {detail && "Entered " + date(detail.created_at, true)}
             </DialogDescription>
           </DialogHeader>
           {detail && (
@@ -1761,7 +2093,12 @@ export default function Home() {
               <dl className="detail-grid">
                 <div>
                   <dt>Author</dt>
-                  <dd>{detail.author_name || "Recorded author"}</dd>
+                  <dd>{detail.author_name || "Unknown"}</dd>
+                  <dd>
+                    {provenanceLines(detail).map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </dd>
                 </div>
                 <div>
                   <dt>Source</dt>
@@ -1978,6 +2315,17 @@ export default function Home() {
                     rows={4}
                   />
                 </label>
+                {amending && (
+                  <label>
+                    Correction reason
+                    <Textarea
+                      required
+                      value={correctionReason}
+                      onChange={(e) => setCorrectionReason(e.target.value)}
+                      maxLength={1000}
+                    />
+                  </label>
+                )}
                 {["lab_result", "dispense"].includes(recordKind) && (
                   <label>
                     Related{" "}

@@ -48,3 +48,10 @@ The delivery register must retain: passkeys, TOTP, recovery and adaptive step-up
 
 ## Provisional nonfunctional targets
 These are engineering acceptance targets, not measured results: WCAG 2.2 AA; 320px through 2560px responsive layouts and 200% browser zoom; p95 protected reads under 500ms and writes under 1s at 50 concurrent synthetic users excluding upstream integrations; online revocation effective on the next request; 99.9% monthly service availability after production operations exist; RPO at most 15 minutes and RTO at most 4 hours after restoration exercises. Load dataset: 10,000 synthetic patients with 100 timeline entries each. Target ownership and operating costs require confirmation before contractual use.
+
+
+## September 11 organization ecosystem expansion
+
+The product now includes verified healthcare organization onboarding, separate work identities, role-specific hospital workspaces, department configuration, workforce intervals/public booking, clinical task/order/handoff workflows, patient insurance sharing and an independently reviewed marketplace. Existing care-team charts, appointment documentation and patient-controlled timelines remain the clinical core. Web and React Native share the new form/permission contract. See [implemented workflows and screenshots](ORGANIZATION_ECOSYSTEM.md).
+
+This is an executable synthetic pilot. Role categories do not replace local licensure/scope-of-practice policy. Marketplace information is patient-selected and separated from PHI; paid placement is disabled. Production clinical deployment, live insurer/PACS integration and device validation remain external release gates.

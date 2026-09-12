@@ -21,8 +21,9 @@ public class OrganizationApi {
     if (!api.demo) return;
     for (var u :
         api.db.queryForList(
-            "select id from app_user where role in ('doctor','lab','pharmacy') and"
-                + " organization='Northstar Demo Network' and display_name like '%(Synthetic)%'")) {
+            "select id from app_user where role in ('doctor','nurse','diagnostic','lab','pharmacy')"
+                + " and organization='Northstar Demo Network' and display_name like"
+                + " '%(Synthetic)%'")) {
       String uid = u.get("id").toString();
       if (api.db.queryForObject(
               "select count(*) from practitioner_verification where user_id=?", Integer.class, uid)
@@ -53,7 +54,8 @@ public class OrganizationApi {
                 + " name,u.username,u.role,u.organization,coalesce(v.status,'unverified') as"
                 + " verification_status,v.evidence_reference,v.verified_at from app_user u left"
                 + " join practitioner_verification v on v.user_id=u.id where u.organization=? and"
-                + " u.role in ('doctor','lab','pharmacy') order by u.display_name",
+                + " u.role in ('doctor','nurse','diagnostic','lab','pharmacy') order by"
+                + " u.display_name",
             admin.get("organization"))
         .stream()
         .map(this::view)
@@ -83,7 +85,7 @@ public class OrganizationApi {
           var found =
               api.db.queryForList(
                   "select id from app_user where id=? and organization=? and role in"
-                      + " ('doctor','lab','pharmacy') for update",
+                      + " ('doctor','nurse','diagnostic','lab','pharmacy') for update",
                   memberId,
                   admin.get("organization"));
           if (found.isEmpty()) throw error(404, "Organization member not found");
@@ -95,6 +97,7 @@ public class OrganizationApi {
               evidence,
               now(),
               api.uid(admin));
+          api.db.update("update employment set credential_status=?,version=version+1 where user_id=?",status,memberId);
           if (status.equals("suspended")) {
             api.db.update("update identity_session set revoked=true where user_id=?", memberId);
             api.db.update(

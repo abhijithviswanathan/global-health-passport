@@ -215,7 +215,11 @@ public class MedicationPassportApi {
       throw error(410, "Passport expired");
     String patient = row.get("patient_id").toString(), signed = row.get("credential").toString();
     var payload = api.json.readTree(dec(signed.split("\\.")[1]));
-    for (var rec : payload.get("records")) api.require(u, patient, rec.get("kind").asText());
+    for (var rec : payload.get("records")) {
+      api.require(u, patient, rec.get("kind").asText());
+      var source=api.db.queryForMap("select * from clinical_record where id=?",rec.get("id").asText());
+      if(!api.tenants.recordVisible(u,source))throw error(403,"Passport contains records from another organization");
+    }
     if (payload.get("records").isEmpty() && !api.uid(u).equals(patient))
       throw error(403, "Access not authorized");
     api.audit(api.uid(u), patient, "MEDICATION_PASSPORT_READ", row.get("id").toString());

@@ -1,0 +1,114 @@
+{
+  "revision": "organization-ecosystem-2026-09-11",
+  "recordedAt": "2026-09-11T10:25:49.356682+00:00",
+  "syntheticOnly": true,
+  "checks": {
+    "h2Backend": {
+      "status": "PASS",
+      "executed": 62,
+      "failures": 0,
+      "errors": 0,
+      "postgresCasesSkippedInThisRun": 31,
+      "log": "ecosystem-verification/backend-h2.log"
+    },
+    "postgresBackend": {
+      "status": "PASS",
+      "executed": 14,
+      "failures": 0,
+      "errors": 0,
+      "engine": "PostgreSQL 17.11",
+      "log": "ecosystem-verification/backend-postgres.log"
+    },
+    "webBrowser": {
+      "status": "PASS",
+      "executed": 14,
+      "stats": {
+        "startTime": "2026-09-11T10:20:03.220Z",
+        "duration": 37240.293999999994,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "report": "ecosystem-verification/web-e2e.json"
+    },
+    "nativeBrowserHarness": {
+      "status": "PASS",
+      "executed": 7,
+      "stats": {
+        "startTime": "2026-09-11T10:17:04.154Z",
+        "duration": 11344.952,
+        "expected": 7,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "report": "ecosystem-verification/mobile-ui.json",
+      "deviceAPIs": "substituted"
+    },
+    "photoBrowserRegression": {
+      "status": "PASS",
+      "executed": 2,
+      "stats": {
+        "startTime": "2026-09-11T10:24:19.742Z",
+        "duration": 11795.693,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "report": "ecosystem-verification/profile-photo-ui.json"
+    },
+    "nativeUnitPolicies": {
+      "status": "PASS",
+      "executed": 18,
+      "failures": 0
+    },
+    "webTypecheckLintBuild": {
+      "status": "PASS",
+      "build": "portable Sites vinext static build",
+      "published": false
+    },
+    "nativeTypecheckExports": {
+      "status": "PASS",
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "signedDeviceBuild": false
+    },
+    "liveMigration": {
+      "status": "PASS",
+      "fromVersion": 14,
+      "toVersion": 18,
+      "backupBeforeUpgrade": true
+    },
+    "physicalDevices": {
+      "status": "NOT TESTED"
+    },
+    "liveInsurerEhrPacs": {
+      "status": "BLOCKED",
+      "reason": "No live partner credentials/contracts/endpoints or validation supplied"
+    },
+    "sponsoredActivation": {
+      "status": "BLOCKED",
+      "reason": "Disabled pending legal/commercial decision"
+    },
+    "externalFHIRValidationLoadPenTestRestore": {
+      "status": "NOT TESTED"
+    }
+  },
+  "limits": [
+    "Single-process application tenancy; no RLS or physical tenant isolation.",
+    "Clinical report attestation is a stored hash, not certificate-backed signing.",
+    "Native exports and browser harness do not establish camera/biometric/secure-store hardware behavior.",
+    "Insurance gateway interface exists but no live insurer has been contacted.",
+    "No production deployment or compliance certification."
+  ],
+  "artifactHashes": {
+    "apps/backend/target/health-passport-api-0.1.0.jar": "7314d1cea1580eac898da30a4741174b0895be8c3a45ff6be0b7124f206535b5",
+    "apps/web/dist/client/index.html": "29989cbafe18f6d2f46da4068166f1d58df9f6271021935f17dfd19b5b1e2315",
+    "apps/mobile/dist/metadata.json": "657a8d6b926dfc914abbf3eba4233623fde8e4489b5984e6673f360044465232",
+    "apps/mobile/dist-android/metadata.json": "de26f102043c533dab12df31e48e5766b3d4466f80cbdf772a06232ddb2526d1"
+  }
+}

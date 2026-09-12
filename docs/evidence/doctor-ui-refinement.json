@@ -1,0 +1,47 @@
+{
+  "date": "2026-09-10",
+  "revision": "Doctor UI refinement across web and mobile",
+  "unitTests": {
+    "passed": 17,
+    "failed": 0
+  },
+  "webJourneys": {
+    "startTime": "2026-09-10T11:54:42.475Z",
+    "duration": 10062.153,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "webJourneyScope": [
+    "Doctor appointment-to-encounter workflow",
+    "Doctor entry and navigation at 1440/768/390/320 widths",
+    "Patient responsive light/dark accessibility regression"
+  ],
+  "mobileJourneys": {
+    "startTime": "2026-09-10T11:56:46.697Z",
+    "duration": 6658.647,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "builds": {
+    "web": "passed",
+    "ios": "passed Hermes export",
+    "android": "passed Hermes export"
+  },
+  "typechecks": "Both passed",
+  "webLint": "passed",
+  "visualReview": [
+    "doctor-agenda.png",
+    "native-doctor-agenda-browser.png",
+    "native-doctor-patients-browser.png",
+    "native-doctor-today-browser.png"
+  ],
+  "boundaries": [
+    "Native device/simulator behavior is not verified; mobile interface journeys use the documented browser harness.",
+    "Unbooked time is not confirmed clinician availability.",
+    "Patient cards use actual authorized identities and bookings; no inferred clinical assertions."
+  ]
+}

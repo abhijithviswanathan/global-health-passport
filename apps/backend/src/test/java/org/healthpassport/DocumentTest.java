@@ -29,7 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
       "spring.datasource.url=jdbc:h2:mem:documents;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE",
       "DEMO_MODE=true",
       "DEMO_PASSWORD=test-passphrase-258!",
-      "DOCUMENT_ENCRYPTION_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      "DOCUMENT_ENCRYPTION_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+      "IDENTITY_ENCRYPTION_KEY=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     })
 @AutoConfigureMockMvc
 @Import(DocumentTest.ScannerConfig.class)
@@ -228,4 +229,13 @@ class DocumentTest {
         DocumentService.Verdict.UNAVAILABLE,
         new DocumentService.CommandScanner("relative-scanner").scan(storage));
   }
+  @Test void insuranceCardsHaveAnIndependentPermissionBoundary() throws Exception {
+    var p=login("patient");var d=login("doctor");scanner.verdict=DocumentService.Verdict.CLEAN;
+    var uploaded=mvc.perform(multipart("/api/insurance/cards").file(new MockMultipartFile("file","card.pdf","application/pdf",pdf)).session(p.session()).header("X-CSRF-TOKEN",p.csrf())).andExpect(status().isOk()).andReturn();String card=json.readTree(uploaded.getResponse().getContentAsString()).get("id").asText();
+    var body=Map.of("company","Synthetic Card Insurer","plan","Synthetic Plan","memberId","SYNTHETIC-123","policyholder","Synthetic patient","relationship","self","coverageOrder","secondary","cardDocumentId",card);
+    var saved=mvc.perform(post("/api/insurance/profiles").session(p.session()).header("X-CSRF-TOKEN",p.csrf()).contentType("application/json").content(json.writeValueAsString(body))).andExpect(status().isOk()).andReturn();String profile=json.readTree(saved.getResponse().getContentAsString()).get("id").asText();
+    mvc.perform(get("/api/documents/"+card+"/download").session(d.session())).andExpect(status().isForbidden());mvc.perform(get("/api/insurance/profiles/"+profile+"/card").session(d.session())).andExpect(status().isForbidden());mvc.perform(get("/api/insurance/profiles/"+profile+"/card").session(p.session())).andExpect(status().isOk()).andExpect(content().bytes(pdf));
+    var listed=mvc.perform(get("/api/patients/"+p.id()+"/documents").session(p.session())).andExpect(status().isOk()).andReturn();assertFalse(listed.getResponse().getContentAsString().contains(card));
+  }
+
 }

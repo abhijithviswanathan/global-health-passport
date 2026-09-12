@@ -25,3 +25,28 @@ Real-engine evidence: PostgreSQL 17.11 applied migrations V1–V8 and six HTTP w
 ## Compact Health ID revision
 
 V9 adds `health_id_alias`; V10 migrates existing long IDs to unique nine-character IDs while preserving legacy lookup. Historical PostgreSQL restore evidence covers V1–V8; include `health_id_alias` in all future logical snapshots and restores.
+
+## V11 — clinician scheduling and documentation
+
+`appointment` stores the owning doctor, patient reference, UTC start in milliseconds, duration, visit reason/type, state, optimistic version and completion record reference. `(doctor_id, request_key)` is unique. `visit_draft` stores the doctor's four note sections and an independent optimistic version. The owning doctor row is locked while booking, rescheduling or completing a visit. Include both tables in subsequent logical snapshots/restores; previous restore reports predate this addition.
+
+## V12 profile photos
+`profile_policy` stores the owner's audience; `profile_viewer` stores an explicit selected-account allowlist. `photo_asset` stores the owner, uploader, profile/clinical kind, unique holder key, doctor/organization scope, organization, stated purpose and timestamp. Image bytes are AES-GCM blobs in `PHOTO_STORAGE_PATH`, not inline database values. Back up database metadata and matching encrypted files/keys together. One current profile photo per owner and one current clinical photo per holder are retained.
+
+## Care coordination storage (V13–V14)
+
+Additive migrations extend `app_user` with clinic/department and membership state; `clinical_record` with observation/source/author snapshots, version, signature, encounter, carry-forward and structured measurement fields; and appointments with a workflow stage. New tables cover assignments, record revisions/confirmations, freshness templates and clinic overrides, tasks, conversations/members/messages, coordination events, service progress and result reviews. Uploaded-document metadata links to a clinical timeline record.
+
+Do not edit applied migration files. Preserve all new tables when backing up and restoring. Existing records receive a bounded provenance snapshot without inventing their earlier edit history. Keep production migration permissions separate from runtime access; no API permits ordinary users to delete revision history. External notification/integration providers are not configured by these migrations. See [care-team workflows](CARE_TEAM_WORKFLOWS.md).
+
+
+## Organization migrations V15–V18
+
+- V15: healthcare_organization, organization_node, employment, platform_operator, staff_invitation, workforce_shift, workforce_policy, shift_handoff, organization_event, clinical_order and task_dependency; stable organization references on users/records/documents/appointments/tasks; task completion and verification fields.
+- V16: insurance_profile with encrypted identifiers, insurance_share, eligibility_check, insurance_plan and notification_read. Marketplace plans have a separate review lifecycle and no patient foreign key.
+- V17: nursing_entry, clinical_attestation and care_message priority.
+- V18: document_purpose boundary, insurance-card backfill and purpose index. Classified insurance cards are excluded from ordinary document/timeline attachment authorization.
+
+Flyway applied the four additive migrations to the existing local V14 database after a consistent stopped-database backup. Tenant adoption only marks the original named demo network synthetic-verified; pre-existing non-demo groups remain pending. Employment backfill does not invent old license evidence. Existing aliases, records, media and signatures are preserved. Old clinical authors without tenant metadata are resolved conservatively through their author identity.
+
+IDs, FK/unique constraints and tenant/time indexes are declared in the SQL files. Sensitive insurance values and license values use the existing identity encryption key; file content uses the separate document encryption key. Do not edit applied migrations or manually remove tenant/membership rows to bypass access checks. Independent, immutable audit storage and managed key lifecycle remain deployment work.
