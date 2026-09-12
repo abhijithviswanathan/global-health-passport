@@ -14,4 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
       "DEMO_MODE=true",
       "DEMO_PASSWORD=test-passphrase-258!"
     })
-class PostgresWorkflowTest extends WorkflowTest {}
+class PostgresWorkflowTest extends WorkflowTest {
+  @org.springframework.test.context.DynamicPropertySource
+  static void database(org.springframework.test.context.DynamicPropertyRegistry properties) {
+    PostgresTestDatabase.configure(properties, "workflow");
+  }
+}
