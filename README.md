@@ -117,7 +117,7 @@ EXPO_NO_TELEMETRY=1 npx expo export --platform ios
 EXPO_NO_TELEMETRY=1 npx expo export --platform android --output-dir dist-android
 ```
 
-The September 11, 2026 portfolio review passed **63 active backend tests** (31 optional PostgreSQL cases skipped) and **18 mobile tests**. Web/mobile type checks and web lint passed. Current build/install results, historical browser evidence and unexecuted checks are distinguished in [the review record](docs/PORTFOLIO_REVIEW.md). CI configuration is included; a configured workflow alone is not a successful hosted run.
+The September 11, 2026 portfolio review passed **63 local backend tests** (31 PostgreSQL cases skipped locally) and **18 mobile tests**. The [hosted run](https://github.com/abhijithviswanathan/global-health-passport/actions/runs/34668275365) then passed all backend tests with a real PostgreSQL service, web types/lint/build, and mobile types/tests on fresh runners. Current install/build results, historical browser evidence and unexecuted checks are distinguished in [the review record](docs/PORTFOLIO_REVIEW.md).
 
 ## Deployment boundary
 
