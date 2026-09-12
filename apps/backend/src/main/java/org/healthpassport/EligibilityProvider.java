@@ -32,6 +32,16 @@ interface EligibilityProvider {
   }
 
   class Synthetic implements EligibilityProvider {
+    private final Clock clock;
+
+    Synthetic() {
+      this(Clock.systemUTC());
+    }
+
+    Synthetic(Clock clock) {
+      this.clock = Objects.requireNonNull(clock).withZone(ZoneOffset.UTC);
+    }
+
     public String name() {
       return "synthetic-development";
     }
@@ -43,14 +53,14 @@ interface EligibilityProvider {
             true,
             "Synthetic adapter accepts fictional companies only; no real coverage decision.");
       if (r.effectiveDate() != null
-          && LocalDate.parse(r.effectiveDate()).isAfter(LocalDate.now(ZoneOffset.UTC)))
+          && LocalDate.parse(r.effectiveDate()).isAfter(LocalDate.now(clock)))
         return new Result(
             "UNVERIFIED",
             true,
             "Synthetic test policy has not reached its supplied effective date. Not an insurer"
                 + " response.");
       if (r.expirationDate() != null
-          && LocalDate.parse(r.expirationDate()).isBefore(LocalDate.now(ZoneOffset.UTC)))
+          && LocalDate.parse(r.expirationDate()).isBefore(LocalDate.now(clock)))
         return new Result(
             "UNVERIFIED",
             true,
