@@ -8,5 +8,5 @@ The user explicitly requested that changes apply everywhere, not only to the cur
 - Update the parity matrix and verification evidence. State any real platform limitation explicitly; do not claim native device testing from JavaScript exports or browser-harness tests.
 - Preserve the synthetic-only development boundary and existing security/data-storage policy.
 
-# README approval
-The user requested an initial illustrated local setup/use/deployment README with the profile-photo revision. That initial guide is authorized. For subsequent feature changes, ask before modifying README files; complete other authorized implementation and verification while awaiting that documentation approval. Do not interpret this as requiring approval for code changes.
+# Repository maintenance
+The owner authorized routine README, setup, configuration example and screenshot updates when completing project requests. Keep documentation accurate and verify relevant changes. Preserve existing work and commit history; check for credentials and private data before pushing. This authorization covers requested project maintenance, not unrelated publication or messages to others.
