@@ -2,7 +2,7 @@ import {
   test,
   expect,
   request as contexts,
-} from "../../web/node_modules/@playwright/test";
+} from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 const root = path.resolve(__dirname, "../../..");

@@ -3,8 +3,8 @@ import {
   expect,
   request as contexts,
   type Page,
-} from "../../web/node_modules/@playwright/test";
-import AxeBuilder from "../../web/node_modules/@axe-core/playwright";
+} from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs";
 import path from "node:path";
 const root = path.resolve(__dirname, "../../..");

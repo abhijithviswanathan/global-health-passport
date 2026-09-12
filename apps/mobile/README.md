@@ -1,10 +1,10 @@
 # Health Passport mobile
 
-An Expo / React Native patient and doctor application for the synthetic pilot. It connects to the Java service used by the web portal. This is source code plus verified JavaScript bundles, not a signed App Store or Play Store release.
+An Expo / React Native application for patients, clinicians and hospital staff in the synthetic pilot. It connects to the Java service used by the web portal. This is source code plus earlier verified JavaScript bundles, not a signed App Store or Play Store release. See [current portfolio verification](../../docs/PORTFOLIO_REVIEW.md) for the latest checks.
 
 ## Run
 
-Prerequisites: Node.js 20.19+ and npm, the running backend, and either a compatible Expo Go installation or native development tools. The checked-in lockfile was installed with Node 24.19.0 / npm 11.6.0.
+Prerequisites: Node.js 24 and npm, the running backend, and either a compatible Expo Go installation or native development tools. The checked-in lockfile was installed with Node 24.19.0 / npm 11.6.0.
 
 ```sh
 cd apps/mobile
@@ -15,7 +15,7 @@ npm start
 
 Set `EXPO_PUBLIC_API_URL` to the backend origin, without `/api`. iOS simulator: `http://localhost:8080`; Android emulator: `http://10.0.2.2:8080`; physical device: use the development computer's LAN address. The backend must be reachable from that device. Use only synthetic records with development HTTP. Production builds reject any API origin that does not begin with HTTPS.
 
-Use the existing synthetic patient or doctor account. The server role selects the workspace; the entry tab never grants permissions. Lab, pharmacy and admin accounts still use the web portal. For a native development build:
+Use an existing synthetic account. The server role selects the workspace; the entry tab never grants permissions. Patient, doctor, nurse, reception, lab, diagnostic, coordinator, admin, pharmacy, billing, security and insurer roles are recognized. The hospital ecosystem section below describes the expanded staff workflows. For a native development build:
 
 ```sh
 npm run ios
@@ -48,7 +48,7 @@ Opening a saved summary first checks the server session when reachable. Only net
 
 Network cookies are managed by the native fetch stack. A failed network logout clears local screen state but cannot guarantee remote session invalidation until connectivity returns or the session expires. Device-record synchronization, notifications, QR code and distribution signing remain incomplete. Camera/library photo selection is implemented; native camera operation remains unverified. Biometric unlock is not server-side MFA, and the privacy screen does not establish prevention of OS screenshots or extraction on a compromised device.
 
-## Verification performed
+## Earlier verification
 
 ```sh
 npm run typecheck
