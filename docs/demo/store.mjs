@@ -175,7 +175,7 @@ export function dispatch(state, role, action, input = {}) {
     s.events.unshift({
       id: id("event"),
       patient: p,
-      actor: roles[role].name,
+      actor: role === "patient" ? people[p].name : roles[role].name,
       title,
       detail,
       at,

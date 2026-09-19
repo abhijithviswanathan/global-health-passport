@@ -249,6 +249,13 @@ try {
     await expect(b("Start guided story")).toBeVisible();
     await b("Start guided story").click();
     await expect(b("Request patient access")).toBeVisible();
+    // Switching fictional patients must also change the timeline actor, not just its heading.
+    await selectRole("patient");
+    await page.locator("#patient-select").selectOption("1");
+    await nav("Requests & sharing").click();
+    await b("Approve selected sharing").click();
+    await nav("My timeline").click();
+    await expect(page.locator(".care-timeline")).toContainText("Noah Bennett");
     await page.reload();
     await expect(b("Start guided story")).toBeVisible();
     await noOverflow();

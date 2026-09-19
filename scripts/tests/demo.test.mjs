@@ -292,3 +292,19 @@ test("Pending or confirmed follow-up slots cannot be double-booked", () => {
   s.act("doctor", "invite-followup", { patient: 2, time: "14:00" });
   assert.equal(latest(s, "appointments", 2).time, "14:00");
 });
+
+test("Timeline attributes patient actions to the selected fictional person", () => {
+  const s = session();
+  s.act("patient", "decide-access", {
+    patient: 1,
+    id: "access-noah",
+    decision: "approved",
+    scopes: ["records", "care"],
+    days: 7,
+  });
+  assert.equal(s.state.events[0].actor, "Noah Bennett");
+  s.act("patient", "revoke-access", { patient: 2 });
+  assert.equal(s.state.events[0].actor, "Fatima Rahman");
+  s.act("doctor", "send-message", { patient: 1 });
+  assert.equal(s.state.events[0].actor, "Dr Smith");
+});

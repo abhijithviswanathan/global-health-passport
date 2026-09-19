@@ -20,7 +20,7 @@ The illustrated presenter guide is at [`demo-guide.html`](demo-guide.html), with
 
 | Check | Result |
 | --- | --- |
-| Node workflow regression (`scripts/tests/demo.test.mjs`) | 10 tests passed: request/approval scopes and expiry; decline/ownership/duplicates; nursing transitions and provenance; prescription acknowledgment and pharmacy transitions; revoked access; lab handoff/review; appointment responses and replacement times; messages/inbox isolation; complete tour/reset isolation; slot conflicts. |
+| Node workflow regression (`scripts/tests/demo.test.mjs`) | 11 tests passed: request/approval scopes and expiry; decline/ownership/duplicates; nursing transitions and provenance; prescription acknowledgment and pharmacy transitions; revoked access; lab handoff/review; appointment responses and replacement times; messages/inbox isolation; complete tour/reset isolation; slot conflicts; correct actor attribution when switching patients. |
 | Chromium desktop, 1440 × 960 | Complete nine-step story, optional lab path, messages and notification navigation, decline, revoke, empty/limited scopes, back/home, Escape focus return, reset/reload all passed. |
 | Chromium phone layouts, 390 × 960 and 360 × 960 | Same connected workflows passed; no horizontal page overflow at sampled screens. |
 | Browser failures and storage | No page errors or failed HTTP responses during the scripted demo flows. Requests stayed under the served demo URL; localStorage and sessionStorage remained empty. |
