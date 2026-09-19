@@ -110,7 +110,13 @@ See [the handover guide](HANDOVER.md) for the reading order and change workflow.
 | [`photo-check/check.py`](../apps/backend/photo-check/check.py) | Local face-presence subprocess. Exit codes are consumed by PhotoService; no identity matching. |
 | [`vite.config.ts`](../apps/web/vite.config.ts) | Web dev proxy and vinext build integration. Pages does not use this pipeline. |
 | [`ci.yml`](../.github/workflows/ci.yml) | Independent Java/PostgreSQL, web and mobile verification jobs. |
-| [`docs/index.html`](index.html) and [`docs/.nojekyll`](.nojekyll) | Self-contained Pages demonstration and plain static publishing marker. Fixtures, styles, view rendering and event handlers are commented in the HTML. |
+| [`docs/index.html`](index.html) and [`docs/.nojekyll`](.nojekyll) | Pages shell and plain static publishing marker; relative module/style links work beneath the repository's github.io path. |
+| [`docs/demo/data.mjs`](demo/data.mjs) | Public invented patient stories, roles, task descriptions, medicine and report fixtures. Never add real patient data. |
+| [`docs/demo/store.mjs`](demo/store.mjs) | In-memory workflow transitions, scope simulation, notifications and tour progress. Copy-before-write keeps rejected actions atomic; these controls are not real authentication. |
+| [`docs/demo/app.mjs`](demo/app.mjs) | Five role views, reusable cards, review dialogs, navigation and event handlers. Calls the store for workflow writes. |
+| [`docs/demo/styles.css`](demo/styles.css) | Desktop/phone presentation and fictional prescription print rules. |
+| [`docs/demo-guide.html`](demo-guide.html), [`DEMO_WALKTHROUGH.md`](DEMO_WALKTHROUGH.md) | Illustrated presentation and developer/presenter instructions; keep the steps aligned. |
+| [`scripts/tests/demo.test.mjs`](../scripts/tests/demo.test.mjs), [`demo-ui.mjs`](../scripts/tests/demo-ui.mjs) | Pure state regression and Chromium workflow/layout/accessibility verification for the public demo. |
 | [`apps/backend/src/test`](../apps/backend/src/test), [`apps/web/tests`](../apps/web/tests), [`apps/mobile/tests`](../apps/mobile/tests) | Existing regression and workflow examples. Read the closest test before changing a feature. |
 | [`ADRs`](../ADRs) | Reasons behind architecture and trust-boundary choices. |
 

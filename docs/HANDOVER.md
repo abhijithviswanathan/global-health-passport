@@ -87,7 +87,7 @@ Do not begin by splitting the largest files solely to make them smaller. They co
 | Clinical file upload/download | `DocumentApi`, `DocumentService` | Web `documents-panel`; consult the parity matrix before assuming mobile support |
 | Exports and educational examples | `FhirMapper`, `OrganizationFhirApi`, `MedicationPassportApi`, `LearningApi` | Relevant web panels; mobile support varies |
 | App navigation/home/back | Server role from `/me` | Web `page.tsx`; mobile `App.tsx` and workspace back/discard handlers |
-| Public demo presentation | `docs/index.html` only | Responsive HTML/CSS/JS in the same file |
+| Public demo presentation | `docs/demo/store.mjs` and `data.mjs` | `docs/index.html`, `docs/demo/app.mjs`, `styles.css`; illustrated `demo-guide.html` |
 
 The [source map](SOURCE_MAP.md) links directly to each module and explains its responsibility. Generic web controls live under `apps/web/components/ui`; feature-specific styling is beside its workspace or in the app styles. Starter build code under `apps/web/build` is tooling, not the clinical backend.
 
@@ -169,7 +169,7 @@ The hosted CI workflow verifies Java/PostgreSQL, web types/lint/build and mobile
 
 Work on a branch, commit a focused change, and have the other developer review its diff. Start from the latest `main`; preserve unrelated work. A useful review explains the changed behavior, both-client impact and actual checks.
 
-The public demo is deployed separately by GitHub Pages from **`main` → `/docs`**. Keep `docs/.nojekyll` and `docs/index.html`. No backend keys or environment variables are required for that demo. After editing it, preview the responsive layouts, patient selector, search, dialogs and task reset; then check the Pages deployment and live URL. No dependency build is needed for this file.
+The public demo is deployed separately by GitHub Pages from **`main` → `/docs`**. Keep `docs/.nojekyll`, `docs/index.html` and the relative `docs/demo/` assets. No backend keys or environment variables are required. Fixtures live in `data.mjs`; `store.mjs` owns pure state transitions and notifications; `app.mjs` renders all role views; `styles.css` supplies responsive and print styles. The [presenter walkthrough](DEMO_WALKTHROUGH.md) describes the connected tour and exact verification commands. Run its Node tests and browser checks for desktop and narrow layouts, then check the Pages deployment and live URL. No dependency build is needed for the static files. Use a local HTTP server because browsers restrict ES module imports from `file://`.
 
 For a full local-app change, use the normal CI workflow and setup instructions. Publishing source to GitHub does not start Java, a database or a mobile service. The repository still has explicit production and native-device limitations in [PORTFOLIO_REVIEW.md](PORTFOLIO_REVIEW.md).
 

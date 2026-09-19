@@ -84,3 +84,12 @@ See [care-team guide](CARE_TEAM_WORKFLOWS.md) for precise integration and native
 | Realtime changes | SSE refresh hint | 60-second cursor fallback | Generic tenant-scoped signals and session revalidation |
 
 Web insurance permits PDF/image uploads and downloads; native insurance currently supports images, with PDF file selection/rendering NOT TESTED/not implemented. Camera/biometric/device secure-store behavior remains NOT TESTED on physical devices. Current executed cross-client evidence is in ECOSYSTEM_VERIFICATION.md.
+
+
+## September 19 connected public demonstration
+
+The GitHub Pages presentation now shares in-tab state across doctor, nurse, patient, pharmacy and laboratory perspectives. The same responsive site presents the workflow on desktop and phone browsers; there is no separate mobile demo fork. It covers scoped approval/decline/revocation, nursing requests and observations, sample prescriptions through collection, laboratory reports through doctor review, messages, inbox updates and follow-up responses.
+
+The full web, native and shared API workflow owners were inspected (`CareWorkspace`, `care-model`, `ecosystem-model`, `CareApi`, `ClinicalOperationsApi`). Their persisted behavior and authentication contracts are unchanged by this presentation-only revision. Public-demo consent and role controls are illustrative and do not replace server checks. GitHub Pages does not run the Java backend, the Expo application, native notifications or account storage. Phone-sized Chromium checks are responsive-browser evidence only, not physical-device or cross-client persistence evidence.
+
+See [demo verification](DEMO_VERIFICATION.md) and the [presenter walkthrough](DEMO_WALKTHROUGH.md).

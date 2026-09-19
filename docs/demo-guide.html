@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Present the care story — Health Passport</title>
+    <meta
+      name="description"
+      content="An illustrated walkthrough of the Health Passport fictional doctor, nurse, patient, pharmacy and laboratory demonstration."
+    />
+    <link rel="stylesheet" href="./demo/styles.css" />
+    <style>
+      .guide {
+        max-width: 1120px;
+        margin: auto;
+        padding: 30px;
+      }
+      .guide-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 36px;
+      }
+      .guide-header a {
+        text-decoration: none;
+      }
+      .guide-hero {
+        background: #175c50;
+        color: white;
+        border-radius: 22px;
+        padding: 50px;
+        margin-bottom: 34px;
+      }
+      .guide-hero h1 {
+        font-size: clamp(36px, 5vw, 60px);
+        max-width: 700px;
+        margin: 18px 0;
+        letter-spacing: -2px;
+      }
+      .guide-hero p {
+        color: #d4e5d6;
+        max-width: 620px;
+      }
+      .guide-hero .eyebrow {
+        color: #dceebc;
+      }
+      .guide-hero .primary {
+        background: #e4f0c4;
+        color: #294d36;
+        margin-top: 24px;
+        border: 0;
+      }
+      .guide-intro {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 34px;
+      }
+      .guide-intro p,
+      .guide-step p {
+        font-size: 14px;
+        color: var(--muted);
+        margin-top: 9px;
+      }
+      .guide-steps {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+        padding: 0;
+        list-style: none;
+        counter-reset: guide;
+      }
+      .guide-step {
+        background: white;
+        padding: 25px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        counter-increment: guide;
+      }
+      .guide-step:before {
+        content: counter(guide, decimal-leading-zero);
+        display: block;
+        color: #51745b;
+        font-size: 25px;
+        margin-bottom: 20px;
+      }
+      .guide-step .eyebrow {
+        color: #506948;
+        margin-bottom: 7px;
+        font-size: 10px;
+      }
+      .guide section {
+        margin-bottom: 40px;
+      }
+      .guide figure {
+        margin: 24px 0;
+        padding: 12px;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+      }
+      .guide figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 9px;
+      }
+      .guide figcaption {
+        padding: 17px 12px 10px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .guide .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .guide .detail-grid p {
+        font-size: 14px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+      .guide footer {
+        margin: 40px 0 10px;
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      @media (max-width: 720px) {
+        .guide {
+          padding: 20px;
+        }
+        .guide-header {
+          flex-wrap: wrap;
+        }
+        .guide-hero {
+          padding: 28px;
+        }
+        .guide-intro,
+        .guide-steps,
+        .guide .detail-grid {
+          grid-template-columns: 1fr;
+        }
+        .guide-step {
+          padding: 22px;
+        }
+        .guide-step:before {
+          margin-bottom: 10px;
+        }
+        .guide footer {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#guide-main">Skip to guide</a>
+    <div class="guide">
+      <header class="guide-header">
+        <a class="brand" href="./"
+          >Health Passport<small>Presenter guide</small></a
+        ><a class="secondary" href="./">Open interactive demo →</a>
+      </header>
+      <main id="guide-main">
+        <section class="guide-hero">
+          <p class="eyebrow">
+            One story · five perspectives · about five minutes
+          </p>
+          <h1>Show how care<br />stays connected.</h1>
+          <p>
+            Follow Alice from her first sharing request to a confirmed
+            follow-up. Every action has a visible recipient and a clear next
+            step.
+          </p>
+          <a class="primary" href="./">Start the demonstration →</a>
+        </section>
+        <div class="guide-intro">
+          <div class="panel">
+            <h2>Begin with Alice.</h2>
+            <p>
+              Open the demo and select <strong>Start guided story</strong>.
+              After each action, select <strong>Continue story</strong> to move
+              to the next perspective. The guide moves you; you still perform
+              each action.
+            </p>
+          </div>
+          <div class="panel">
+            <h2>Keep one tab open.</h2>
+            <p>
+              All five views share this tab’s fictional state. Reloading,
+              opening another tab or choosing <strong>Reset demo</strong> starts
+              fresh. No account or installation is needed.
+            </p>
+          </div>
+        </div>
+        <section aria-labelledby="journey-title">
+          <h2 id="journey-title">The nine-step care journey</h2>
+          <ol class="guide-steps">
+            <li class="guide-step">
+              <p class="eyebrow">Doctor</p>
+              <h3>Ask for access</h3>
+              <p>
+                Select <strong>Request patient access</strong>. Alice receives
+                the request in her inbox and sharing screen.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Patient</p>
+              <h3>Choose what to share</h3>
+              <p>
+                Review the purpose, three scopes and duration. Select
+                <strong>Approve selected sharing</strong>. Keep all three scopes
+                for the full story.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Doctor</p>
+              <h3>Send work to the nurse</h3>
+              <p>
+                Create the vitals request. Review the assignee, priority and due
+                time, then <strong>Send request to nurse</strong>.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Nurse</p>
+              <h3>Receive, accept, complete</h3>
+              <p>
+                On Alice’s card,
+                <strong
+                  >Accept request → Start task → Review & file result</strong
+                >. Confirm the sample. Doctor and patient receive the update.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Doctor</p>
+              <h3>Review the prescription</h3>
+              <p>
+                Select <strong>Review new prescription</strong>, read the
+                invented example, check the review box and send it to Alice and
+                Harbor Pharmacy.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Patient</p>
+              <h3>Understand the directions</h3>
+              <p>
+                Show dose, route, frequency, duration and quantity. Select
+                <strong>I have read the directions</strong>. Reading does not
+                record a dose.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Pharmacy</p>
+              <h3>Make collection visible</h3>
+              <p>
+                Review the prescription, mark it ready and record collection.
+                Confirm each step; the patient sees the progress.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Doctor</p>
+              <h3>Invite a follow-up</h3>
+              <p>
+                Choose a proposed time and select
+                <strong>Invite patient to follow-up</strong>. It stays pending
+                until Alice responds.
+              </p>
+            </li>
+            <li class="guide-step">
+              <p class="eyebrow">Patient</p>
+              <h3>Close the loop</h3>
+              <p>
+                Select <strong>Confirm appointment</strong>. The doctor sees the
+                confirmation. Open Alice’s timeline to review the whole story.
+              </p>
+            </li>
+          </ol>
+        </section>
+        <section>
+          <p class="eyebrow">The handoff</p>
+          <h2>The nurse sees exactly what comes next.</h2>
+          <figure>
+            <img
+              src="./images/pages-nurse-queue.png"
+              alt="Nurse Williams' queue with Alice's new observations request, priority, due time, requester and Accept request button"
+              loading="lazy"
+            />
+            <figcaption>
+              Open Nurse → Inbox to show the arriving request, then its queue
+              card. Accepting, starting and filing are separate actions.
+            </figcaption>
+          </figure>
+        </section>
+        <section>
+          <p class="eyebrow">The patient’s experience</p>
+          <h2>Every request has a purpose and a choice.</h2>
+          <figure>
+            <img
+              src="./images/pages-patient-request.png"
+              alt="Alice's access request with three selectable information scopes, a sharing duration, approval and decline controls"
+              loading="lazy"
+            />
+            <figcaption>
+              Alice can approve selected scopes, decline or later revoke
+              sharing. The doctor receives her response.
+            </figcaption>
+          </figure>
+        </section>
+        <section>
+          <p class="eyebrow">The prescription</p>
+          <h2>Directions, ownership and progress in one place.</h2>
+          <figure>
+            <img
+              src="./images/pages-patient-prescription.png"
+              alt="Alice's fictional prescription showing medicine details, instructions, prescriber, pharmacy and collection progress"
+              loading="lazy"
+            />
+            <figcaption>
+              DemoCare A is invented. The sample cannot be used as a
+              prescription or treatment instruction.
+            </figcaption>
+          </figure>
+        </section>
+        <section>
+          <h2>Go deeper when the audience asks.</h2>
+          <div class="detail-grid">
+            <div class="panel">
+              <h3>Follow a laboratory report</h3>
+              <p>
+                Doctor requests a specimen. Nurse accepts, starts and files
+                collection. Laboratory processes and releases the sample. Doctor
+                records review; Alice sees the report and its status.
+              </p>
+            </div>
+            <div class="panel">
+              <h3>Show a question and reply</h3>
+              <p>
+                Patient → Messages → Send example question. Switch to Doctor →
+                Messages → Send example reply. Return to Alice’s inbox to show
+                the response.
+              </p>
+            </div>
+            <div class="panel">
+              <h3>Demonstrate patient control</h3>
+              <p>
+                Decline, limit or revoke sharing. Future simulated staff actions
+                need the relevant scope. To resume the full tour, send a new
+                request and approve all three scopes.
+              </p>
+            </div>
+            <div class="panel">
+              <h3>Try a different appointment</h3>
+              <p>
+                Alice can ask for another time. The doctor selects the other
+                example slot and sends a new invitation. A pending or confirmed
+                slot cannot be double-booked.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <h2>Ready for the next presentation?</h2>
+          <p class="small-note">
+            Top-right menu → Restart with fresh examples → Reset demo. The small
+            Back button returns to the previous screen; the logo returns home.
+            On a phone, swipe the navigation strip to reach more sections.
+          </p>
+          <div class="callout">
+            <strong>Fictional demonstration, clearly separated.</strong>
+            <p>
+              This GitHub Pages site has no real login, backend, persistent
+              records or external messages. Every fixture is public. Consent
+              controls illustrate workflow, not real account security. The
+              separate full web and Expo applications run locally with the Java
+              API.
+            </p>
+          </div>
+          <a class="primary" href="./">Explore the demo →</a>
+          <a
+            class="secondary"
+            href="https://github.com/abhijithviswanathan/global-health-passport/blob/main/docs/HANDOVER.md"
+            >Run the full local application</a
+          >
+        </section>
+      </main>
+      <footer>
+        <span>Health Passport · Fictional presentation · September 2026</span
+        ><a href="https://github.com/abhijithviswanathan/global-health-passport"
+          >Source & documentation</a
+        >
+      </footer>
+    </div>
+  </body>
+</html>
