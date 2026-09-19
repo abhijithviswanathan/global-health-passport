@@ -1,40 +1,1927 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Explore Health Passport with four fictional patient stories. Interactive doctor and patient demo, appointments, care tasks, requests and reports."><meta name="theme-color" content="#175c50"><title>Health Passport · Interactive demo</title>
-<style>
-:root{--bg:#f5f6f2;--paper:#fff;--ink:#233d3a;--muted:#627570;--line:#dce5de;--green:#175c50;--mint:#e8f2e9;--orange:#b36937;--shadow:0 10px 35px #173a2910}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select{font:inherit}button,a,input,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #c88536;outline-offset:3px}button:disabled{cursor:default}a{color:var(--green)}button{color:inherit}svg{width:20px;height:20px;vertical-align:middle;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}h1,h2,h3,p{margin:0}h1{font-size:36px;font-weight:650;letter-spacing:-1.3px;line-height:1.15}h2{font-size:22px;letter-spacing:-.5px}h3{font-size:16px}small{font-size:12px}.muted{color:var(--muted)}.eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:700}.layout{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:var(--paper);border-right:1px solid var(--line);padding:30px 20px;display:flex;flex-direction:column;gap:32px}.brand{display:flex;align-items:center;gap:10px;text-align:left;border:0;background:none;padding:0;color:var(--green);font-size:18px;font-weight:750;letter-spacing:-.5px}.brandmark{width:39px;height:42px;background:var(--green);color:#fff;border-radius:12px;display:grid;place-items:center}.brandmark svg{width:25px;height:25px}.brand small{display:block;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;font-weight:500}.side-label{padding:0 14px;color:#74817d;margin-bottom:14px}.nav{display:flex;flex-direction:column;gap:7px}.nav button{display:flex;align-items:center;gap:13px;padding:12px 14px;min-height:46px;border:0;background:transparent;border-radius:10px;text-align:left;color:var(--muted)}.nav button.active{background:var(--mint);color:var(--green);font-weight:650}.nav button:hover{background:#f0f4f0}.sidebottom{margin-top:auto;padding:18px 13px 0;border-top:1px solid var(--line)}.demo-dot{width:7px;height:7px;background:#519c60;display:inline-block;border-radius:50%;margin-right:6px}.workspace{min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:88px;padding:18px 40px;border-bottom:1px solid var(--line);background:#fdfefbaa}.breadcrumbs{font-size:13px;display:flex;gap:12px;align-items:center;color:var(--muted)}.tools{display:flex;gap:12px;align-items:center}.switch{display:flex;background:#e9ede6;padding:4px;border-radius:30px}.switch button{border:0;border-radius:24px;padding:9px 16px;background:transparent;font-size:12px}.switch button.selected{background:white;box-shadow:0 1px 6px #24422b12;color:var(--green);font-weight:650}.avatar{height:38px;width:38px;border-radius:50%;background:#dce9df;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--green)}.content{max-width:1420px;margin:auto;padding:30px 40px 45px}.demo-notice{font-size:12px;color:#607469;display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:23px}.textbutton{background:none;border:0;padding:5px 0;color:var(--green);text-decoration:underline;font-size:12px}.pagehead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:24px}.pagehead p{margin-top:8px;color:var(--muted)}.pill{display:inline-flex;align-items:center;padding:5px 10px;border:1px solid var(--line);border-radius:20px;font-size:11px;background:white;white-space:nowrap}.hero{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(180px,1fr);gap:24px;background:var(--green);border-radius:19px;color:#fff;padding:31px 32px;position:relative;overflow:hidden}.hero p{color:#c4d8ce;max-width:440px;margin-top:16px;font-size:14px}.hero .eyebrow{color:#c5dfca;margin-bottom:12px}.hero h1{font-size:39px}.hero .primary{background:#e4f0c4;color:#294d36;border:0;margin-top:22px}.hero-art{display:flex;justify-content:flex-end;align-items:center;position:relative}.orbit{height:165px;width:165px;border:1px solid #70a38d;border-radius:50%;display:grid;place-items:center;position:relative}.orbit:before{content:"";position:absolute;inset:20px;border:1px solid #70a38d55;border-radius:50%}.orbit svg{width:68px;height:68px;stroke:#dfeebd;stroke-width:1}.mini{position:absolute;background:#f5f7e9;color:#294d36;border-radius:12px;padding:10px 14px;box-shadow:0 8px 20px #08251d22;font-size:12px;left:-40px;bottom:0}.mini strong{display:block;font-size:22px}.primary,.secondary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:43px;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600}.primary{color:white;border:1px solid var(--green);background:var(--green)}.secondary{background:white;border:1px solid var(--line)}.primary:hover{filter:brightness(1.08)}.secondary:hover{background:#eef4ed}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:21px 0 26px}.stat{padding:17px 20px;background:var(--paper);border:1px solid var(--line);border-radius:12px;display:flex;justify-content:space-between;align-items:center}.stat strong{font-size:26px;letter-spacing:-1px}.stat p{font-size:12px;color:var(--muted);margin-top:2px}.stat .symbol{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--mint);color:var(--green)}.columns{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:23px;min-width:0}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:17px}.panelhead h2{font-size:18px}.panelhead p{font-size:12px;color:var(--muted);margin-top:4px}.visit{display:grid;grid-template-columns:51px 1fr auto;gap:15px;align-items:center;padding:17px 0;border-bottom:1px solid #e8ede7}.visit:last-child{border-bottom:0;padding-bottom:0}.time{font-size:13px;font-weight:650;color:var(--green);align-self:start;padding-top:4px}.personline{display:flex;align-items:center;gap:10px}.personline h3{font-size:14px}.visit p{font-size:12px;margin-top:5px;color:var(--muted)}.visit .avatar{width:30px;height:30px;font-size:10px;flex-shrink:0}.iconbutton{width:35px;height:35px;min-width:35px;border-radius:50%;border:1px solid var(--line);background:white;display:grid;place-items:center}.task{padding:16px 0;border-bottom:1px solid #e8ede7;display:flex;align-items:start;gap:12px}.task:last-child{border:0;padding-bottom:0}.task .check{width:24px;height:24px;min-width:24px;border:1px solid #b8ccbe;border-radius:7px;background:#fff;display:grid;place-items:center;margin-top:3px}.task .check.done{background:#deeddd;color:#346344}.task h3{font-size:13px}.task p{font-size:12px;color:var(--muted);margin-top:4px}.badge{font-size:10px;padding:4px 8px;border-radius:5px;display:inline-block;background:#f6eedf;color:#8a5824;margin-top:8px}.badge.green{background:#e8f1e6;color:#427144}.badge.blue{background:#e7f0f4;color:#446d7c}.badge.gray{background:#eef0ed;color:#607166}.below{display:flex;justify-content:space-between;gap:15px;margin-top:24px;font-size:11px;color:var(--muted)}.search{width:min(100%,400px);border:1px solid var(--line);background:white;border-radius:9px;padding:12px 16px;margin-bottom:22px;min-height:44px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.patient-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:24px;transition:box-shadow .2s}.patient-card:hover{box-shadow:var(--shadow)}.patient-card .avatar{height:46px;width:46px;font-size:15px}.patient-card h2{font-size:18px}.patient-card .meta{font-size:12px;color:var(--muted);margin-top:5px}.patient-card .context{border-radius:9px;background:#f3f6f0;padding:15px;margin:20px 0 16px;min-height:103px}.patient-card .context p{font-size:13px;margin:7px 0;color:#52665c}.card-actions{display:flex;justify-content:space-between;align-items:center;gap:10px}.tablewrap{overflow:auto}.datatable{border-collapse:collapse;width:100%;font-size:13px}.datatable th{text-align:left;padding:12px;color:var(--muted);font-size:11px;font-weight:500;border-bottom:1px solid var(--line);background:#f4f6f0}.datatable td{padding:17px 12px;border-bottom:1px solid var(--line);vertical-align:middle}.datatable td small{display:block;color:var(--muted);margin-top:4px}.datatable tr:last-child td{border-bottom:0}.datatable .badge{margin:0}.empty{padding:30px;color:var(--muted);text-align:center;grid-column:1/-1}.report{background:white;border:1px solid var(--line);border-radius:14px;padding:25px}.report-icon{width:43px;height:43px;display:grid;place-items:center;background:var(--mint);border-radius:10px;margin-bottom:20px}.report p{font-size:13px;color:var(--muted);margin:10px 0 18px}.strip{padding:17px 20px;border-radius:12px;background:#eaf0e4;margin-bottom:22px;font-size:13px}.patientselect{border:1px solid var(--line);border-radius:9px;padding:10px;background:white;max-width:100%}.vitals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0}.vitals>div{padding:13px;background:#f1f5ee;border-radius:9px}.vitals strong{display:block;font-size:19px}.vitals small{color:var(--muted)}.record{padding:15px 0;border-bottom:1px solid var(--line)}.record p{font-size:13px;line-height:1.7;margin-top:7px;color:#536860}.record:last-child{border:0}.teamgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:22px}.team-member{background:white;border:1px solid var(--line);border-radius:12px;padding:18px}.team-member .avatar{margin-bottom:12px}.team-member p{font-size:12px;color:var(--muted);margin-top:4px}dialog{border:0;border-radius:18px;width:min(690px,calc(100vw - 28px));padding:0;color:var(--ink);box-shadow:0 25px 100px #183d3544;max-height:90vh;background:white}dialog::backdrop{background:#12372b77;backdrop-filter:blur(4px)}.dialoghead{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:16px;background:white;padding:23px 26px;border-bottom:1px solid var(--line);z-index:1}.dialoghead h2{font-size:20px}.dialogbody{padding:23px 26px}.dialogbody>p{font-size:14px;color:var(--muted);margin-bottom:14px}.dialogbody h3{margin:17px 0 7px}.dialogbody .primary{margin-top:18px}.provenance{font-size:11px;background:#f5f6f0;padding:13px;border-radius:8px;margin-top:20px;color:var(--muted)}#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#173f33;color:white;padding:13px 20px;border-radius:10px;box-shadow:var(--shadow);font-size:13px;max-width:calc(100% - 28px);z-index:20;display:none}.skip{position:absolute;top:-60px;left:10px;background:white;padding:10px;z-index:100}.skip:focus{top:10px}.mobile-brand{display:none}.buttonrow{display:flex;gap:10px;flex-wrap:wrap}footer a{color:inherit}button,.primary,.secondary{touch-action:manipulation}@media(min-width:1450px){.content{padding-top:36px}.hero{padding:38px}.hero h1{font-size:44px}}@media(max-width:1050px){.layout{grid-template-columns:195px minmax(0,1fr)}.sidebar{padding:25px 12px}.content{padding:25px}.topbar{padding:17px 25px}.stats{gap:10px}.stat{padding:14px}.columns{grid-template-columns:1fr}.hero-art{padding-right:0}.orbit{width:135px;height:135px}.mini{left:-22px}.teamgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:720px){h1{font-size:29px}.layout{display:block}.sidebar{position:static;height:auto;padding:18px 18px 0;gap:16px;border:0}.sidebar>.brand{display:none}.side-label,.sidebottom{display:none}.nav{flex-direction:row;overflow:auto;gap:5px;padding-bottom:13px}.nav button{white-space:nowrap;padding:10px 12px;font-size:12px;min-height:42px;gap:6px}.nav svg{width:16px;height:16px}.topbar{padding:15px 18px;min-height:73px;border-bottom:0;position:relative;order:-1}.layout{display:flex;flex-direction:column}.workspace{display:contents}.topbar{order:-2;background:white}.sidebar{order:-1;background:white;border-bottom:1px solid var(--line)}.mobile-brand{display:flex;font-size:15px}.mobile-brand .brandmark{width:32px;height:35px;border-radius:9px}.mobile-brand small{font-size:8px}.breadcrumbs,.tools>.avatar{display:none}.tools{gap:0}.switch button{font-size:11px;padding:8px 10px}.content{padding:23px 18px 30px;width:100%}.hero{grid-template-columns:1fr;padding:26px}.hero h1{font-size:35px}.hero-art{display:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:14px 16px}.stat strong{font-size:23px}.demo-notice{align-items:start;font-size:11px}.demo-notice span{max-width:230px}.pagehead{align-items:start;flex-direction:column;gap:12px}.pagehead p{font-size:13px}.cards{grid-template-columns:1fr}.panel{padding:19px}.visit{gap:10px;grid-template-columns:43px 1fr auto}.patient-card{padding:20px}.vitals{grid-template-columns:repeat(2,minmax(0,1fr))}.teamgrid{grid-template-columns:1fr 1fr}.below{flex-direction:column;gap:8px}.dialogbody,.dialoghead{padding:20px}.datatable{min-width:620px}.dialoghead h2{font-size:18px}.pill{white-space:normal}.buttonrow{gap:8px}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-</style></head><body><a class="skip" href="#main">Skip to content</a><div class="layout"><aside class="sidebar"><button class="brand" data-action="home" aria-label="Health Passport home"><span class="brandmark" data-icon="heart"></span><span>Health Passport<small>Your health, connected</small></span></button><div><p class="eyebrow side-label">Clinical workspace</p><nav class="nav" aria-label="Demo navigation" id="nav"></nav></div><div class="sidebottom"><p style="font-size:12px;font-weight:600"><span class="demo-dot"></span>Interactive demo</p><p class="muted" style="font-size:11px;margin-top:7px">Four fictional stories.<br>No real patient information.</p><button class="textbutton" data-action="about">How this demo works</button></div></aside><div class="workspace"><header class="topbar"><button class="brand mobile-brand" data-action="home" aria-label="Health Passport home"><span class="brandmark" data-icon="heart"></span><span>Health Passport<small>Your health, connected</small></span></button><div class="breadcrumbs"><span>Health Passport</span><span>›</span><strong id="crumb">Today</strong></div><div class="tools"><div class="switch" aria-label="Demonstration perspective"><button data-role="doctor" class="selected" aria-pressed="true">Doctor view</button><button data-role="patient" aria-pressed="false">Patient view</button></div><span class="avatar" id="useravatar" aria-label="Fictional doctor Dr Smith">DS</span></div></header><main class="content" id="main" tabindex="-1"><div class="demo-notice"><span><span class="demo-dot"></span>Fictional data · Browser-session demo</span><button class="textbutton" data-action="reset">Reset demo</button></div><div id="screen"></div><footer class="below"><span>Made for clearer care, across every handoff.</span><span><a href="https://github.com/abhijithviswanathan/global-health-passport" target="_blank" rel="noopener">View the full project ↗</a> · <button class="textbutton" data-action="about">Demo limitations</button></span></footer></main></div></div><dialog id="dialog" aria-labelledby="dialog-title"><div class="dialoghead"><h2 id="dialog-title"></h2><button class="iconbutton" data-action="close" aria-label="Close dialog">✕</button></div><div class="dialogbody" id="dialog-body"></div></dialog><div id="toast" role="status" aria-live="polite"></div>
-<script>
-'use strict';
-const people=[{"id": 0, "name": "Alice Morgan", "age": 34, "job": "Museum programme coordinator", "healthId": "KW6V6HRCU", "story": "Review of a recent cough and fatigue episode", "history": "Chief complaint: dry cough and tiredness for three days during a busy exhibition week. Onset gradual; symptoms more noticeable late in the day. No previous similar episode recorded in this fictional story. Past history: seasonal nasal symptoms. Family history: parent with high blood pressure. Personal history: walks to work, does not smoke, lives with a partner. Occupation: museum programme coordinator. Fictional address: 14 Example Lane, Demo District. No real contact information.", "allergy": "Patient reports a rash after penicillin as a teenager; timing and original documentation are not available. Demonstrates a patient-reported allergy requiring reconciliation, not verified testing.", "plan": "Review the attached fictional reports, reconcile the reported allergy, document the discussion and confirm the next follow-up with Alice. No real treatment instruction.", "vitals": {"temperature_c": 36.8, "spo2_percent": 98, "pulse_bpm": 76, "systolic_mmhg": 118, "diastolic_mmhg": 76}, "room": "Clinic A · Room 2", "time": "08:00", "initials": "AM"}, {"id": 1, "name": "Noah Bennett", "age": 52, "job": "Bus route dispatcher", "healthId": "CAGNH5SDP", "story": "Routine health review with blood work pending", "history": "Chief complaint: routine annual review and a request to discuss occasional tiredness after rotating shifts. Symptoms occur near the end of a long workday. Past history: no surgeries reported in this fictional record. Family history: sibling with raised cholesterol. Personal history: irregular sleep during shift changes; enjoys weekend gardening. Occupation: bus route dispatcher. Fictional address: 22 Sample Crescent, Demo District.", "allergy": "No medication allergies reported at this fictional intake. This is a reported history, not an assertion that every exposure is safe.", "plan": "Keep the laboratory task visible until the result arrives. Show how the clinician can prepare a draft and return later without copying the patient history.", "vitals": {"temperature_c": 36.6, "spo2_percent": 99, "pulse_bpm": 70, "systolic_mmhg": 126, "diastolic_mmhg": 80}, "room": "Clinic A · Room 3", "time": "08:30", "initials": "NB"}, {"id": 2, "name": "Fatima Rahman", "age": 28, "job": "Product illustrator", "healthId": "TWH6XXC2Q", "story": "Follow-up for recurring seasonal nasal symptoms", "history": "Chief complaint: sneezing and itchy eyes recurring during spring cleaning. Onset intermittent over two weeks; patient notices symptoms around dusty storage boxes. Past history: similar seasonal symptoms in prior years. Family history: sibling reports hay-fever symptoms. Personal history: works from a home studio, no tobacco use reported. Occupation: product illustrator. Fictional address: 8 Illustration Walk, Demo District.", "allergy": "No drug allergies reported; patient describes sensitivity to dust. Keep environmental symptoms distinct from a confirmed drug allergy.", "plan": "Use the follow-up task and message thread to confirm the symptom history and reconcile the demonstration medication list. No real prescribing advice.", "vitals": {"temperature_c": 36.5, "spo2_percent": 99, "pulse_bpm": 74, "systolic_mmhg": 112, "diastolic_mmhg": 72}, "room": "Clinic B · Room 1", "time": "09:00", "initials": "FR"}, {"id": 3, "name": "Leo Fernandes", "age": 41, "job": "Primary-school teacher", "healthId": "ZLNACMBWM", "story": "Ankle discomfort after a weekend walk; imaging pending", "history": "Chief complaint: left ankle discomfort after stepping off a low kerb during a weekend walk. Patient reports swelling later that evening and discomfort on stairs. Past history: a similar minor injury several years ago; no operation reported. Family history: no relevant condition reported in the fictional interview. Personal history: active at school, enjoys hiking. Occupation: primary-school teacher. Fictional address: 31 Storybook Road, Demo District.", "allergy": "Patient reports nausea with an unnamed pain medicine; original name and circumstances are unknown. Demonstrates an unreconciled intolerance rather than a confirmed allergy.", "plan": "Coordinate the imaging appointment, document the reported symptoms and leave the report-review task open until a report is available.", "vitals": {"temperature_c": 36.7, "spo2_percent": 98, "pulse_bpm": 78, "systolic_mmhg": 122, "diastolic_mmhg": 78}, "room": "Clinic B · Room 4", "time": "09:30", "initials": "LF"}];
-const icons={heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M3 12h5l2-4 3 8 2-4h6"/>',today:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h3m3 0h3"/>',people:'<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m1-16a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 4v2"/>',request:'<rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h3"/>',report:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Zm0 0v6h6M8 13h8m-8 4h5"/>',team:'<circle cx="12" cy="6" r="3"/><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M10 9 7 13m7-4 3 4m-9 3h8"/>',arrow:'<path d="M5 12h14m-5-5 5 5-5 5"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',check:'<path d="m5 12 4 4L19 6"/>'};
-const svg=k=>'<svg aria-hidden="true" viewBox="0 0 24 24">'+(icons[k]||icons.heart)+'</svg>';
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const orders=[{patient:0,name:'Complete blood count',type:'Laboratory',state:'Completed',owner:'Technician Lee',detail:'Fictional EDTA whole-blood specimen. The sample result was entered by Technician Lee and reviewed by Dr Smith.',report:0},{patient:0,name:'Chest examination',type:'Imaging',state:'Completed',owner:'Technician Patel',detail:'Fictional chest report attested by Dr Ahmed and reviewed by Dr Smith. No actual image pixels are included.',report:1},{patient:1,name:'Wellness panel',type:'Laboratory',state:'Processing',owner:'Technician Lee',detail:'The fictional specimen is being processed. No result has been supplied. The order stays pending until a result is reviewed.'},{patient:2,name:'Symptom follow-up',type:'Consultation',state:'Ordered',owner:'Dr Smith',detail:'Review the reported seasonal symptoms and reconcile the fictional medication list. This is an internal demonstration request.'},{patient:3,name:'Left ankle examination',type:'Imaging',state:'Scheduled',owner:'Technician Patel',detail:'Coordinate the imaging slot and confirm patient identity. No report or diagnosis is available yet.'}];
-const taskSeed=[{patient:0,title:'Confirm report discussion',status:'Completed',note:'Reviewed reports and patient discussion verified by Dr Smith.'},{patient:1,title:'Follow up the laboratory result',status:'In progress',note:'Keep the task open while the laboratory request is processing.'},{patient:2,title:'Arrange a follow-up visit',status:'Open',note:'Confirm the symptom history and coordinate a follow-up.'},{patient:3,title:'Coordinate the imaging slot',status:'Waiting',note:'Check the room and time with the imaging team.'}];
-let tasks=structuredClone(taskSeed),role='doctor',view='today',selected=0,search='',toastTimer;
-const screen=document.querySelector('#screen'),dialog=document.querySelector('#dialog');
-const badge=s=>'<span class="badge '+(s==='Completed'?'green':s==='Processing'||s==='In progress'?'blue':s==='Ordered'||s==='Open'?'gray':'')+'">'+esc(s)+'</span>';
-const avatar=p=>'<span class="avatar" style="background:'+['#e1eddf','#efe9d9','#ece5ef','#e3edf1'][p.id]+'">'+p.initials+'</span>';
-const btn=(label,action,id,cls='secondary')=>'<button class="'+cls+'" data-action="'+action+'"'+(id===undefined?'':' data-id="'+id+'"')+'>'+label+'</button>';
-function head(title,sub,right=''){return '<div class="pagehead"><div><h1>'+title+'</h1><p>'+sub+'</p></div>'+right+'</div>'}
-function visit(p){return '<div class="visit"><span class="time">'+p.time+'</span><div><div class="personline">'+avatar(p)+'<h3>'+p.name+'</h3></div><p>'+p.story+'</p><small class="muted">30 min · '+p.room+'</small></div>'+btn(svg('arrow'),'chart',p.id,'iconbutton') .replace('class="iconbutton"','aria-label="Open '+p.name+' chart" class="iconbutton"')+'</div>'}
-function taskList(){return tasks.map((t,i)=>'<div class="task"><button class="check '+(t.status==='Completed'?'done':'')+'" data-action="complete" data-id="'+i+'" aria-label="'+(t.status==='Completed'?'View completed task for ':'Complete demo task for ')+people[t.patient].name+'">'+(t.status==='Completed'?svg('check'):'')+'</button><div><h3>'+t.title+'</h3><p>'+people[t.patient].name+' · Nurse Williams</p>'+badge(t.status)+'</div></div>').join('')}
-function today(){return head('Good morning, Dr Smith','Your patients. Your plan. A little more breathing room.','<span class="pill">'+svg('today')+' &nbsp; Friday, 11 September 2026 · Eastern</span>')+'<section class="hero"><div><div class="eyebrow">A connected day of care</div><h1>More clarity.<br>More time for care.</h1><p>Four patients, one shared picture. See the history, follow the results, and keep the next step in sight.</p>'+btn('Meet your patients &nbsp; '+svg('arrow'),'navigate','patients','primary')+'</div><div class="hero-art"><div class="orbit">'+svg('heart')+'<div class="mini"><strong>4 patients</strong>Every story, connected</div></div></div></section><div class="stats">'+[['4','Appointments','today'],['3','Pending requests','request'],['2','Reports ready','report'],[tasks.filter(t=>t.status!=='Completed').length,'Open care tasks','team']].map(s=>'<div class="stat"><div><strong>'+s[0]+'</strong><p>'+s[1]+'</p></div><span class="symbol">'+svg(s[2])+'</span></div>').join('')+'</div><div class="columns"><section class="panel"><div class="panelhead"><div><h2>Your day at a glance</h2><p>Four 30-minute visits · In person</p></div><span class="pill">08:00–10:00</span></div>'+people.map(visit).join('')+'</section><section class="panel"><div class="panelhead"><div><h2>Keep care moving</h2><p>Nurse Williams · Shared care tasks</p></div>'+svg('team')+'</div>'+taskList()+'</section></div>'}
-function patientCards(){const found=people.filter(p=>(p.name+' '+p.healthId+' '+p.story).toLowerCase().includes(search.toLowerCase()));return found.length?found.map(p=>'<article class="patient-card"><div class="personline">'+avatar(p)+'<div><h2>'+p.name+'</h2><p class="meta">'+p.age+' years · '+p.job+'</p></div></div><div class="context"><span class="eyebrow" style="font-size:9px">Next visit · '+p.time+' Eastern</span><p>'+p.story+'</p><small>'+p.room+'</small></div><div class="card-actions"><small class="muted">ID '+p.healthId+'</small>'+btn('Open chart &nbsp; ↗','chart',p.id)+'</div></article>').join(''):'<p class="empty">No fictional patients match your search.</p>'}
-function patients(){return head('Every patient, a fuller picture','Explore the four fictional stories in this demonstration.')+'<label for="patient-search" class="eyebrow muted" style="display:block;margin-bottom:8px">Find a patient</label><input id="patient-search" class="search" placeholder="Search by name, Health ID or concern" value="'+esc(search)+'" autocomplete="off"><div class="cards" id="patient-cards">'+patientCards()+'</div>'}
-function requestView(){return head('The next step is visible','Follow five requests from the initial order to a reviewed result.')+'<div class="strip">Two completed requests. Three awaiting the next step. Each one has an owner.</div><section class="panel tablewrap"><table class="datatable"><thead><tr><th>Patient</th><th>Request</th><th>Owner</th><th>Status</th><th>Details</th></tr></thead><tbody>'+orders.map((o,i)=>'<tr><td><strong>'+people[o.patient].name+'</strong></td><td>'+o.name+'<small>'+o.type+'</small></td><td>'+o.owner+'</td><td>'+badge(o.state)+'</td><td>'+btn('View','order',i)+'</td></tr>').join('')+'</tbody></table></section>'}
-function reports(){return head('Reports with context','Results stay connected to the patient, author and date of care.')+'<div class="cards">'+['Complete blood count','Chest examination'].map((t,i)=>'<article class="report"><div class="report-icon">'+svg('report')+'</div><span class="eyebrow muted">Alice Morgan · Fictional report</span><h2 style="margin-top:8px">'+t+'</h2><p>Observed 10 Sep 2026 · Entered 11 Sep 2026<br>'+(i?'Dr Ahmed attestation · Dr Smith review':'Technician Lee · Reviewed by Dr Smith')+'</p>'+btn('Read sample report &nbsp; ↗','report',i,'primary')+'</article>').join('')+'</div><p class="muted" style="font-size:12px;margin-top:20px">No result has been invented for Noah’s processing laboratory request or Leo’s scheduled imaging request.</p>'}
-function care(){return head('One team, fewer loose ends','Clear ownership helps each next step find the right person.')+'<div class="teamgrid">'+[['DS','Dr Smith','Physician'],['NW','Nurse Williams','Nursing'],['TL','Technician Lee','Laboratory'],['TP','Technician Patel','Imaging'],['DA','Dr Ahmed','Radiologist'],['PD','Pharmacist Davis','Pharmacy']].map(t=>'<div class="team-member"><span class="avatar">'+t[0]+'</span><h3>'+t[1]+'</h3><p>'+t[2]+' · Fictional staff</p></div>').join('')+'</div><div class="columns"><section class="panel"><div class="panelhead"><div><h2>Shared work grid</h2><p>Click a checkbox to complete a demo task.</p></div></div>'+taskList()+'</section><section class="panel"><h2 style="font-size:18px">Handoff notes</h2><div class="record"><h3>Alice · Reports reviewed</h3><p>Both sample reports are ready. Nurse Williams has confirmed the discussion; Dr Smith has acknowledged the handoff.</p>'+badge('Completed')+'</div><div class="record"><h3>Leo · Imaging coordination</h3><p>The ankle request is scheduled. Confirm the room and time with the imaging team. The report remains pending.</p>'+badge('Waiting')+'</div><div class="provenance">Operational messages do not complete clinical work. Task actions here simulate a workflow only and are reset when you reload.</div></section></div>'}
-function vital(p){let v=p.vitals;return '<div class="vitals">'+[[v.temperature_c+'°C','Temperature'],[v.spo2_percent+'%','SpO₂'],[v.pulse_bpm,'Pulse / min'],[v.systolic_mmhg+'/'+v.diastolic_mmhg,'Blood pressure']].map(x=>'<div><strong>'+x[0]+'</strong><small>'+x[1]+'</small></div>').join('')+'</div>'}
-function patientView(){let p=people[selected];return head('Your health, in one place','A patient perspective using fictional records.','<div><label class="eyebrow muted" for="patient-select" style="display:block;margin-bottom:6px">Choose a demo patient</label><select class="patientselect" id="patient-select">'+people.map(x=>'<option value="'+x.id+'"'+(x.id===selected?' selected':'')+'>'+x.name+'</option>').join('')+'</select></div>')+'<section class="hero" style="grid-template-columns:1fr"><div><span class="eyebrow">Fictional Health Passport · '+p.healthId+'</span><h1>'+p.name+'</h1><p>'+p.age+' years · '+p.job+'<br>Next example visit: 11 September, '+p.time+' Eastern.</p></div></section>'+vital(p)+'<div class="columns"><section class="panel"><h2 style="font-size:18px">Your story and next steps</h2><div class="record"><h3>Visit context</h3><p>'+p.history+'</p></div><div class="record"><h3>Reported allergies and intolerances</h3><p>'+p.allergy+'</p></div><div class="record"><h3>Follow-up plan</h3><p>'+p.plan+'</p></div></section><section class="panel"><h2 style="font-size:18px">Requests and reports</h2>'+orders.map((o,i)=>o.patient===selected?'<div class="record"><h3>'+o.name+'</h3><p>'+o.owner+'</p>'+badge(o.state)+'<div style="margin-top:13px">'+btn(o.report===undefined?'View request':'Read report',o.report===undefined?'order':'report',o.report===undefined?i:o.report)+'</div></div>':'').join('')+'<div class="provenance">Demo perspective selection is not login or access authorization. The full application enforces patient permissions on its backend.</div></section></div>'}
-function render(){const navs=[['today','Today','today'],['patients','Patients','people'],['requests','Requests','request'],['reports','Reports','report'],['care','Care team','team']];document.querySelector('#nav').innerHTML=navs.map(n=>'<button data-action="navigate" data-id="'+n[0]+'" class="'+(role==='doctor'&&view===n[0]?'active':'')+'"'+(role==='doctor'&&view===n[0]?' aria-current="page"':'')+'>'+svg(n[2])+n[1]+'</button>').join('');document.querySelectorAll('[data-role]').forEach(b=>{b.classList.toggle('selected',b.dataset.role===role);b.setAttribute('aria-pressed',b.dataset.role===role)});document.querySelector('#crumb').textContent=role==='patient'?'Patient perspective':navs.find(n=>n[0]===view)[1];document.querySelector('#useravatar').textContent=role==='doctor'?'DS':people[selected].initials;document.querySelector('#useravatar').setAttribute('aria-label',role==='doctor'?'Fictional doctor Dr Smith':'Fictional patient '+people[selected].name);screen.innerHTML=role==='patient'?patientView():({today,patients,requests:requestView,reports,care})[view]();document.querySelectorAll('[data-icon]').forEach(e=>e.innerHTML=svg(e.dataset.icon));}
-function show(title,body){document.querySelector('#dialog-title').textContent=title;document.querySelector('#dialog-body').innerHTML=body;if(!dialog.open)dialog.showModal()}
-function chart(id){const p=people[id];show(p.name+' · Patient chart','<p>'+p.age+' years · '+p.job+' · ID '+p.healthId+'</p>'+vital(p)+'<div class="record"><h3>History and presenting concern</h3><p>'+p.history+'</p></div><div class="record"><h3>Allergy reconciliation</h3><p>'+p.allergy+'</p></div><div class="record"><h3>Plan</h3><p>'+p.plan+'</p></div><div class="provenance">All details are invented. Nurse intake observed 10 Sep 2026; entered 11 Sep 2026. These are historical example measurements, not current observations.</div><div class="buttonrow" style="margin-top:17px">'+orders.map((o,i)=>o.patient===id?btn(o.name,'order',i):'').join('')+'</div>')}
-function report(id){show((id?'Chest examination':'Complete blood count')+' · Alice Morgan',id?'<span class="pill">Fictional imaging report</span><h3>Technique</h3><p>Fictional two-view chest examination. No actual X-ray or DICOM pixels are included.</p><h3>Findings</h3><p>No focal air-space opacity, pleural fluid or pneumothorax described in this invented narrative. Cardiomediastinal silhouette not enlarged.</p><h3>Sample impression</h3><p>No acute finding described in this fictional sample.</p><div class="provenance">Attested by Dr Ahmed · Reviewed by Dr Smith<br>Observed 10 Sep 2026 · Entered 11 Sep 2026<br>Demonstration only; not a real clinical interpretation.</div>':'<span class="pill">Fictional laboratory report · EDTA whole blood</span><div class="vitals" style="grid-template-columns:repeat(3,1fr)"><div><strong>6.8</strong><small>WBC · ×10⁹/L</small></div><div><strong>13.2</strong><small>Haemoglobin · g/dL</small></div><div><strong>254</strong><small>Platelets · ×10⁹/L</small></div></div><p>These values are invented. No clinical reference range or diagnostic interpretation is asserted.</p><div class="provenance">Recorded by Technician Lee · Reviewed by Dr Smith<br>Observed 10 Sep 2026 · Entered 11 Sep 2026<br>Accession DEMO-CBC-ALICE-01</div>')}
-function toast(message){const el=document.querySelector('#toast');el.textContent=message;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',4500)}
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.role){role=b.dataset.role;render();return}const id=b.dataset.id;switch(b.dataset.action){case'home':role='doctor';view='today';render();window.scrollTo(0,0);break;case'navigate':role='doctor';view=id;render();window.scrollTo(0,0);break;case'chart':chart(Number(id));break;case'report':report(Number(id));break;case'order':{let o=orders[id];show(o.name+' · '+people[o.patient].name,badge(o.state)+'<h3>'+o.type+' request</h3><p>'+o.detail+'</p><div class="provenance">Owner: '+o.owner+'<br>Fictional demonstration request. No order is sent to a real care provider.</div>'+(o.report===undefined?'':btn('Read the sample report','report',o.report,'primary')));break}case'complete':if(tasks[id].status==='Completed'){toast('This sample task is already complete.');break}tasks[id].status='Completed';render();toast('Demo task completed in this browser session. No clinical record was changed.');break;case'close':dialog.close();break;case'reset':tasks=structuredClone(taskSeed);selected=0;search='';role='doctor';view='today';render();toast('Demo reset to the original fictional examples.');break;case'about':show('A working preview of the idea','<p>Explore a day of care at fictional NorthStar Hospital. Switch between doctor and patient perspectives, read charts and reports, follow requests, and complete sample care tasks.</p><h3>What works in this preview</h3><p>Navigation, patient search, chart and report reading, perspective selection, and simulated task completion work entirely in your browser.</p><h3>What is not connected</h3><p>This GitHub Pages site has no authentication, backend database, uploads, live messaging or real clinical services. Reloading resets all changes. Do not enter real patient information.</p><h3>The full application</h3><p>The repository includes the Java backend, web and Expo clients, server-enforced consent and persistent workflows. Those services must be run or hosted separately.</p><p><a href="https://github.com/abhijithviswanathan/global-health-passport" target="_blank" rel="noopener">Read the project and local setup instructions ↗</a></p>');break}});
-document.addEventListener('input',e=>{if(e.target.id==='patient-search'){search=e.target.value;document.querySelector('#patient-cards').innerHTML=patientCards()}});
-document.addEventListener('change',e=>{if(e.target.id==='patient-select'){selected=Number(e.target.value);render()}});
-render();
-</script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Explore Health Passport with four fictional patient stories. Interactive doctor and patient demo, appointments, care tasks, requests and reports."
+    />
+    <meta name="theme-color" content="#175c50" />
+    <title>Health Passport · Interactive demo</title>
+    <!-- Standalone GitHub Pages demo. Edit styles, fictional fixtures and view functions below.
+     This file never connects to the Java API and does not share live application state. -->
+    <style>
+      :root {
+        --bg: #f5f6f2;
+        --paper: #fff;
+        --ink: #233d3a;
+        --muted: #627570;
+        --line: #dce5de;
+        --green: #175c50;
+        --mint: #e8f2e9;
+        --orange: #b36937;
+        --shadow: 0 10px 35px #173a2910;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          15px/1.5 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      a,
+      input,
+      select {
+        -webkit-tap-highlight-color: transparent;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #c88536;
+        outline-offset: 3px;
+      }
+      button:disabled {
+        cursor: default;
+      }
+      a {
+        color: var(--green);
+      }
+      button {
+        color: inherit;
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      h1 {
+        font-size: 36px;
+        font-weight: 650;
+        letter-spacing: -1.3px;
+        line-height: 1.15;
+      }
+      h2 {
+        font-size: 22px;
+        letter-spacing: -0.5px;
+      }
+      h3 {
+        font-size: 16px;
+      }
+      small {
+        font-size: 12px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 238px minmax(0, 1fr);
+        min-height: 100vh;
+      }
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        background: var(--paper);
+        border-right: 1px solid var(--line);
+        padding: 30px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        border: 0;
+        background: none;
+        padding: 0;
+        color: var(--green);
+        font-size: 18px;
+        font-weight: 750;
+        letter-spacing: -0.5px;
+      }
+      .brandmark {
+        width: 39px;
+        height: 42px;
+        background: var(--green);
+        color: #fff;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+      }
+      .brandmark svg {
+        width: 25px;
+        height: 25px;
+      }
+      .brand small {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 1.1px;
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+      .side-label {
+        padding: 0 14px;
+        color: #74817d;
+        margin-bottom: 14px;
+      }
+      .nav {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+      .nav button {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 12px 14px;
+        min-height: 46px;
+        border: 0;
+        background: transparent;
+        border-radius: 10px;
+        text-align: left;
+        color: var(--muted);
+      }
+      .nav button.active {
+        background: var(--mint);
+        color: var(--green);
+        font-weight: 650;
+      }
+      .nav button:hover {
+        background: #f0f4f0;
+      }
+      .sidebottom {
+        margin-top: auto;
+        padding: 18px 13px 0;
+        border-top: 1px solid var(--line);
+      }
+      .demo-dot {
+        width: 7px;
+        height: 7px;
+        background: #519c60;
+        display: inline-block;
+        border-radius: 50%;
+        margin-right: 6px;
+      }
+      .workspace {
+        min-width: 0;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 88px;
+        padding: 18px 40px;
+        border-bottom: 1px solid var(--line);
+        background: #fdfefbaa;
+      }
+      .breadcrumbs {
+        font-size: 13px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        color: var(--muted);
+      }
+      .tools {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .switch {
+        display: flex;
+        background: #e9ede6;
+        padding: 4px;
+        border-radius: 30px;
+      }
+      .switch button {
+        border: 0;
+        border-radius: 24px;
+        padding: 9px 16px;
+        background: transparent;
+        font-size: 12px;
+      }
+      .switch button.selected {
+        background: white;
+        box-shadow: 0 1px 6px #24422b12;
+        color: var(--green);
+        font-weight: 650;
+      }
+      .avatar {
+        height: 38px;
+        width: 38px;
+        border-radius: 50%;
+        background: #dce9df;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--green);
+      }
+      .content {
+        max-width: 1420px;
+        margin: auto;
+        padding: 30px 40px 45px;
+      }
+      .demo-notice {
+        font-size: 12px;
+        color: #607469;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 23px;
+      }
+      .textbutton {
+        background: none;
+        border: 0;
+        padding: 5px 0;
+        color: var(--green);
+        text-decoration: underline;
+        font-size: 12px;
+      }
+      .pagehead {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .pagehead p {
+        margin-top: 8px;
+        color: var(--muted);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 10px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        font-size: 11px;
+        background: white;
+        white-space: nowrap;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(180px, 1fr);
+        gap: 24px;
+        background: var(--green);
+        border-radius: 19px;
+        color: #fff;
+        padding: 31px 32px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero p {
+        color: #c4d8ce;
+        max-width: 440px;
+        margin-top: 16px;
+        font-size: 14px;
+      }
+      .hero .eyebrow {
+        color: #c5dfca;
+        margin-bottom: 12px;
+      }
+      .hero h1 {
+        font-size: 39px;
+      }
+      .hero .primary {
+        background: #e4f0c4;
+        color: #294d36;
+        border: 0;
+        margin-top: 22px;
+      }
+      .hero-art {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        position: relative;
+      }
+      .orbit {
+        height: 165px;
+        width: 165px;
+        border: 1px solid #70a38d;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+      .orbit:before {
+        content: "";
+        position: absolute;
+        inset: 20px;
+        border: 1px solid #70a38d55;
+        border-radius: 50%;
+      }
+      .orbit svg {
+        width: 68px;
+        height: 68px;
+        stroke: #dfeebd;
+        stroke-width: 1;
+      }
+      .mini {
+        position: absolute;
+        background: #f5f7e9;
+        color: #294d36;
+        border-radius: 12px;
+        padding: 10px 14px;
+        box-shadow: 0 8px 20px #08251d22;
+        font-size: 12px;
+        left: -40px;
+        bottom: 0;
+      }
+      .mini strong {
+        display: block;
+        font-size: 22px;
+      }
+      .primary,
+      .secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 43px;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .primary {
+        color: white;
+        border: 1px solid var(--green);
+        background: var(--green);
+      }
+      .secondary {
+        background: white;
+        border: 1px solid var(--line);
+      }
+      .primary:hover {
+        filter: brightness(1.08);
+      }
+      .secondary:hover {
+        background: #eef4ed;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        margin: 21px 0 26px;
+      }
+      .stat {
+        padding: 17px 20px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .stat strong {
+        font-size: 26px;
+        letter-spacing: -1px;
+      }
+      .stat p {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .stat .symbol {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        background: var(--mint);
+        color: var(--green);
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: 22px;
+      }
+      .panel {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 23px;
+        min-width: 0;
+      }
+      .panelhead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 17px;
+      }
+      .panelhead h2 {
+        font-size: 18px;
+      }
+      .panelhead p {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .visit {
+        display: grid;
+        grid-template-columns: 51px 1fr auto;
+        gap: 15px;
+        align-items: center;
+        padding: 17px 0;
+        border-bottom: 1px solid #e8ede7;
+      }
+      .visit:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+      .time {
+        font-size: 13px;
+        font-weight: 650;
+        color: var(--green);
+        align-self: start;
+        padding-top: 4px;
+      }
+      .personline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .personline h3 {
+        font-size: 14px;
+      }
+      .visit p {
+        font-size: 12px;
+        margin-top: 5px;
+        color: var(--muted);
+      }
+      .visit .avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+        flex-shrink: 0;
+      }
+      .iconbutton {
+        width: 35px;
+        height: 35px;
+        min-width: 35px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: white;
+        display: grid;
+        place-items: center;
+      }
+      .task {
+        padding: 16px 0;
+        border-bottom: 1px solid #e8ede7;
+        display: flex;
+        align-items: start;
+        gap: 12px;
+      }
+      .task:last-child {
+        border: 0;
+        padding-bottom: 0;
+      }
+      .task .check {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        border: 1px solid #b8ccbe;
+        border-radius: 7px;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        margin-top: 3px;
+      }
+      .task .check.done {
+        background: #deeddd;
+        color: #346344;
+      }
+      .task h3 {
+        font-size: 13px;
+      }
+      .task p {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .badge {
+        font-size: 10px;
+        padding: 4px 8px;
+        border-radius: 5px;
+        display: inline-block;
+        background: #f6eedf;
+        color: #8a5824;
+        margin-top: 8px;
+      }
+      .badge.green {
+        background: #e8f1e6;
+        color: #427144;
+      }
+      .badge.blue {
+        background: #e7f0f4;
+        color: #446d7c;
+      }
+      .badge.gray {
+        background: #eef0ed;
+        color: #607166;
+      }
+      .below {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 24px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .search {
+        width: min(100%, 400px);
+        border: 1px solid var(--line);
+        background: white;
+        border-radius: 9px;
+        padding: 12px 16px;
+        margin-bottom: 22px;
+        min-height: 44px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+      .patient-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        padding: 24px;
+        transition: box-shadow 0.2s;
+      }
+      .patient-card:hover {
+        box-shadow: var(--shadow);
+      }
+      .patient-card .avatar {
+        height: 46px;
+        width: 46px;
+        font-size: 15px;
+      }
+      .patient-card h2 {
+        font-size: 18px;
+      }
+      .patient-card .meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 5px;
+      }
+      .patient-card .context {
+        border-radius: 9px;
+        background: #f3f6f0;
+        padding: 15px;
+        margin: 20px 0 16px;
+        min-height: 103px;
+      }
+      .patient-card .context p {
+        font-size: 13px;
+        margin: 7px 0;
+        color: #52665c;
+      }
+      .card-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .tablewrap {
+        overflow: auto;
+      }
+      .datatable {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 13px;
+      }
+      .datatable th {
+        text-align: left;
+        padding: 12px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 500;
+        border-bottom: 1px solid var(--line);
+        background: #f4f6f0;
+      }
+      .datatable td {
+        padding: 17px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: middle;
+      }
+      .datatable td small {
+        display: block;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .datatable tr:last-child td {
+        border-bottom: 0;
+      }
+      .datatable .badge {
+        margin: 0;
+      }
+      .empty {
+        padding: 30px;
+        color: var(--muted);
+        text-align: center;
+        grid-column: 1/-1;
+      }
+      .report {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 25px;
+      }
+      .report-icon {
+        width: 43px;
+        height: 43px;
+        display: grid;
+        place-items: center;
+        background: var(--mint);
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .report p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 10px 0 18px;
+      }
+      .strip {
+        padding: 17px 20px;
+        border-radius: 12px;
+        background: #eaf0e4;
+        margin-bottom: 22px;
+        font-size: 13px;
+      }
+      .patientselect {
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 10px;
+        background: white;
+        max-width: 100%;
+      }
+      .vitals {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin: 16px 0;
+      }
+      .vitals > div {
+        padding: 13px;
+        background: #f1f5ee;
+        border-radius: 9px;
+      }
+      .vitals strong {
+        display: block;
+        font-size: 19px;
+      }
+      .vitals small {
+        color: var(--muted);
+      }
+      .record {
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .record p {
+        font-size: 13px;
+        line-height: 1.7;
+        margin-top: 7px;
+        color: #536860;
+      }
+      .record:last-child {
+        border: 0;
+      }
+      .teamgrid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 22px;
+      }
+      .team-member {
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 18px;
+      }
+      .team-member .avatar {
+        margin-bottom: 12px;
+      }
+      .team-member p {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      dialog {
+        border: 0;
+        border-radius: 18px;
+        width: min(690px, calc(100vw - 28px));
+        padding: 0;
+        color: var(--ink);
+        box-shadow: 0 25px 100px #183d3544;
+        max-height: 90vh;
+        background: white;
+      }
+      dialog::backdrop {
+        background: #12372b77;
+        backdrop-filter: blur(4px);
+      }
+      .dialoghead {
+        position: sticky;
+        top: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        background: white;
+        padding: 23px 26px;
+        border-bottom: 1px solid var(--line);
+        z-index: 1;
+      }
+      .dialoghead h2 {
+        font-size: 20px;
+      }
+      .dialogbody {
+        padding: 23px 26px;
+      }
+      .dialogbody > p {
+        font-size: 14px;
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+      .dialogbody h3 {
+        margin: 17px 0 7px;
+      }
+      .dialogbody .primary {
+        margin-top: 18px;
+      }
+      .provenance {
+        font-size: 11px;
+        background: #f5f6f0;
+        padding: 13px;
+        border-radius: 8px;
+        margin-top: 20px;
+        color: var(--muted);
+      }
+      #toast {
+        position: fixed;
+        bottom: 22px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #173f33;
+        color: white;
+        padding: 13px 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        font-size: 13px;
+        max-width: calc(100% - 28px);
+        z-index: 20;
+        display: none;
+      }
+      .skip {
+        position: absolute;
+        top: -60px;
+        left: 10px;
+        background: white;
+        padding: 10px;
+        z-index: 100;
+      }
+      .skip:focus {
+        top: 10px;
+      }
+      .mobile-brand {
+        display: none;
+      }
+      .buttonrow {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      footer a {
+        color: inherit;
+      }
+      button,
+      .primary,
+      .secondary {
+        touch-action: manipulation;
+      }
+      @media (min-width: 1450px) {
+        .content {
+          padding-top: 36px;
+        }
+        .hero {
+          padding: 38px;
+        }
+        .hero h1 {
+          font-size: 44px;
+        }
+      }
+      @media (max-width: 1050px) {
+        .layout {
+          grid-template-columns: 195px minmax(0, 1fr);
+        }
+        .sidebar {
+          padding: 25px 12px;
+        }
+        .content {
+          padding: 25px;
+        }
+        .topbar {
+          padding: 17px 25px;
+        }
+        .stats {
+          gap: 10px;
+        }
+        .stat {
+          padding: 14px;
+        }
+        .columns {
+          grid-template-columns: 1fr;
+        }
+        .hero-art {
+          padding-right: 0;
+        }
+        .orbit {
+          width: 135px;
+          height: 135px;
+        }
+        .mini {
+          left: -22px;
+        }
+        .teamgrid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 720px) {
+        h1 {
+          font-size: 29px;
+        }
+        .layout {
+          display: block;
+        }
+        .sidebar {
+          position: static;
+          height: auto;
+          padding: 18px 18px 0;
+          gap: 16px;
+          border: 0;
+        }
+        .sidebar > .brand {
+          display: none;
+        }
+        .side-label,
+        .sidebottom {
+          display: none;
+        }
+        .nav {
+          flex-direction: row;
+          overflow: auto;
+          gap: 5px;
+          padding-bottom: 13px;
+        }
+        .nav button {
+          white-space: nowrap;
+          padding: 10px 12px;
+          font-size: 12px;
+          min-height: 42px;
+          gap: 6px;
+        }
+        .nav svg {
+          width: 16px;
+          height: 16px;
+        }
+        .topbar {
+          padding: 15px 18px;
+          min-height: 73px;
+          border-bottom: 0;
+          position: relative;
+          order: -1;
+        }
+        .layout {
+          display: flex;
+          flex-direction: column;
+        }
+        .workspace {
+          display: contents;
+        }
+        .topbar {
+          order: -2;
+          background: white;
+        }
+        .sidebar {
+          order: -1;
+          background: white;
+          border-bottom: 1px solid var(--line);
+        }
+        .mobile-brand {
+          display: flex;
+          font-size: 15px;
+        }
+        .mobile-brand .brandmark {
+          width: 32px;
+          height: 35px;
+          border-radius: 9px;
+        }
+        .mobile-brand small {
+          font-size: 8px;
+        }
+        .breadcrumbs,
+        .tools > .avatar {
+          display: none;
+        }
+        .tools {
+          gap: 0;
+        }
+        .switch button {
+          font-size: 11px;
+          padding: 8px 10px;
+        }
+        .content {
+          padding: 23px 18px 30px;
+          width: 100%;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 26px;
+        }
+        .hero h1 {
+          font-size: 35px;
+        }
+        .hero-art {
+          display: none;
+        }
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+        }
+        .stat {
+          padding: 14px 16px;
+        }
+        .stat strong {
+          font-size: 23px;
+        }
+        .demo-notice {
+          align-items: start;
+          font-size: 11px;
+        }
+        .demo-notice span {
+          max-width: 230px;
+        }
+        .pagehead {
+          align-items: start;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .pagehead p {
+          font-size: 13px;
+        }
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        .panel {
+          padding: 19px;
+        }
+        .visit {
+          gap: 10px;
+          grid-template-columns: 43px 1fr auto;
+        }
+        .patient-card {
+          padding: 20px;
+        }
+        .vitals {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .teamgrid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .below {
+          flex-direction: column;
+          gap: 8px;
+        }
+        .dialogbody,
+        .dialoghead {
+          padding: 20px;
+        }
+        .datatable {
+          min-width: 620px;
+        }
+        .dialoghead h2 {
+          font-size: 18px;
+        }
+        .pill {
+          white-space: normal;
+        }
+        .buttonrow {
+          gap: 8px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <div class="layout">
+      <aside class="sidebar">
+        <button
+          class="brand"
+          data-action="home"
+          aria-label="Health Passport home"
+        >
+          <span class="brandmark" data-icon="heart"></span
+          ><span>Health Passport<small>Your health, connected</small></span>
+        </button>
+        <div>
+          <p class="eyebrow side-label">Clinical workspace</p>
+          <nav class="nav" aria-label="Demo navigation" id="nav"></nav>
+        </div>
+        <div class="sidebottom">
+          <p style="font-size: 12px; font-weight: 600">
+            <span class="demo-dot"></span>Interactive demo
+          </p>
+          <p class="muted" style="font-size: 11px; margin-top: 7px">
+            Four fictional stories.<br />No real patient information.
+          </p>
+          <button class="textbutton" data-action="about">
+            How this demo works
+          </button>
+        </div>
+      </aside>
+      <div class="workspace">
+        <header class="topbar">
+          <button
+            class="brand mobile-brand"
+            data-action="home"
+            aria-label="Health Passport home"
+          >
+            <span class="brandmark" data-icon="heart"></span
+            ><span>Health Passport<small>Your health, connected</small></span>
+          </button>
+          <div class="breadcrumbs">
+            <span>Health Passport</span><span>›</span
+            ><strong id="crumb">Today</strong>
+          </div>
+          <div class="tools">
+            <div class="switch" aria-label="Demonstration perspective">
+              <button data-role="doctor" class="selected" aria-pressed="true">
+                Doctor view</button
+              ><button data-role="patient" aria-pressed="false">
+                Patient view
+              </button>
+            </div>
+            <span
+              class="avatar"
+              id="useravatar"
+              aria-label="Fictional doctor Dr Smith"
+              >DS</span
+            >
+          </div>
+        </header>
+        <main class="content" id="main" tabindex="-1">
+          <div class="demo-notice">
+            <span
+              ><span class="demo-dot"></span>Fictional data · Browser-session
+              demo</span
+            ><button class="textbutton" data-action="reset">Reset demo</button>
+          </div>
+          <div id="screen"></div>
+          <footer class="below">
+            <span>Made for clearer care, across every handoff.</span
+            ><span
+              ><a
+                href="https://github.com/abhijithviswanathan/global-health-passport"
+                target="_blank"
+                rel="noopener"
+                >View the full project ↗</a
+              >
+              ·
+              <button class="textbutton" data-action="about">
+                Demo limitations
+              </button></span
+            >
+          </footer>
+        </main>
+      </div>
+    </div>
+    <dialog id="dialog" aria-labelledby="dialog-title">
+      <div class="dialoghead">
+        <h2 id="dialog-title"></h2>
+        <button
+          class="iconbutton"
+          data-action="close"
+          aria-label="Close dialog"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="dialogbody" id="dialog-body"></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script>
+      "use strict";
+      // Fictional presentation fixtures only. IDs and stories are illustrative, not authentication data.
+      const people = [
+        {
+          id: 0,
+          name: "Alice Morgan",
+          age: 34,
+          job: "Museum programme coordinator",
+          healthId: "KW6V6HRCU",
+          story: "Review of a recent cough and fatigue episode",
+          history:
+            "Chief complaint: dry cough and tiredness for three days during a busy exhibition week. Onset gradual; symptoms more noticeable late in the day. No previous similar episode recorded in this fictional story. Past history: seasonal nasal symptoms. Family history: parent with high blood pressure. Personal history: walks to work, does not smoke, lives with a partner. Occupation: museum programme coordinator. Fictional address: 14 Example Lane, Demo District. No real contact information.",
+          allergy:
+            "Patient reports a rash after penicillin as a teenager; timing and original documentation are not available. Demonstrates a patient-reported allergy requiring reconciliation, not verified testing.",
+          plan: "Review the attached fictional reports, reconcile the reported allergy, document the discussion and confirm the next follow-up with Alice. No real treatment instruction.",
+          vitals: {
+            temperature_c: 36.8,
+            spo2_percent: 98,
+            pulse_bpm: 76,
+            systolic_mmhg: 118,
+            diastolic_mmhg: 76,
+          },
+          room: "Clinic A · Room 2",
+          time: "08:00",
+          initials: "AM",
+        },
+        {
+          id: 1,
+          name: "Noah Bennett",
+          age: 52,
+          job: "Bus route dispatcher",
+          healthId: "CAGNH5SDP",
+          story: "Routine health review with blood work pending",
+          history:
+            "Chief complaint: routine annual review and a request to discuss occasional tiredness after rotating shifts. Symptoms occur near the end of a long workday. Past history: no surgeries reported in this fictional record. Family history: sibling with raised cholesterol. Personal history: irregular sleep during shift changes; enjoys weekend gardening. Occupation: bus route dispatcher. Fictional address: 22 Sample Crescent, Demo District.",
+          allergy:
+            "No medication allergies reported at this fictional intake. This is a reported history, not an assertion that every exposure is safe.",
+          plan: "Keep the laboratory task visible until the result arrives. Show how the clinician can prepare a draft and return later without copying the patient history.",
+          vitals: {
+            temperature_c: 36.6,
+            spo2_percent: 99,
+            pulse_bpm: 70,
+            systolic_mmhg: 126,
+            diastolic_mmhg: 80,
+          },
+          room: "Clinic A · Room 3",
+          time: "08:30",
+          initials: "NB",
+        },
+        {
+          id: 2,
+          name: "Fatima Rahman",
+          age: 28,
+          job: "Product illustrator",
+          healthId: "TWH6XXC2Q",
+          story: "Follow-up for recurring seasonal nasal symptoms",
+          history:
+            "Chief complaint: sneezing and itchy eyes recurring during spring cleaning. Onset intermittent over two weeks; patient notices symptoms around dusty storage boxes. Past history: similar seasonal symptoms in prior years. Family history: sibling reports hay-fever symptoms. Personal history: works from a home studio, no tobacco use reported. Occupation: product illustrator. Fictional address: 8 Illustration Walk, Demo District.",
+          allergy:
+            "No drug allergies reported; patient describes sensitivity to dust. Keep environmental symptoms distinct from a confirmed drug allergy.",
+          plan: "Use the follow-up task and message thread to confirm the symptom history and reconcile the demonstration medication list. No real prescribing advice.",
+          vitals: {
+            temperature_c: 36.5,
+            spo2_percent: 99,
+            pulse_bpm: 74,
+            systolic_mmhg: 112,
+            diastolic_mmhg: 72,
+          },
+          room: "Clinic B · Room 1",
+          time: "09:00",
+          initials: "FR",
+        },
+        {
+          id: 3,
+          name: "Leo Fernandes",
+          age: 41,
+          job: "Primary-school teacher",
+          healthId: "ZLNACMBWM",
+          story: "Ankle discomfort after a weekend walk; imaging pending",
+          history:
+            "Chief complaint: left ankle discomfort after stepping off a low kerb during a weekend walk. Patient reports swelling later that evening and discomfort on stairs. Past history: a similar minor injury several years ago; no operation reported. Family history: no relevant condition reported in the fictional interview. Personal history: active at school, enjoys hiking. Occupation: primary-school teacher. Fictional address: 31 Storybook Road, Demo District.",
+          allergy:
+            "Patient reports nausea with an unnamed pain medicine; original name and circumstances are unknown. Demonstrates an unreconciled intolerance rather than a confirmed allergy.",
+          plan: "Coordinate the imaging appointment, document the reported symptoms and leave the report-review task open until a report is available.",
+          vitals: {
+            temperature_c: 36.7,
+            spo2_percent: 98,
+            pulse_bpm: 78,
+            systolic_mmhg: 122,
+            diastolic_mmhg: 78,
+          },
+          room: "Clinic B · Room 4",
+          time: "09:30",
+          initials: "LF",
+        },
+      ];
+      const icons = {
+        heart:
+          '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/><path d="M3 12h5l2-4 3 8 2-4h6"/>',
+        today:
+          '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 4h3m3 0h3"/>',
+        people:
+          '<circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m1-16a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 4v2"/>',
+        request:
+          '<rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h3"/>',
+        report:
+          '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Zm0 0v6h6M8 13h8m-8 4h5"/>',
+        team: '<circle cx="12" cy="6" r="3"/><circle cx="5" cy="16" r="3"/><circle cx="19" cy="16" r="3"/><path d="M10 9 7 13m7-4 3 4m-9 3h8"/>',
+        arrow: '<path d="M5 12h14m-5-5 5 5-5 5"/>',
+        clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        check: '<path d="m5 12 4 4L19 6"/>',
+      };
+      const svg = (k) =>
+        '<svg aria-hidden="true" viewBox="0 0 24 24">' +
+        (icons[k] || icons.heart) +
+        "</svg>";
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      const orders = [
+        {
+          patient: 0,
+          name: "Complete blood count",
+          type: "Laboratory",
+          state: "Completed",
+          owner: "Technician Lee",
+          detail:
+            "Fictional EDTA whole-blood specimen. The sample result was entered by Technician Lee and reviewed by Dr Smith.",
+          report: 0,
+        },
+        {
+          patient: 0,
+          name: "Chest examination",
+          type: "Imaging",
+          state: "Completed",
+          owner: "Technician Patel",
+          detail:
+            "Fictional chest report attested by Dr Ahmed and reviewed by Dr Smith. No actual image pixels are included.",
+          report: 1,
+        },
+        {
+          patient: 1,
+          name: "Wellness panel",
+          type: "Laboratory",
+          state: "Processing",
+          owner: "Technician Lee",
+          detail:
+            "The fictional specimen is being processed. No result has been supplied. The order stays pending until a result is reviewed.",
+        },
+        {
+          patient: 2,
+          name: "Symptom follow-up",
+          type: "Consultation",
+          state: "Ordered",
+          owner: "Dr Smith",
+          detail:
+            "Review the reported seasonal symptoms and reconcile the fictional medication list. This is an internal demonstration request.",
+        },
+        {
+          patient: 3,
+          name: "Left ankle examination",
+          type: "Imaging",
+          state: "Scheduled",
+          owner: "Technician Patel",
+          detail:
+            "Coordinate the imaging slot and confirm patient identity. No report or diagnosis is available yet.",
+        },
+      ];
+      const taskSeed = [
+        {
+          patient: 0,
+          title: "Confirm report discussion",
+          status: "Completed",
+          note: "Reviewed reports and patient discussion verified by Dr Smith.",
+        },
+        {
+          patient: 1,
+          title: "Follow up the laboratory result",
+          status: "In progress",
+          note: "Keep the task open while the laboratory request is processing.",
+        },
+        {
+          patient: 2,
+          title: "Arrange a follow-up visit",
+          status: "Open",
+          note: "Confirm the symptom history and coordinate a follow-up.",
+        },
+        {
+          patient: 3,
+          title: "Coordinate the imaging slot",
+          status: "Waiting",
+          note: "Check the room and time with the imaging team.",
+        },
+      ];
+      // In-memory demo state. Reload/reset restores the fixture; no browser database is used.
+      let tasks = structuredClone(taskSeed),
+        role = "doctor",
+        view = "today",
+        selected = 0,
+        search = "",
+        toastTimer;
+      const screen = document.querySelector("#screen"),
+        dialog = document.querySelector("#dialog");
+      const badge = (s) =>
+        '<span class="badge ' +
+        (s === "Completed"
+          ? "green"
+          : s === "Processing" || s === "In progress"
+            ? "blue"
+            : s === "Ordered" || s === "Open"
+              ? "gray"
+              : "") +
+        '">' +
+        esc(s) +
+        "</span>";
+      const avatar = (p) =>
+        '<span class="avatar" style="background:' +
+        ["#e1eddf", "#efe9d9", "#ece5ef", "#e3edf1"][p.id] +
+        '">' +
+        p.initials +
+        "</span>";
+      const btn = (label, action, id, cls = "secondary") =>
+        '<button class="' +
+        cls +
+        '" data-action="' +
+        action +
+        '"' +
+        (id === undefined ? "" : ' data-id="' + id + '"') +
+        ">" +
+        label +
+        "</button>";
+      function head(title, sub, right = "") {
+        return (
+          '<div class="pagehead"><div><h1>' +
+          title +
+          "</h1><p>" +
+          sub +
+          "</p></div>" +
+          right +
+          "</div>"
+        );
+      }
+      function visit(p) {
+        return (
+          '<div class="visit"><span class="time">' +
+          p.time +
+          '</span><div><div class="personline">' +
+          avatar(p) +
+          "<h3>" +
+          p.name +
+          "</h3></div><p>" +
+          p.story +
+          '</p><small class="muted">30 min · ' +
+          p.room +
+          "</small></div>" +
+          btn(svg("arrow"), "chart", p.id, "iconbutton").replace(
+            'class="iconbutton"',
+            'aria-label="Open ' + p.name + ' chart" class="iconbutton"',
+          ) +
+          "</div>"
+        );
+      }
+      function taskList() {
+        return tasks
+          .map(
+            (t, i) =>
+              '<div class="task"><button class="check ' +
+              (t.status === "Completed" ? "done" : "") +
+              '" data-action="complete" data-id="' +
+              i +
+              '" aria-label="' +
+              (t.status === "Completed"
+                ? "View completed task for "
+                : "Complete demo task for ") +
+              people[t.patient].name +
+              '">' +
+              (t.status === "Completed" ? svg("check") : "") +
+              "</button><div><h3>" +
+              t.title +
+              "</h3><p>" +
+              people[t.patient].name +
+              " · Nurse Williams</p>" +
+              badge(t.status) +
+              "</div></div>",
+          )
+          .join("");
+      }
+      // Doctor overview combines the sample appointment agenda and the current demo task state.
+      function today() {
+        return (
+          head(
+            "Good morning, Dr Smith",
+            "Your patients. Your plan. A little more breathing room.",
+            '<span class="pill">' +
+              svg("today") +
+              " &nbsp; Friday, 11 September 2026 · Eastern</span>",
+          ) +
+          '<section class="hero"><div><div class="eyebrow">A connected day of care</div><h1>More clarity.<br>More time for care.</h1><p>Four patients, one shared picture. See the history, follow the results, and keep the next step in sight.</p>' +
+          btn(
+            "Meet your patients &nbsp; " + svg("arrow"),
+            "navigate",
+            "patients",
+            "primary",
+          ) +
+          '</div><div class="hero-art"><div class="orbit">' +
+          svg("heart") +
+          '<div class="mini"><strong>4 patients</strong>Every story, connected</div></div></div></section><div class="stats">' +
+          [
+            ["4", "Appointments", "today"],
+            ["3", "Pending requests", "request"],
+            ["2", "Reports ready", "report"],
+            [
+              tasks.filter((t) => t.status !== "Completed").length,
+              "Open care tasks",
+              "team",
+            ],
+          ]
+            .map(
+              (s) =>
+                '<div class="stat"><div><strong>' +
+                s[0] +
+                "</strong><p>" +
+                s[1] +
+                '</p></div><span class="symbol">' +
+                svg(s[2]) +
+                "</span></div>",
+            )
+            .join("") +
+          '</div><div class="columns"><section class="panel"><div class="panelhead"><div><h2>Your day at a glance</h2><p>Four 30-minute visits · In person</p></div><span class="pill">08:00–10:00</span></div>' +
+          people.map(visit).join("") +
+          '</section><section class="panel"><div class="panelhead"><div><h2>Keep care moving</h2><p>Nurse Williams · Shared care tasks</p></div>' +
+          svg("team") +
+          "</div>" +
+          taskList() +
+          "</section></div>"
+        );
+      }
+      // Filter fictional fixtures locally. This is a demonstration search, not a patient directory API.
+      function patientCards() {
+        const found = people.filter((p) =>
+          (p.name + " " + p.healthId + " " + p.story)
+            .toLowerCase()
+            .includes(search.toLowerCase()),
+        );
+        return found.length
+          ? found
+              .map(
+                (p) =>
+                  '<article class="patient-card"><div class="personline">' +
+                  avatar(p) +
+                  "<div><h2>" +
+                  p.name +
+                  '</h2><p class="meta">' +
+                  p.age +
+                  " years · " +
+                  p.job +
+                  '</p></div></div><div class="context"><span class="eyebrow" style="font-size:9px">Next visit · ' +
+                  p.time +
+                  " Eastern</span><p>" +
+                  p.story +
+                  "</p><small>" +
+                  p.room +
+                  '</small></div><div class="card-actions"><small class="muted">ID ' +
+                  p.healthId +
+                  "</small>" +
+                  btn("Open chart &nbsp; ↗", "chart", p.id) +
+                  "</div></article>",
+              )
+              .join("")
+          : '<p class="empty">No fictional patients match your search.</p>';
+      }
+      function patients() {
+        return (
+          head(
+            "Every patient, a fuller picture",
+            "Explore the four fictional stories in this demonstration.",
+          ) +
+          '<label for="patient-search" class="eyebrow muted" style="display:block;margin-bottom:8px">Find a patient</label><input id="patient-search" class="search" placeholder="Search by name, Health ID or concern" value="' +
+          esc(search) +
+          '" autocomplete="off"><div class="cards" id="patient-cards">' +
+          patientCards() +
+          "</div>"
+        );
+      }
+      function requestView() {
+        return (
+          head(
+            "The next step is visible",
+            "Follow five requests from the initial order to a reviewed result.",
+          ) +
+          '<div class="strip">Two completed requests. Three awaiting the next step. Each one has an owner.</div><section class="panel tablewrap"><table class="datatable"><thead><tr><th>Patient</th><th>Request</th><th>Owner</th><th>Status</th><th>Details</th></tr></thead><tbody>' +
+          orders
+            .map(
+              (o, i) =>
+                "<tr><td><strong>" +
+                people[o.patient].name +
+                "</strong></td><td>" +
+                o.name +
+                "<small>" +
+                o.type +
+                "</small></td><td>" +
+                o.owner +
+                "</td><td>" +
+                badge(o.state) +
+                "</td><td>" +
+                btn("View", "order", i) +
+                "</td></tr>",
+            )
+            .join("") +
+          "</tbody></table></section>"
+        );
+      }
+      function reports() {
+        return (
+          head(
+            "Reports with context",
+            "Results stay connected to the patient, author and date of care.",
+          ) +
+          '<div class="cards">' +
+          ["Complete blood count", "Chest examination"]
+            .map(
+              (t, i) =>
+                '<article class="report"><div class="report-icon">' +
+                svg("report") +
+                '</div><span class="eyebrow muted">Alice Morgan · Fictional report</span><h2 style="margin-top:8px">' +
+                t +
+                "</h2><p>Observed 10 Sep 2026 · Entered 11 Sep 2026<br>" +
+                (i
+                  ? "Dr Ahmed attestation · Dr Smith review"
+                  : "Technician Lee · Reviewed by Dr Smith") +
+                "</p>" +
+                btn("Read sample report &nbsp; ↗", "report", i, "primary") +
+                "</article>",
+            )
+            .join("") +
+          '</div><p class="muted" style="font-size:12px;margin-top:20px">No result has been invented for Noah’s processing laboratory request or Leo’s scheduled imaging request.</p>'
+        );
+      }
+      function care() {
+        return (
+          head(
+            "One team, fewer loose ends",
+            "Clear ownership helps each next step find the right person.",
+          ) +
+          '<div class="teamgrid">' +
+          [
+            ["DS", "Dr Smith", "Physician"],
+            ["NW", "Nurse Williams", "Nursing"],
+            ["TL", "Technician Lee", "Laboratory"],
+            ["TP", "Technician Patel", "Imaging"],
+            ["DA", "Dr Ahmed", "Radiologist"],
+            ["PD", "Pharmacist Davis", "Pharmacy"],
+          ]
+            .map(
+              (t) =>
+                '<div class="team-member"><span class="avatar">' +
+                t[0] +
+                "</span><h3>" +
+                t[1] +
+                "</h3><p>" +
+                t[2] +
+                " · Fictional staff</p></div>",
+            )
+            .join("") +
+          '</div><div class="columns"><section class="panel"><div class="panelhead"><div><h2>Shared work grid</h2><p>Click a checkbox to complete a demo task.</p></div></div>' +
+          taskList() +
+          '</section><section class="panel"><h2 style="font-size:18px">Handoff notes</h2><div class="record"><h3>Alice · Reports reviewed</h3><p>Both sample reports are ready. Nurse Williams has confirmed the discussion; Dr Smith has acknowledged the handoff.</p>' +
+          badge("Completed") +
+          '</div><div class="record"><h3>Leo · Imaging coordination</h3><p>The ankle request is scheduled. Confirm the room and time with the imaging team. The report remains pending.</p>' +
+          badge("Waiting") +
+          '</div><div class="provenance">Operational messages do not complete clinical work. Task actions here simulate a workflow only and are reset when you reload.</div></section></div>'
+        );
+      }
+      function vital(p) {
+        let v = p.vitals;
+        return (
+          '<div class="vitals">' +
+          [
+            [v.temperature_c + "°C", "Temperature"],
+            [v.spo2_percent + "%", "SpO₂"],
+            [v.pulse_bpm, "Pulse / min"],
+            [v.systolic_mmhg + "/" + v.diastolic_mmhg, "Blood pressure"],
+          ]
+            .map(
+              (x) =>
+                "<div><strong>" +
+                x[0] +
+                "</strong><small>" +
+                x[1] +
+                "</small></div>",
+            )
+            .join("") +
+          "</div>"
+        );
+      }
+      // Render the selected fictional patient perspective. Selection is intentionally not login.
+      function patientView() {
+        let p = people[selected];
+        return (
+          head(
+            "Your health, in one place",
+            "A patient perspective using fictional records.",
+            '<div><label class="eyebrow muted" for="patient-select" style="display:block;margin-bottom:6px">Choose a demo patient</label><select class="patientselect" id="patient-select">' +
+              people
+                .map(
+                  (x) =>
+                    '<option value="' +
+                    x.id +
+                    '"' +
+                    (x.id === selected ? " selected" : "") +
+                    ">" +
+                    x.name +
+                    "</option>",
+                )
+                .join("") +
+              "</select></div>",
+          ) +
+          '<section class="hero" style="grid-template-columns:1fr"><div><span class="eyebrow">Fictional Health Passport · ' +
+          p.healthId +
+          "</span><h1>" +
+          p.name +
+          "</h1><p>" +
+          p.age +
+          " years · " +
+          p.job +
+          "<br>Next example visit: 11 September, " +
+          p.time +
+          " Eastern.</p></div></section>" +
+          vital(p) +
+          '<div class="columns"><section class="panel"><h2 style="font-size:18px">Your story and next steps</h2><div class="record"><h3>Visit context</h3><p>' +
+          p.history +
+          '</p></div><div class="record"><h3>Reported allergies and intolerances</h3><p>' +
+          p.allergy +
+          '</p></div><div class="record"><h3>Follow-up plan</h3><p>' +
+          p.plan +
+          '</p></div></section><section class="panel"><h2 style="font-size:18px">Requests and reports</h2>' +
+          orders
+            .map((o, i) =>
+              o.patient === selected
+                ? '<div class="record"><h3>' +
+                  o.name +
+                  "</h3><p>" +
+                  o.owner +
+                  "</p>" +
+                  badge(o.state) +
+                  '<div style="margin-top:13px">' +
+                  btn(
+                    o.report === undefined ? "View request" : "Read report",
+                    o.report === undefined ? "order" : "report",
+                    o.report === undefined ? i : o.report,
+                  ) +
+                  "</div></div>"
+                : "",
+            )
+            .join("") +
+          '<div class="provenance">Demo perspective selection is not login or access authorization. The full application enforces patient permissions on its backend.</div></section></div>'
+        );
+      }
+      // Central render pass synchronizes navigation, perspective controls and the active screen.
+      function render() {
+        const navs = [
+          ["today", "Today", "today"],
+          ["patients", "Patients", "people"],
+          ["requests", "Requests", "request"],
+          ["reports", "Reports", "report"],
+          ["care", "Care team", "team"],
+        ];
+        document.querySelector("#nav").innerHTML = navs
+          .map(
+            (n) =>
+              '<button data-action="navigate" data-id="' +
+              n[0] +
+              '" class="' +
+              (role === "doctor" && view === n[0] ? "active" : "") +
+              '"' +
+              (role === "doctor" && view === n[0]
+                ? ' aria-current="page"'
+                : "") +
+              ">" +
+              svg(n[2]) +
+              n[1] +
+              "</button>",
+          )
+          .join("");
+        document.querySelectorAll("[data-role]").forEach((b) => {
+          b.classList.toggle("selected", b.dataset.role === role);
+          b.setAttribute("aria-pressed", b.dataset.role === role);
+        });
+        document.querySelector("#crumb").textContent =
+          role === "patient"
+            ? "Patient perspective"
+            : navs.find((n) => n[0] === view)[1];
+        document.querySelector("#useravatar").textContent =
+          role === "doctor" ? "DS" : people[selected].initials;
+        document
+          .querySelector("#useravatar")
+          .setAttribute(
+            "aria-label",
+            role === "doctor"
+              ? "Fictional doctor Dr Smith"
+              : "Fictional patient " + people[selected].name,
+          );
+        screen.innerHTML =
+          role === "patient"
+            ? patientView()
+            : { today, patients, requests: requestView, reports, care }[view]();
+        document
+          .querySelectorAll("[data-icon]")
+          .forEach((e) => (e.innerHTML = svg(e.dataset.icon)));
+      }
+      // Reusable native dialog for charts, requests, reports and explanation text.
+      function show(title, body) {
+        document.querySelector("#dialog-title").textContent = title;
+        document.querySelector("#dialog-body").innerHTML = body;
+        if (!dialog.open) dialog.showModal();
+      }
+      // Assemble one fictional chart with linked sample orders and observation-date provenance.
+      function chart(id) {
+        const p = people[id];
+        show(
+          p.name + " · Patient chart",
+          "<p>" +
+            p.age +
+            " years · " +
+            p.job +
+            " · ID " +
+            p.healthId +
+            "</p>" +
+            vital(p) +
+            '<div class="record"><h3>History and presenting concern</h3><p>' +
+            p.history +
+            '</p></div><div class="record"><h3>Allergy reconciliation</h3><p>' +
+            p.allergy +
+            '</p></div><div class="record"><h3>Plan</h3><p>' +
+            p.plan +
+            '</p></div><div class="provenance">All details are invented. Nurse intake observed 10 Sep 2026; entered 11 Sep 2026. These are historical example measurements, not current observations.</div><div class="buttonrow" style="margin-top:17px">' +
+            orders
+              .map((o, i) => (o.patient === id ? btn(o.name, "order", i) : ""))
+              .join("") +
+            "</div>",
+        );
+      }
+      // Show hard-coded illustrative report content; no clinical interpretation service is called.
+      function report(id) {
+        show(
+          (id ? "Chest examination" : "Complete blood count") +
+            " · Alice Morgan",
+          id
+            ? '<span class="pill">Fictional imaging report</span><h3>Technique</h3><p>Fictional two-view chest examination. No actual X-ray or DICOM pixels are included.</p><h3>Findings</h3><p>No focal air-space opacity, pleural fluid or pneumothorax described in this invented narrative. Cardiomediastinal silhouette not enlarged.</p><h3>Sample impression</h3><p>No acute finding described in this fictional sample.</p><div class="provenance">Attested by Dr Ahmed · Reviewed by Dr Smith<br>Observed 10 Sep 2026 · Entered 11 Sep 2026<br>Demonstration only; not a real clinical interpretation.</div>'
+            : '<span class="pill">Fictional laboratory report · EDTA whole blood</span><div class="vitals" style="grid-template-columns:repeat(3,1fr)"><div><strong>6.8</strong><small>WBC · ×10⁹/L</small></div><div><strong>13.2</strong><small>Haemoglobin · g/dL</small></div><div><strong>254</strong><small>Platelets · ×10⁹/L</small></div></div><p>These values are invented. No clinical reference range or diagnostic interpretation is asserted.</p><div class="provenance">Recorded by Technician Lee · Reviewed by Dr Smith<br>Observed 10 Sep 2026 · Entered 11 Sep 2026<br>Accession DEMO-CBC-ALICE-01</div>',
+        );
+      }
+      function toast(message) {
+        const el = document.querySelector("#toast");
+        el.textContent = message;
+        el.style.display = "block";
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => (el.style.display = "none"), 4500);
+      }
+      // Delegate button actions from rendered markup. Only the complete/reset actions change demo state.
+      document.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        if (b.dataset.role) {
+          role = b.dataset.role;
+          render();
+          return;
+        }
+        const id = b.dataset.id;
+        switch (b.dataset.action) {
+          case "home":
+            role = "doctor";
+            view = "today";
+            render();
+            window.scrollTo(0, 0);
+            break;
+          case "navigate":
+            role = "doctor";
+            view = id;
+            render();
+            window.scrollTo(0, 0);
+            break;
+          case "chart":
+            chart(Number(id));
+            break;
+          case "report":
+            report(Number(id));
+            break;
+          case "order": {
+            let o = orders[id];
+            show(
+              o.name + " · " + people[o.patient].name,
+              badge(o.state) +
+                "<h3>" +
+                o.type +
+                " request</h3><p>" +
+                o.detail +
+                '</p><div class="provenance">Owner: ' +
+                o.owner +
+                "<br>Fictional demonstration request. No order is sent to a real care provider.</div>" +
+                (o.report === undefined
+                  ? ""
+                  : btn(
+                      "Read the sample report",
+                      "report",
+                      o.report,
+                      "primary",
+                    )),
+            );
+            break;
+          }
+          case "complete":
+            if (tasks[id].status === "Completed") {
+              toast("This sample task is already complete.");
+              break;
+            }
+            tasks[id].status = "Completed";
+            render();
+            toast(
+              "Demo task completed in this browser session. No clinical record was changed.",
+            );
+            break;
+          case "close":
+            dialog.close();
+            break;
+          case "reset":
+            tasks = structuredClone(taskSeed);
+            selected = 0;
+            search = "";
+            role = "doctor";
+            view = "today";
+            render();
+            toast("Demo reset to the original fictional examples.");
+            break;
+          case "about":
+            show(
+              "A working preview of the idea",
+              '<p>Explore a day of care at fictional NorthStar Hospital. Switch between doctor and patient perspectives, read charts and reports, follow requests, and complete sample care tasks.</p><h3>What works in this preview</h3><p>Navigation, patient search, chart and report reading, perspective selection, and simulated task completion work entirely in your browser.</p><h3>What is not connected</h3><p>This GitHub Pages site has no authentication, backend database, uploads, live messaging or real clinical services. Reloading resets all changes. Do not enter real patient information.</p><h3>The full application</h3><p>The repository includes the Java backend, web and Expo clients, server-enforced consent and persistent workflows. Those services must be run or hosted separately.</p><p><a href="https://github.com/abhijithviswanathan/global-health-passport" target="_blank" rel="noopener">Read the project and local setup instructions ↗</a></p>',
+            );
+            break;
+        }
+      });
+      document.addEventListener("input", (e) => {
+        if (e.target.id === "patient-search") {
+          search = e.target.value;
+          document.querySelector("#patient-cards").innerHTML = patientCards();
+        }
+      });
+      document.addEventListener("change", (e) => {
+        if (e.target.id === "patient-select") {
+          selected = Number(e.target.value);
+          render();
+        }
+      });
+      // Initial render. New views should be added to navigation and the render dispatch together.
+      render();
+    </script>
+  </body>
+</html>

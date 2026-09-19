@@ -1,3 +1,8 @@
+/**
+ * Patient registration, recovery and invited-staff entry dialogs for the web app.
+ * Uses server identity endpoints; form choice is not authorization. Profile photo
+ * onboarding is optional and follows the account flow.
+ */
 "use client";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";

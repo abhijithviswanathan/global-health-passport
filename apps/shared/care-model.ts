@@ -1,3 +1,9 @@
+/**
+ * Shared care-workflow UI contract. Field describes an input; Action describes its
+ * endpoint, fixed context and fields. Both clients render these definitions, then
+ * payload() builds the request. Role-based visibility helps the interface only:
+ * CareApi must independently enforce assignment, consent, ownership and versions.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any -- API rows vary by permission-scoped resource. */
 // Shared workflow contracts used by the web and native mobile workspaces.
 export type Row = Record<string, any>;
@@ -157,6 +163,7 @@ export function provenanceLines(r: Row) {
     ),
   ].filter(Boolean);
 }
+// Describe forms available in this UI context. The backend still checks every submitted action.
 export function actions(
   role: string,
   tab: string,
@@ -752,6 +759,8 @@ function messageAction(fixed: Row): Action {
     ],
   };
 }
+// Translate rendered field values to the request contract, keeping retry keys stable.
+// Optional blanks are omitted; vital_* inputs become one structured measurements object.
 export function payload(action: Action, values: Row, key: string) {
   const b: Row = { ...action.fixed, ...values };
   if (["record", "carry", "amend"].includes(action.id)) b.idempotencyKey = key;
@@ -774,6 +783,7 @@ export function payload(action: Action, values: Row, key: string) {
     b.measurements = measures;
   return b;
 }
+// Resolve select choices from authorized workspace rows, not an unrestricted global directory.
 export function options(field: Field, data: Row, records: Row[]) {
   if (field.options)
     return field.options.map((v) => ({ id: v, label: readable(v) }));
@@ -795,6 +805,7 @@ export function options(field: Field, data: Row, records: Row[]) {
           : r.id),
     }));
 }
+// Build fresh form values from declared defaults; this must not reuse a previous patient's draft.
 export function initial(a: Action, patientId: string) {
   return Object.fromEntries(
     a.fields.map((f) => [
@@ -823,6 +834,7 @@ export const roleDescription: Record<string, string> = {
   pharmacy: "Linked prescriptions, dispensing and care coordination.",
 };
 
+// Show inputs relevant to the record kind; these display rules do not validate server payloads.
 export function visibleFields(a: Action, v: Row, role: string) {
   return a.fields.filter((f) => {
     if (a.id !== "record") return true;

@@ -1,3 +1,9 @@
+/**
+ * Organization onboarding, hierarchy, employment, shifts and public booking.
+ * TenantService resolves stable organization/work identities; legacy organization
+ * labels are not sufficient authorization. Shared forms are in ecosystem-model.ts.
+ * Clinical orders and insurance live in separate controllers under this domain.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -431,6 +437,7 @@ class EcosystemApi {
             + " sent.");
   }
 
+  // Invitation acceptance establishes employment through the server-controlled invitation context.
   @PostMapping("/invitations/accept")
   Map<String, Object> acceptInvite(@RequestBody Map<String, Object> b, HttpServletRequest r) {
     api.csrf(r);
@@ -874,6 +881,7 @@ class EcosystemApi {
     return out;
   }
 
+  // Public availability is only a suggestion. Recheck slot/doctor constraints while saving the booking.
   @PostMapping("/public-booking")
   Map<String, Object> publicBooking(@RequestBody Map<String, Object> b, HttpServletRequest r) {
     api.csrf(r);

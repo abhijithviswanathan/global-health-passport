@@ -1,3 +1,9 @@
+/**
+ * Native HTTP adapter to the same Java API used by the web app. The configured
+ * base URL excludes /api. Mutations fetch a CSRF token; release builds require HTTPS.
+ * By default only top-level row keys are converted from snake_case to camelCase.
+ * Shared care/ecosystem models need raw=true to retain their server-shaped contracts.
+ */
 // Clinical data and credentials are deliberately never written to AsyncStorage.
 const baseUrl = (
   process.env.EXPO_PUBLIC_API_URL || "http://localhost:8080"
@@ -63,6 +69,8 @@ export async function request<T>(
             : "The request could not be completed.",
         response.status,
       );
+    // Legacy patient/clinician screens use camelCase. Shared models opt out via raw=true;
+    // this conversion is deliberately shallow, so nested objects keep their original keys.
     const normalize = (row: Record<string, unknown>) =>
       Object.fromEntries(
         Object.entries(row).map(([key, value]) => [

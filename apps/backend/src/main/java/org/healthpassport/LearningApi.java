@@ -1,3 +1,8 @@
+/**
+ * Bounded demonstration of synthetic-case search and source excerpts.
+ * This is not a production AI pipeline or permission to index patient charts.
+ * Keep educational fixtures and transactional clinical data separated.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

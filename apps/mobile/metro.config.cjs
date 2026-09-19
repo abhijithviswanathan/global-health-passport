@@ -1,3 +1,7 @@
+/**
+ * Expo Metro configuration for resolving the sibling apps/shared modules.
+ * Shared workflow edits must remain importable from both native and web bundlers.
+ */
 const path = require('node:path');
 const { getDefaultConfig } = require('expo/metro-config');
 const config = getDefaultConfig(__dirname);

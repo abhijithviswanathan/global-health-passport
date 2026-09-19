@@ -1,3 +1,9 @@
+/**
+ * Web organization/workforce, order, nursing, handoff and insurance workspace.
+ * Shared sections/actions/payloads live in apps/shared, while this file renders them.
+ * SSE announces available updates; it does not silently replace a draft in progress.
+ * Pair changes with mobile/src/EcosystemWorkspace.tsx.
+ */
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import { api, type User } from "@/lib/api";
@@ -91,6 +97,7 @@ export function EcosystemWorkspace({
   }, [action]);
   useEffect(() => {
     if (user.role === "patient") return;
+    // Announce updates without overwriting a form the user is currently editing.
     const stream = new EventSource("/api/ecosystem/events", {
       withCredentials: true,
     });
@@ -139,6 +146,7 @@ export function EcosystemWorkspace({
     setSearch("");
     setSection(s);
   }
+  // Convert shared form values to the API contract; slot lookup is a read, other forms may mutate.
   async function save() {
     if (!action) return;
     await run(async () => {

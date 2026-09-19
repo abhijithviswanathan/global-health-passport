@@ -1,3 +1,9 @@
+/**
+ * Native profile and clinical identification photos using Expo image/camera picking.
+ * PhotoActivityContext tells App.tsx about a temporary system-picker transition so
+ * it can distinguish that flow from ordinary backgrounding. Server visibility checks
+ * remain authoritative; face presence is not identity verification.
+ */
 import React, {
   createContext,
   useContext,

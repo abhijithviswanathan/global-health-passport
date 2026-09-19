@@ -1,3 +1,9 @@
+/**
+ * Organization clinical execution: structured orders, nursing entries and handoffs.
+ * Uses EcosystemApi for organization identity and CareApi for patient scope checks.
+ * Order changes may create linked clinical records and care tasks in one transaction;
+ * keep those links and ownership checks together when adding an order state.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -26,6 +32,7 @@ class ClinicalOperationsApi {
     return u;
   }
 
+  // Map the operational order kind to the clinical consent scope before viewing or changing it.
   void access(Map<String, Object> u, Map<String, Object> o) {
     care.access(u, o.get("patient_id").toString(), scope(o.get("kind").toString()));
   }
@@ -149,6 +156,8 @@ class ClinicalOperationsApi {
         });
   }
 
+  // State transitions validate the acting team/recipient and linked work. A changed status may
+  // require a report or dispensing record; it is not a generic editable text field.
   @PatchMapping("/orders/{oid}")
   Map<String, Object> update(
       @PathVariable String oid, @RequestBody Map<String, Object> b, HttpServletRequest r) {

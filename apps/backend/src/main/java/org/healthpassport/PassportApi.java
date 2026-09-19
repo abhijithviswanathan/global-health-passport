@@ -1,3 +1,9 @@
+/**
+ * Core patient-record API and shared request checks used by the other controllers.
+ * Read user(), allowed()/require(), and create() before changing clinical access.
+ * Database rows use snake_case; explicit request fields usually use camelCase.
+ * This class also owns local synthetic seeding, consent, access requests, audit and exports.
+ */
 package org.healthpassport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,6 +76,7 @@ public class PassportApi {
     this.tx = new TransactionTemplate(tm);
   }
 
+  // Internal record/resource key. This is deliberately separate from the short public Health ID.
   static String id() {
     return UUID.randomUUID().toString();
   }
@@ -109,6 +116,7 @@ public class PassportApi {
     return b.get(k) instanceof String s ? s : "";
   }
 
+  // Only an empty synthetic database receives seed accounts; this never resets existing passwords.
   @PostConstruct
   void seed() throws Exception {
     verifyLaunchMode();
@@ -231,6 +239,8 @@ public class PassportApi {
     return rows.isEmpty() ? null : rows.getFirst();
   }
 
+  // Resolve the session on every request, then recheck suspension, employment and practitioner status.
+  // Do not accept a user ID or role from the submitted form as a substitute.
   Map<String, Object> user(HttpServletRequest r) {
     HttpSession s = r.getSession(false);
     if (s == null || s.getAttribute("uid") == null) throw error(401, "Authentication required");
@@ -290,6 +300,7 @@ public class PassportApi {
     return Map.of("token", s.getAttribute("csrf"), "headerName", "X-CSRF-TOKEN");
   }
 
+  // Run a BCrypt comparison even for an unknown account; bound input before BCrypt truncation.
   boolean matchesPassword(String raw, String encoded) {
     boolean validLength = raw.getBytes(java.nio.charset.StandardCharsets.UTF_8).length <= 72;
     boolean matched =
@@ -404,6 +415,7 @@ public class PassportApi {
                         || Arrays.asList(a.get("scopes").toString().split(",")).contains(kind)));
   }
 
+  // Broad relationship check for navigation. A specific record read still needs allowed()/require().
   boolean hasGrant(Map<String, Object> u, String patient) {
     if (!careAssignmentAllows(u, patient, null)) return false;
     if (!Set.of("doctor", "nurse", "diagnostic", "lab", "pharmacy").contains(role(u))) return false;
@@ -417,6 +429,8 @@ public class PassportApi {
         .anyMatch(c -> Instant.parse(c.get("expires_at").toString()).isAfter(Instant.now()));
   }
 
+  // Combine role, employment privilege, care assignment and a live treatment consent for this kind.
+  // A patient may read their own records; other roles do not inherit that exception.
   boolean allowed(Map<String, Object> u, String p, String kind) {
     if (Boolean.FALSE.equals(u.get("staff_active"))) return false;
     if (!tenants.privilege(u, kind, false)) return false;
@@ -473,6 +487,7 @@ public class PassportApi {
                     && Arrays.asList(c.get("scopes").toString().split(",")).contains(kind));
   }
 
+  // Use at disclosure/mutation boundaries so denied access is audited as well as rejected.
   void require(Map<String, Object> u, String p, String k) {
     if (!allowed(u, p, k)) {
       audit(uid(u), p, "ACCESS_DENIED", k);
@@ -513,6 +528,7 @@ public class PassportApi {
         uid(u));
   }
 
+  // The patient controls grant scope and expiry; a provider access request is not itself a grant.
   @PostMapping("/consents")
   synchronized Map<String, Object> grant(@RequestBody Map<String, Object> b, HttpServletRequest r) {
     csrf(r);
@@ -642,6 +658,8 @@ public class PassportApi {
     return Map.of("message", "If the identifier is valid, the patient will receive your request.");
   }
 
+  // Record writes preserve provenance and relationships. Review replacement, recipient and
+  // dispensing checks together before adding a new clinical record kind.
   @PostMapping("/records")
   synchronized Map<String, Object> create(
       @RequestBody Map<String, Object> b, HttpServletRequest r) {
@@ -911,6 +929,8 @@ public class PassportApi {
         uid(u));
   }
 
+  // Append to the local hash-linked audit sequence. synchronized coordinates this process only;
+  // this is not independently protected retention or a multi-instance locking strategy.
   synchronized void audit(String actor, String patient, String action, String resource) {
     var previous = db.queryForList("select event_hash from audit_event order by seq desc limit 1");
     String
@@ -943,6 +963,7 @@ public class PassportApi {
     }
   }
 
+  // Export must use the same authorized record selection as the timeline, not a raw table dump.
   @GetMapping("/patients/{patient}/export")
   Map<String, Object> export(@PathVariable String patient, HttpServletRequest r) {
     var u = user(r);

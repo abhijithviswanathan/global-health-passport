@@ -1,3 +1,8 @@
+/**
+ * Eligibility adapter contract and bounded synthetic/unconfigured implementations.
+ * An UNKNOWN result is not evidence of coverage. InsuranceApi selects the adapter;
+ * marketplace browsing must never supply private identifiers to it.
+ */
 package org.healthpassport;
 
 import java.time.*;

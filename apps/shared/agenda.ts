@@ -1,3 +1,8 @@
+/**
+ * Pure schedule-layout helper used by web and native clients. Events use epoch
+ * milliseconds plus a duration in minutes. Returned segments include appointments
+ * and free gaps; a missing eventId means a gap, not a booked patient visit.
+ */
 /** Local-calendar agenda segments shared by the web and native clients. */
 export type AgendaEvent = {
   id: string;
@@ -12,6 +17,7 @@ export function buildAgenda(
 ): AgendaSegment[] {
   const midnight = new Date(`${day}T00:00:00`),
     finish = new Date(midnight);
+  // Use the next local midnight to handle daylight-saving days without assuming 24 hours.
   finish.setDate(finish.getDate() + 1);
   if (!Number.isFinite(midnight.getTime())) return [];
   const relevant = events
@@ -40,6 +46,7 @@ export function buildAgenda(
   for (const e of relevant) {
     const start = Math.max(+midnight, e.start),
       until = Math.min(+finish, e.start + e.minutes * 60000);
+    // Only emit positive gaps; overlapping appointments remain separate event segments.
     if (start > cursor) result.push({ start: cursor, end: start });
     result.push({ start, end: until, eventId: e.id });
     cursor = Math.max(cursor, until);

@@ -1,3 +1,8 @@
+/**
+ * Maps already-authorized clinical rows into a bounded FHIR R4 collection export.
+ * This mapper does not authorize the caller and is not a general FHIR server.
+ * Preserve unknown clinical facts instead of inventing codes, diagnoses or timestamps.
+ */
 package org.healthpassport;
 
 import java.nio.charset.StandardCharsets;

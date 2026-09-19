@@ -1,3 +1,8 @@
+/**
+ * Legacy practitioner verification and organization membership endpoints.
+ * Used by OrganizationPanel and by the session verification path; keep verification
+ * status distinct from the role selected on a login screen.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

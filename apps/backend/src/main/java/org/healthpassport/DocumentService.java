@@ -1,3 +1,9 @@
+/**
+ * File processing and encrypted local storage for uploaded documents.
+ * The scanner verdict gates download: an unavailable scanner is not a clean result.
+ * Storage IDs are generated internally; filenames are metadata, not filesystem paths.
+ * Controller callers remain responsible for patient and organization authorization.
+ */
 package org.healthpassport;
 
 import java.io.IOException;
@@ -88,6 +94,8 @@ public class DocumentService {
     }
   }
 
+  // Validate content and scan before classifying the upload. Encrypt stored bytes even when
+  // the file must remain quarantined; never equate a scanner outage with CLEAN.
   Map<String, Object> upload(
       String patient, String author, String source, MultipartFile upload, Runnable reauthorize) {
     if (upload.isEmpty() || upload.getSize() > MAX_BYTES)
@@ -237,6 +245,7 @@ public class DocumentService {
         "select * from medical_document where patient_id=? order by created_at desc", patient);
   }
 
+  // Caller has already authorized metadata access; this stage also enforces scan state and decrypts.
   byte[] download(Map<String, Object> row) {
     if (!"clean".equals(row.get("status")))
       throw PassportApi.error(423, "Document is quarantined or rejected and cannot be downloaded");

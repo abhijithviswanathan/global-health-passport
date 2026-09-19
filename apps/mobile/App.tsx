@@ -1,3 +1,9 @@
+/**
+ * Native application shell: authentication, patient pages, staff workspace routing,
+ * background privacy/biometric lock and the optional emergency snapshot. Network
+ * records stay in memory; the explicitly selected emergency copy uses SecureStore.
+ * Keep session-generation guards and picker/background transitions when editing.
+ */
 import { EcosystemWorkspace } from "./src/EcosystemWorkspace";
 import { CareWorkspace } from "./src/CareWorkspace";
 import { provenanceLines } from "../shared/care-model";
@@ -129,6 +135,7 @@ export default function App() {
     "medication",
   ]);
   const [duration, setDuration] = useState("24");
+  // Invalidate pending loads when leaving/locking a session so old responses cannot repopulate records.
   const sessionGeneration = useRef(0);
   const biometricPrompt = useRef(false);
   const colors = dark
@@ -150,6 +157,7 @@ export default function App() {
         accent: "#236958",
         button: "#236958",
       };
+  // Clear in-memory clinical state separately from the explicitly opted-in SecureStore emergency copy.
   const clearData = () => {
     setRecords([]);
     setGrants([]);
@@ -245,6 +253,8 @@ export default function App() {
       .catch(() => setBiometric(false));
   }, []);
   useEffect(() => {
+    // Backgrounding clears sensitive UI state. Biometric and system photo pickers need explicit
+    // lifecycle handling so a legitimate prompt is not mistaken for an ordinary app exit.
     const listener = AppState.addEventListener("change", (state) => {
       setBackground(state !== "active");
       if (state === "background") {

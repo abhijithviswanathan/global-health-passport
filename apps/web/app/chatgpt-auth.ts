@@ -1,3 +1,8 @@
+/**
+ * Optional starter hosting identity helpers. These headers assume a trusted hosting
+ * proxy and do not establish a Health Passport Java session or clinical permission.
+ * The normal application uses lib/api.ts and the Java identity endpoints.
+ */
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 

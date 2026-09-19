@@ -1,3 +1,9 @@
+/**
+ * Patient-controlled profile photos and separately held clinical identification photos.
+ * visible() decides who can read pixels. Patient holder/purpose metadata is distinct
+ * from permission to view a privately held clinical image. Public means signed-in
+ * users here, not anonymous visitors to the GitHub Pages demonstration.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -31,6 +37,8 @@ public class ProfileApi {
     return rows.getFirst();
   }
 
+  // Clinical identification photos have their own holder rule. Profile visibility options
+  // apply to the personal profile image and cannot make a hospital-held image public.
   boolean visible(Map<String, Object> a, Map<String, Object> viewer) {
     String owner = a.get("owner_id").toString();
     if (a.get("kind").equals("clinical"))
@@ -224,6 +232,7 @@ public class ProfileApi {
     return owner;
   }
 
+  // The optional onboarding image uses the registration flow; skipping it must not block account use.
   @PostMapping(value = "/auth/registration-photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   Map<String, Object> registrationPhoto(
       @RequestPart("file") MultipartFile file, HttpServletRequest r) {

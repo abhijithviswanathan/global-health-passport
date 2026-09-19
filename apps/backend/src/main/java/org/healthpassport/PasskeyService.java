@@ -1,3 +1,8 @@
+/**
+ * WebAuthn ceremony handling and credential repository for the Yubico library.
+ * Challenges are bound to a session and ceremony. The configured relying-party ID
+ * and exact origins must match the frontend; weakening them is not a deployment fix.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -118,6 +123,7 @@ public class PasskeyService implements CredentialRepository {
         "requestId", request, "publicKey", api.json.readTree(browserJson).get("publicKey"));
   }
 
+  // Consume a challenge only for its expected ceremony/session. Preserve expiry and replay checks.
   Map<String, Object> consume(String request, String purpose, HttpServletRequest r) {
     return api.tx.execute(
         s -> {

@@ -1,3 +1,8 @@
+/**
+ * Clinical observation times, author snapshots, revision history and freshness labels.
+ * Observed time is when care happened; created/updated time is when data was entered.
+ * Carry-forward or confirmation must not silently become a new clinical measurement.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -43,6 +48,7 @@ class RecordProvenance {
     }
   }
 
+  // Capture an auditable snapshot of the record after a change, with the prior value when supplied.
   void revision(String rid, String actor, String action, String reason, Map<String, Object> old) {
     db.update(
         "insert into record_revision values(?,?,?,?,?,?,?,?)",
@@ -56,6 +62,7 @@ class RecordProvenance {
         encode(db.queryForMap("select * from clinical_record where id=?", rid)));
   }
 
+  // Keep observed time/zone and source/author metadata separate from database insertion timestamps.
   void stamp(String rid, Map<String, Object> b, Map<String, Object> u) {
     String observed = time(b, "observedAt"),
         zone = optional(b, "observedTimezone", 80),
@@ -192,6 +199,7 @@ class RecordProvenance {
         rid, u.get("id").toString(), origin == null ? "created" : "carried_forward", reason, null);
   }
 
+  // Add read-time freshness/provenance labels; unknown observation time must stay unknown.
   Map<String, Object> view(Map<String, Object> row) {
     var out = new LinkedHashMap<>(row);
     if (!out.containsKey("author_name"))

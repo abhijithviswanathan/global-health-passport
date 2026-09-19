@@ -8,6 +8,12 @@ A synthetic healthcare workflow platform connecting patient records and consent 
 
 ![Doctor patient directory using synthetic fixtures](docs/images/showcase-patients-web.png)
 
+## Taking over development
+
+Start with the [developer handover](docs/HANDOVER.md) for setup, code-reading order, feature ownership, API/data conventions and safe change examples. The [source map](docs/SOURCE_MAP.md) links the backend, shared logic, web/mobile workspaces and scripts. Application modules include comments explaining their responsibilities and important workflow rules.
+
+The [public GitHub Pages demo](https://abhijithviswanathan.github.io/global-health-passport/) is the separate, fictional `docs/index.html` presentation. It has no backend or real login; changing the full application does not automatically change that demo.
+
 ## What is implemented
 
 | Area | Current scope |

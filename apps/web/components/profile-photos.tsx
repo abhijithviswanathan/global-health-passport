@@ -1,3 +1,8 @@
+/**
+ * Web photo components: avatar, file/camera picker, profile visibility settings,
+ * and clinical identification-photo management. Stop camera tracks and revoke object
+ * URLs when done. ProfileApi decides who may retrieve each image.
+ */
 /* eslint-disable @next/next/no-img-element -- Authenticated local photo endpoints use session cookies. */
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";

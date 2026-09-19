@@ -1,3 +1,8 @@
+/**
+ * Account security controls: MFA enrollment, passkeys, recovery and active sessions.
+ * Uses the shared API and browser passkey helper. Never persist displayed recovery
+ * material or enrollment secrets in general browser storage.
+ */
 "use client";
 import Image from "next/image";
 import { useState, useEffect, useCallback, type FormEvent } from "react";

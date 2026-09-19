@@ -1,3 +1,10 @@
+/**
+ * Clinic work coordination: assignments, intake, tasks, conversations and patient flow.
+ * Read access() first: a clinic assignment and clinical consent are separate checks.
+ * Mutations use atomic(), row locks, versions and request keys to protect shared work.
+ * RecordProvenance supplies observation dates and revision history; UI forms live in
+ * apps/shared/care-model.ts and are rendered by both client workspaces.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -68,6 +75,7 @@ class CareApi {
     }
   }
 
+  // Backfill a baseline for older rows without inventing earlier edits or observation dates.
   @PostConstruct
   void legacySnapshots() {
     for (var doc :
@@ -144,6 +152,8 @@ class CareApi {
                     && Arrays.asList(a.get("scopes").toString().split(",")).contains(scope));
   }
 
+  // Assignment limits clinic work; clinical scopes also require the patient-consent check.
+  // Registration has its own operational-role path and does not expose the clinical chart.
   void access(Map<String, Object> u, String p, String scope) {
     if (p == null) return;
     if (!assigned(u, p, scope))
@@ -166,6 +176,7 @@ class CareApi {
                 != 1)) throw error(400, "Encounter and patient must match");
   }
 
+  // Table names cannot be SQL parameters: keep this explicit allowlist before concatenating one.
   void lock(String table, String id) {
     if (!Set.of("care_task", "clinical_record", "appointment", "care_assignment").contains(table))
       throw error(400, "Invalid resource");
@@ -173,6 +184,7 @@ class CareApi {
       throw error(404, "Resource not found");
   }
 
+  // Reject stale edits with 409. The UI must refresh/review instead of blindly retrying a new version.
   void version(Map<String, Object> b, Map<String, Object> row, String key) {
     if (api.number(b, "version", 0, Integer.MAX_VALUE, -1) != ((Number) row.get(key)).intValue())
       throw error(409, "This item changed. Refresh and review before saving again.");
@@ -580,6 +592,7 @@ class CareApi {
             rid));
   }
 
+  // Confirmation is an auditable review of an existing observation, not a new measurement time.
   @PostMapping("/records/{rid}/confirm")
   synchronized Map<String, Object> confirm(
       @PathVariable String rid, @RequestBody Map<String, Object> b, HttpServletRequest r) {
@@ -799,6 +812,7 @@ class CareApi {
         .toList();
   }
 
+  // A task is operational work with dependencies/owners; it is not automatically a clinical record.
   @PostMapping("/tasks")
   synchronized Map<String, Object> taskCreate(
       @RequestBody Map<String, Object> b, HttpServletRequest r) {
@@ -949,6 +963,7 @@ class CareApi {
         });
   }
 
+  // Independent verification has a distinct transition from marking work complete.
   @PostMapping("/tasks/{tid}/verify")
   Map<String, Object> verifyTask(
       @PathVariable String tid, @RequestBody Map<String, Object> b, HttpServletRequest r) {
@@ -1237,6 +1252,7 @@ class CareApi {
         });
   }
 
+  // Promoting a conversation message to the chart is explicit and goes through record validation.
   @PostMapping("/messages/{mid}/record")
   synchronized Map<String, Object> promote(
       @PathVariable String mid, @RequestBody Map<String, Object> b, HttpServletRequest r) {
@@ -1541,6 +1557,7 @@ class CareApi {
         });
   }
 
+  // Result review is explicit; a notification or message read does not perform this action.
   @PostMapping("/results/{rid}/review")
   synchronized Map<String, Object> review(
       @PathVariable String rid, @RequestBody Map<String, Object> b, HttpServletRequest r) {

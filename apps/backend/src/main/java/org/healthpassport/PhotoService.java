@@ -1,3 +1,8 @@
+/**
+ * Sanitizes image bytes, checks face presence locally and encrypts stored photos.
+ * Face presence is not identity verification or liveness detection. ProfileApi owns
+ * visibility; a successful image check never grants anyone access to the photo.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

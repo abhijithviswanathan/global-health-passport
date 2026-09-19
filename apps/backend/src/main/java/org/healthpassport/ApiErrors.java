@@ -1,3 +1,8 @@
+/**
+ * Maps expected request failures to the JSON error shape both clients consume.
+ * Duplicate/stale writes surface as 409 so the caller can refresh and review.
+ * Keep database details and secrets out of messages returned to the browser.
+ */
 package org.healthpassport;
 
 import java.util.Map;

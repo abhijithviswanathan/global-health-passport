@@ -1,3 +1,8 @@
+/**
+ * Browser WebAuthn adapter: converts server JSON into browser credential options
+ * and serializes the response back to the Java passkey endpoints. The server
+ * verifies challenges, origins and credentials; this module does not grant roles.
+ */
 import { api, type User } from "./api";
 const decode = (value: string) =>
   Uint8Array.from(atob(value.replace(/-/g, "+").replace(/_/g, "/")), (c) =>

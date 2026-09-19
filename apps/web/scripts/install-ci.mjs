@@ -1,3 +1,7 @@
+/**
+ * Locked dependency-install helper for the web project. Read the current CI
+ * workflow before changing this: its npm ci command is the hosted verification path.
+ */
 import { spawnSync } from "node:child_process";
 import { accessSync, constants } from "node:fs";
 import path from "node:path";

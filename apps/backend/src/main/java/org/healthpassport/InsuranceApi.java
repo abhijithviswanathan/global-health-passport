@@ -1,3 +1,9 @@
+/**
+ * Private insurance profiles, scoped sharing, eligibility and public plan browsing.
+ * Keep encrypted identifiers and card documents separate from marketplace results.
+ * canRead() evaluates insurance-specific permission; clinical consent alone is not
+ * a substitute. Synthetic mode must not call a real eligibility gateway.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -50,6 +56,7 @@ class InsuranceApi {
     return rows.getFirst();
   }
 
+  // Insurance disclosure uses its own live share and allowed purpose/organization/recipient.
   boolean canRead(Map<String, Object> u, Map<String, Object> p) {
     if (api.role(u).equals("patient")) return api.uid(u).equals(p.get("patient_id"));
     if (!Set.of("admin", "billing", "doctor", "reception", "pharmacy").contains(api.role(u))
@@ -73,6 +80,7 @@ class InsuranceApi {
                         .contains(s.get("purpose")));
   }
 
+  // List views redact private identifiers; the explicit reveal path performs additional work.
   Map<String, Object> visible(Map<String, Object> p) {
     var v = new LinkedHashMap<>(p);
     v.remove("encrypted_identifiers");

@@ -1,3 +1,8 @@
+/**
+ * Issues and displays a signed medication snapshot, including its QR representation.
+ * This snapshot is distinct from the permanent Health ID and from an active consent
+ * grant; the Java API performs issuance and verification checks.
+ */
 "use client";
 import Image from "next/image";
 import { useState } from "react";

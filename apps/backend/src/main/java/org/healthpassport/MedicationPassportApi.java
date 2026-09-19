@@ -1,3 +1,8 @@
+/**
+ * Issues and checks locally signed medication snapshots for an authorized patient.
+ * The credential describes a snapshot, not a live prescription authority or proof
+ * of current consent. Signing-key custody and revocation remain explicit concerns.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

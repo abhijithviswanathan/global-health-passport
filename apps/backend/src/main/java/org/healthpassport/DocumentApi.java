@@ -1,3 +1,8 @@
+/**
+ * HTTP boundary for clinical document metadata, upload and authorized download.
+ * Calls DocumentService for file processing and storage, and links uploads to record
+ * provenance. Insurance cards have a separate access path in InsuranceApi.
+ */
 package org.healthpassport;
 
 import jakarta.servlet.http.HttpServletRequest;

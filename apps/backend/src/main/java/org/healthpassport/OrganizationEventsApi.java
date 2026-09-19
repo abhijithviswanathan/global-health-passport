@@ -1,3 +1,9 @@
+/**
+ * Organization update notifications over SSE and a cursor-based polling fallback.
+ * Subscribers are tied to sessions; polling rechecks access. Events tell the UI to
+ * refresh authorized data instead of embedding a patient chart in a notification.
+ * The emitter registry is local to this Java process.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

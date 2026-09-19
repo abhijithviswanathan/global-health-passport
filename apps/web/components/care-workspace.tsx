@@ -1,3 +1,8 @@
+/**
+ * Web renderer for the shared care-workflow form definitions in care-model.ts.
+ * Owns tab/dialog state, loading, task/conversation detail and save feedback.
+ * Pair changes with mobile/src/CareWorkspace.tsx; server checks remain authoritative.
+ */
 "use client";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -91,6 +96,7 @@ export function CareWorkspace({
       setBusy(false);
     }
   }
+  // One request key per form attempt. Reuse it while retrying that action to avoid duplicate records.
   function begin(a: Action) {
     if (action && !window.confirm("Discard this unsaved form?")) return;
     setAction(a);

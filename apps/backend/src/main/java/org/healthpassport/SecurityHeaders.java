@@ -1,3 +1,8 @@
+/**
+ * Adds API response headers that discourage caching, framing and content sniffing.
+ * These headers apply to the backend; web/static hosting has its own configuration.
+ * They complement, and do not replace, session, CSRF and resource access checks.
+ */
 package org.healthpassport;
 
 import jakarta.servlet.*;

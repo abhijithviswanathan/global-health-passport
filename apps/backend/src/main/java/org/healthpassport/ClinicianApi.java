@@ -1,3 +1,9 @@
+/**
+ * Doctor appointments and encounter drafts. The doctor is resolved from the session,
+ * not a client-supplied role. owned() scopes appointments to that doctor; access()
+ * checks current patient permission before chart work. Draft and appointment versions
+ * prevent one browser or mobile session from silently overwriting another.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -30,6 +36,7 @@ public class ClinicianApi {
     return rows.getFirst();
   }
 
+  // Serialize this doctor's booking checks inside a transaction to avoid overlapping concurrent inserts.
   void lockDoctor(Map<String, Object> u) {
     api.db.queryForMap("select id from app_user where id=? for update", api.uid(u));
   }
@@ -272,6 +279,7 @@ public class ClinicianApi {
     }
   }
 
+  // Draft saves carry a version; the final encounter is created only through the completion endpoint.
   @PutMapping("/appointments/{aid}/draft")
   Map<String, Object> saveDraft(
       @PathVariable String aid, @RequestBody Map<String, Object> b, HttpServletRequest r) {
@@ -335,6 +343,8 @@ public class ClinicianApi {
     }
   }
 
+  // Completing a visit links the saved documentation to a clinical record. Keep appointment
+  // state, draft version and permission checks together in the transaction.
   @PostMapping("/appointments/{aid}/complete")
   Map<String, Object> complete(
       @PathVariable String aid, @RequestBody Map<String, Object> b, HttpServletRequest r) {

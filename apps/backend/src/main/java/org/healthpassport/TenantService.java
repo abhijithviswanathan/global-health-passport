@@ -1,3 +1,9 @@
+/**
+ * Shared organization, employment, role and privilege checks across API modules.
+ * Stable organization IDs and employment records drive access, including legacy paths.
+ * Database constraints complement these checks; neither a display label nor a client
+ * role selector establishes organization membership.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -200,6 +206,7 @@ class TenantService {
     return String.join(",", p);
   }
 
+  // Apply organization visibility in addition to the patient/category checks performed by callers.
   boolean recordVisible(Map<String, Object> u, Map<String, Object> record) {
     if ("patient".equals(u.get("role")))
       return Objects.equals(u.get("id"), record.get("patient_id"));
@@ -309,6 +316,8 @@ class TenantService {
             + " id=care_task.creator_id) where tenant_id is null");
   }
 
+  // When availability enforcement is enabled, require a covering work shift and no blocked interval.
+  // The legacy except argument is currently unused here; appointment overlap checks live in callers.
   void available(Map<String, Object> doctor, Instant start, int duration, String except) {
     String oid = org(doctor);
     if (!Boolean.TRUE.equals(

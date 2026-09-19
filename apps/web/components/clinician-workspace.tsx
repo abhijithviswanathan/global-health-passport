@@ -1,3 +1,9 @@
+/**
+ * Doctor day schedule, patient directory, bookings and encounter-draft dialogs.
+ * Appointment state and draft versions come from ClinicianApi. buildAgenda() is
+ * shared with mobile; BookingDialog and VisitDialog handle distinct editing flows.
+ * Pair workflow changes with mobile/src/ClinicianWorkspace.tsx.
+ */
 "use client";
 import { provenanceLines } from "../../shared/care-model";
 import { ProfileAvatar } from "@/components/profile-photos";
@@ -777,6 +783,7 @@ export function ClinicianWorkspace({
   );
 }
 
+// Booking editor: calendar input becomes an API timestamp; request keys protect a retried submission.
 function BookingDialog({
   value,
   patients,
@@ -955,6 +962,7 @@ function BookingDialog({
   );
 }
 
+// Encounter editor owns draft loading, dirty-state protection and version-aware save/complete actions.
 function VisitDialog({
   appointment: a,
   onClose,

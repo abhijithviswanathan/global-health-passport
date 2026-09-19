@@ -1,3 +1,8 @@
+/**
+ * Local server for an already built web client, with /api forwarded to Java on 8080.
+ * This is used by start_saved.py, not by GitHub Pages. File resolution below must
+ * stay inside dist/client; it is not a general filesystem download endpoint.
+ */
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
@@ -25,6 +30,7 @@ const server = http.createServer((req, res) => {
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("Cache-Control", "no-store");
   const url = new URL(req.url, "http://localhost");
+  // Keep browser requests same-origin while Java owns sessions, CSRF and authorization.
   if (url.pathname.startsWith("/api/")) {
     const upstream = http.request(
       {
@@ -62,6 +68,7 @@ const server = http.createServer((req, res) => {
     res.end();
     return;
   }
+  // Normalize before containment checking so encoded traversal cannot escape the build directory.
   let file = path.resolve(root, "." + decoded);
   if (!file.startsWith(root + path.sep) && file !== root) {
     res.writeHead(404);

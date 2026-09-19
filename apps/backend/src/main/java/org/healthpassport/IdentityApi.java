@@ -1,3 +1,8 @@
+/**
+ * Account registration/recovery, TOTP enrollment and session-management endpoints.
+ * IdentityService handles protected secrets and session validation. Registration
+ * creates patient accounts; staff access follows verification and employment rules.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

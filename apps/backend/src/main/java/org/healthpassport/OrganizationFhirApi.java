@@ -1,3 +1,8 @@
+/**
+ * Builds bounded organization and insurance FHIR collection projections.
+ * Uses domain API methods so their access checks run before serialization.
+ * Do not bypass those checks by exporting raw database tables.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;

@@ -1,3 +1,8 @@
+/**
+ * Native appointment/draft contracts and pure booking/date helpers. The API adapter
+ * normalizes these row keys to camelCase. Local calendar days are converted to UTC
+ * instants only at the request boundary; do not hard-code a day as 24 elapsed hours.
+ */
 export type Patient = { id: string; displayName: string; healthId: string };
 export type Appointment = {
   id: string;
@@ -35,6 +40,7 @@ export const closed = (a: Appointment) =>
 export function localDay(value = new Date()) {
   return `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, "0")}-${String(value.getDate()).padStart(2, "0")}`;
 }
+// Round-trip the local date/time to reject impossible dates and daylight-saving skipped times.
 export function localInstant(day: string, time: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !/^\d{2}:\d{2}$/.test(time))
     throw new Error(
@@ -52,6 +58,7 @@ export function localInstant(day: string, time: string) {
     );
   return d;
 }
+// Advance the calendar date, not milliseconds: a local day can be 23 or 25 hours.
 export function dayRange(day: string) {
   const from = localInstant(day, "00:00");
   const to = new Date(from);

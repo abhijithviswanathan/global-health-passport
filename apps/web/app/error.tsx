@@ -1,3 +1,7 @@
+/**
+ * Client error boundary for an unexpected render failure. Provides a retry path;
+ * normal API validation and permission errors are handled inside the feature panels.
+ */
 "use client";
 
 import Link from "next/link";

@@ -1,3 +1,9 @@
+/**
+ * Shared organization/clinical-operations/insurance screen definitions. context()
+ * loads supporting choices, rows() loads a section, actions() describes forms, and
+ * fields() narrows visible inputs. Call abstracts web/native HTTP differences.
+ * Keep private insurance and public marketplace payloads separated.
+ */
 /* eslint-disable @typescript-eslint/no-explicit-any -- permission-scoped API contracts */
 import {
   type Row,
@@ -97,6 +103,8 @@ export function sections(role: string, reviewer = false) {
   if (reviewer) list.push("Organization review", "Plan review");
   return list;
 }
+// Load supporting rows for this role. employment IDs and user IDs differ; careStaff maps
+// user_id into the option ID expected by care-team actions.
 export async function context(call: Call, role: string) {
   const d: Row = {};
   d.organizations = await call("/ecosystem/organizations");
@@ -124,6 +132,7 @@ export async function context(call: Call, role: string) {
   }
   return d;
 }
+// Resolve the active section without duplicating endpoint selection in each client.
 export async function rows(
   call: Call,
   section: string,
@@ -169,6 +178,7 @@ export async function rows(
       return [];
   }
 }
+// Build organization/order/insurance forms. Keep action paths and field names in step with Java.
 export function actions(
   role: string,
   section: string,

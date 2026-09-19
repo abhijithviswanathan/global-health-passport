@@ -1,3 +1,7 @@
+/**
+ * Synthetic learning search and source-excerpt UI. Keeps source links visible and
+ * does not offer a clinical diagnosis engine or upload patient records for training.
+ */
 "use client";
 import { useState, type FormEvent } from "react";
 import { Search, BookOpen, ArrowRight, ShieldCheck } from "lucide-react";

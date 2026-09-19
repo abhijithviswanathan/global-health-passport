@@ -1,3 +1,8 @@
+/**
+ * Clinical document list, multipart upload and authorized file download.
+ * Shows the server scan/quarantine state; do not assume upload success means a file
+ * is downloadable. Insurance cards use the separate insurance workflow.
+ */
 "use client";
 import { useState, useEffect, useCallback, type FormEvent } from "react";
 import { FileText, Upload, Download, ShieldCheck } from "lucide-react";

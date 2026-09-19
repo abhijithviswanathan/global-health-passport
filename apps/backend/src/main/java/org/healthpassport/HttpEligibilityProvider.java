@@ -1,3 +1,8 @@
+/**
+ * Server-side HTTPS eligibility adapter with configured endpoint and credentials.
+ * Request validation, network bounds and failure handling belong here; callers should
+ * not treat network failure or an unavailable adapter as confirmed insurance cover.
+ */
 package org.healthpassport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

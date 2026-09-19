@@ -1,3 +1,8 @@
+/**
+ * Shared identity mechanics: MFA encryption, OTP checks, recovery and session registry.
+ * Encryption keys come from server configuration and must survive restarts.
+ * Attempt counters are process-local; they are not a distributed rate limiter.
+ */
 package org.healthpassport;
 
 import static org.healthpassport.PassportApi.*;
@@ -43,6 +48,7 @@ public class IdentityService {
     }
   }
 
+  // Bound attempts in a rolling local window. Multiple server processes would need shared counters.
   void limit(String key) {
     var list = attempts.computeIfAbsent(key, k -> new ArrayList<>());
     synchronized (list) {
@@ -62,6 +68,7 @@ public class IdentityService {
     }
   }
 
+  // Store IV + authenticated ciphertext, encoded as Base64. Each encryption uses a fresh random IV.
   String encrypt(byte[] secret) {
     try {
       byte[] iv = new byte[12];
@@ -163,6 +170,7 @@ public class IdentityService {
     }
   }
 
+  // The registry stores a hash of the session identifier so revocation can be checked on later requests.
   void registerSession(String uid, HttpServletRequest r) {
     db.update(
         "insert into"
@@ -184,6 +192,7 @@ public class IdentityService {
                         .length())));
   }
 
+  // A cookie alone is insufficient: revoked/expired registry entries must stop access immediately.
   void validateSession(HttpServletRequest r) {
     var session = r.getSession(false);
     if (session == null) throw error(401, "Authentication required");

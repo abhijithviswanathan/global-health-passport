@@ -1,3 +1,8 @@
+/**
+ * Native organization, workforce, clinical-order and insurance UI using shared models.
+ * Uses native image picking for insurance cards and polling for workspace updates.
+ * Keep web parity without assuming the browser SSE or camera APIs exist on device.
+ */
 import * as ImagePicker from "expo-image-picker";
 import { PhotoActivityContext } from "./ProfilePhotos";
 import React, { useState, useEffect, useCallback, useContext } from "react";
@@ -212,6 +217,7 @@ export function EcosystemWorkspace({
       setSection(s);
     });
   }
+  // Use the shared payload builder so mobile and web submit the same field names and request keys.
   async function save() {
     if (!action) return;
     await run(async () => {

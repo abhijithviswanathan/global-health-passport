@@ -1,3 +1,8 @@
+/**
+ * Last-pass removal of a small set of internal database fields from JSON maps/lists.
+ * This is defense in depth, not a complete response allowlist or an access-control
+ * layer. Controllers must still authorize resources and choose safe output fields.
+ */
 package org.healthpassport;
 
 import java.util.*;

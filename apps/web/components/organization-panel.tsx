@@ -1,3 +1,8 @@
+/**
+ * Web interface for practitioner verification and organization member status.
+ * The server controls which users may change verification; hiding a button alone
+ * is not an authorization mechanism.
+ */
 "use client";
 import { useState, useEffect, useCallback, type FormEvent } from "react";
 import { Users, ShieldCheck } from "lucide-react";

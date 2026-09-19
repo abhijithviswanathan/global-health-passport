@@ -1,5 +1,9 @@
 # Web and mobile parity
 
+## Developer handover — 2026-09-19
+
+This maintenance revision documents the Java backend, shared workflows and both clients without changing the API or intended product behavior. The independent GitHub Pages demonstration is now formatted and commented for editing; it remains a fictional static presentation, outside the API-backed parity matrix below. See [handover](HANDOVER.md), [source map](SOURCE_MAP.md) and [verification record](HANDOVER_VERIFICATION.md). No new native-device capability or device testing is claimed.
+
 ## Fictional presentation showcase — 2026-09-11
 
 The same API-backed NorthStar fixture now supplies both clients with four patient stories, 33 clinical entries (26 authored, five orders, two completed reports), appointments, tasks, messages, handoffs and insurance examples. No client-only copy of clinical demo data was introduced.

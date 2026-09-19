@@ -1,3 +1,9 @@
+/**
+ * Full web application shell: session bootstrap, role-based navigation, patient
+ * selection, record/consent dialogs and workspace composition. Feature-specific UI
+ * lives in components/. Async request generations prevent obsolete patient/session
+ * responses from replacing current state. This is separate from docs/index.html.
+ */
 "use client";
 import { EcosystemWorkspace } from "@/components/ecosystem-workspace";
 import { CareWorkspace } from "@/components/care-workspace";
@@ -371,10 +377,12 @@ export default function Home() {
     [frequency, setFrequency] = useState(""),
     [duration, setDuration] = useState(""),
     [formError, setFormError] = useState("");
+  // Increment on session/patient changes. A slower old response must never restore the previous chart.
   const requestGeneration = useRef(0);
   const invalidateRequests = useCallback(() => {
     requestGeneration.current++;
   }, []);
+  // Reset all patient-specific memory when the authenticated user changes; the portal tab is only UI.
   const changeSession = useCallback((next: User | null) => {
     requestGeneration.current++;
     setUser(next);
@@ -487,6 +495,7 @@ export default function Home() {
       });
     return () => controller.abort();
   }, [changeSession]);
+  // Collect an authorized workspace before applying it. Avoid mixing rows from different refreshes.
   const fetchWorkspace = useCallback(
     async (signal?: AbortSignal) => {
       if (!user) return null;
@@ -542,6 +551,7 @@ export default function Home() {
     },
     [changeSession],
   );
+  // Apply only the newest refresh result; aborting alone cannot stop every already-completed response.
   const refresh = useCallback(async () => {
     const generation = ++requestGeneration.current;
     setLoading(true);

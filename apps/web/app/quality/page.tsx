@@ -1,3 +1,7 @@
+/**
+ * Development accessibility-audit route wrapping the normal application. The axe
+ * control is shown only in development; results need review and do not prove full accessibility.
+ */
 "use client";
 import { useState } from "react";
 import Home from "../page";

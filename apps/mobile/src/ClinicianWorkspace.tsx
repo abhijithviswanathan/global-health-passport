@@ -1,3 +1,8 @@
+/**
+ * Native doctor workspace: day schedule, patient chart, booking and encounter draft.
+ * Uses clinician-model.ts for calendar conversion and apps/shared/agenda.ts for layout.
+ * Retain draft/version handling and permission refreshes alongside the web equivalent.
+ */
 import { provenanceLines } from "../../shared/care-model";
 import { ProfilePanel, ProfileAvatar, ClinicalPhotos } from "./ProfilePhotos";
 import { buildAgenda } from "../../shared/agenda";

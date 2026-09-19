@@ -1,3 +1,7 @@
+/**
+ * Starter tooling environment setup for local vinext/Cloudflare runtime directories.
+ * This does not deploy the application. The public github.io demo uses docs/ directly.
+ */
 import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

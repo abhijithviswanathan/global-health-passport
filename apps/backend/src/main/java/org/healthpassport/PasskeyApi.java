@@ -1,3 +1,8 @@
+/**
+ * Thin HTTP adapter for passkey enrollment, sign-in and revocation.
+ * PasskeyService owns the challenge lifecycle and WebAuthn verification; the browser
+ * only transports credential data and does not decide whether authentication passed.
+ */
 package org.healthpassport;
 
 import jakarta.servlet.http.*;

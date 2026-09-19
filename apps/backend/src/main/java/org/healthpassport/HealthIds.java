@@ -1,3 +1,8 @@
+/**
+ * Generates the nine-character patient lookup label shown by both clients.
+ * Internal row IDs remain separate UUIDs. The database enforces uniqueness; callers
+ * handle collisions. Normalization helps lookup and does not prove identity.
+ */
 package org.healthpassport;
 
 import java.security.SecureRandom;

@@ -1,3 +1,8 @@
+/**
+ * Web development/build integration inherited from the vinext starter.
+ * The /api proxy keeps local cookies same-origin with Java on 8080.
+ * GitHub Pages serves docs/index.html separately and does not run this build.
+ */
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json" with { type: "json" };

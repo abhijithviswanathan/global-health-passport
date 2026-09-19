@@ -1,3 +1,8 @@
+/**
+ * Native renderer for apps/shared/care-model.ts: intake, tasks, messages and services.
+ * Uses raw server row names through request(..., raw=true). Keep discard/back handling
+ * and web/components/care-workspace.tsx behavior aligned when adding an action.
+ */
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -89,6 +94,7 @@ export function CareWorkspace({
       setBusy(false);
     }
   }
+  // Initialize the shared form and keep one request key for its retries.
   function begin(a: Action) {
     setAction(a);
     setValues(initial(a, pid));

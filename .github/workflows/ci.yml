@@ -1,3 +1,5 @@
+# Repository verification only. GitHub Pages uses its separate branch deployment.
+# Backend, web and mobile jobs are independent; a green build does not imply native-device testing.
 name: Verify application
 
 on:

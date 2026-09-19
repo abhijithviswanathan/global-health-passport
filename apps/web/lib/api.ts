@@ -1,3 +1,9 @@
+/**
+ * Same-origin transport for the full web app. Paths are relative to /api; cookies
+ * identify the session and mutations carry a CSRF token. API status codes remain
+ * available to screens for sign-in, permission and stale-write handling.
+ * Clinical records are not cached here; JSON row keys remain as returned by Java.
+ */
 let csrf: { token: string; headerName: string } | null = null;
 export class ApiError extends Error {
   constructor(
@@ -13,6 +19,7 @@ export async function api<T = unknown>(
 ): Promise<T> {
   const method = options.method || "GET";
   const headers: Record<string, string> = { Accept: "application/json" };
+  // The CSRF token is session-bound. Let the browser set multipart boundaries for FormData.
   if (method !== "GET") {
     if (!csrf) {
       const r = await fetch("/api/csrf", {
@@ -43,6 +50,7 @@ export async function api<T = unknown>(
         }
       : {}),
   });
+  // Authentication may rotate the session; discard the token so the next write fetches a fresh one.
   if (path.startsWith("/auth/")) csrf = null;
   if (!r.ok) {
     if (r.status === 403) csrf = null;

@@ -1,3 +1,7 @@
+/**
+ * Root web document and shared layout metadata/styles. Keep browser-only state
+ * in client components so server markup and the first hydrated render agree.
+ */
 import type { Metadata } from "next";
 import "./globals.css";
 
