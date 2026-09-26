@@ -1,9 +1,4 @@
-import {
-  test,
-  expect,
-  request as contexts,
-  type Page,
-} from "@playwright/test";
+import { test, expect, request as contexts, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import fs from "node:fs";
 import path from "node:path";
@@ -47,10 +42,10 @@ test("mobile clinician booking, cross-client draft conflict and filing", async (
 }) => {
   page.on("dialog", (d) => d.accept());
   const patient = await contexts.newContext({
-    baseURL: "http://localhost:5174",
+    baseURL: process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174",
   });
   const webDoctor = await contexts.newContext({
-    baseURL: "http://localhost:5174",
+    baseURL: process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174",
   });
   try {
     await post(patient, "/auth/login", {
@@ -179,7 +174,10 @@ test("mobile clinician booking, cross-client draft conflict and filing", async (
       viewport: { width: 1440, height: 1000 },
     });
     try {
-      await web.goto("http://localhost:5173/?portal=doctor");
+      await web.goto(
+        (process.env.PASSPORT_TEST_WEB_URL || "http://localhost:5173") +
+          "/?portal=doctor",
+      );
       await web.getByLabel("Username", { exact: true }).fill("doctor");
       await web.getByLabel("Password", { exact: true }).fill(env.DEMO_PASSWORD);
       await web
@@ -310,10 +308,10 @@ test("revoked permission removes a mobile chart and prevents reopening it", asyn
   page,
 }) => {
   const patient = await contexts.newContext({
-    baseURL: "http://localhost:5174",
+    baseURL: process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174",
   });
   const doctor = await contexts.newContext({
-    baseURL: "http://localhost:5174",
+    baseURL: process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174",
   });
   const username = "mob" + Date.now();
   const password = env.DEMO_PASSWORD;

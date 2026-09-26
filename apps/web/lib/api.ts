@@ -1,77 +1,32 @@
-/**
- * Same-origin transport for the full web app. Paths are relative to /api; cookies
- * identify the session and mutations carry a CSRF token. API status codes remain
- * available to screens for sign-in, permission and stale-write handling.
- * Clinical records are not cached here; JSON row keys remain as returned by Java.
- */
-let csrf: { token: string; headerName: string } | null = null;
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-  ) {
-    super(message);
-  }
-}
-export async function api<T = unknown>(
+/** Browser adapter: same-origin cookies, session-cached CSRF and unchanged server field names. */
+import {
+  HttpClient,
+  CachedCsrfPolicy,
+  browserJson,
+} from "../../shared/http-client";
+export { ApiError } from "../../shared/http-client";
+
+const client = new HttpClient({
+  baseUrl: "/api",
+  credentials: "same-origin",
+  csrf: new CachedCsrfPolicy(),
+  decode: browserJson,
+  csrfErrorMessage: "Unable to establish a secure session.",
+  messageForStatus: (status) =>
+    status === 401
+      ? "Please sign in to continue."
+      : status === 403
+        ? "Access is not authorized."
+        : "The request could not be completed.",
+});
+
+export function api<T = unknown>(
   path: string,
   options: { method?: string; body?: unknown; signal?: AbortSignal } = {},
 ): Promise<T> {
-  const method = options.method || "GET";
-  const headers: Record<string, string> = { Accept: "application/json" };
-  // The CSRF token is session-bound. Let the browser set multipart boundaries for FormData.
-  if (method !== "GET") {
-    if (!csrf) {
-      const r = await fetch("/api/csrf", {
-        credentials: "same-origin",
-        cache: "no-store",
-        signal: AbortSignal.timeout(15000),
-      });
-      if (!r.ok)
-        throw new ApiError("Unable to establish a secure session.", r.status);
-      csrf = await r.json();
-    }
-    if (csrf) headers[csrf.headerName] = csrf.token;
-    if (!(options.body instanceof FormData))
-      headers["Content-Type"] = "application/json";
-  }
-  const r = await fetch(`/api${path}`, {
-    method,
-    headers,
-    credentials: "same-origin",
-    cache: "no-store",
-    signal: options.signal ?? AbortSignal.timeout(15000),
-    ...(options.body !== undefined
-      ? {
-          body:
-            options.body instanceof FormData
-              ? options.body
-              : JSON.stringify(options.body),
-        }
-      : {}),
-  });
-  // Authentication may rotate the session; discard the token so the next write fetches a fresh one.
-  if (path.startsWith("/auth/")) csrf = null;
-  if (!r.ok) {
-    if (r.status === 403) csrf = null;
-    const e = (await r.json().catch(() => ({}))) as {
-      message?: string;
-      error?: string;
-    };
-    throw new ApiError(
-      e.message ||
-        e.error ||
-        (r.status === 401
-          ? "Please sign in to continue."
-          : r.status === 403
-            ? "Access is not authorized."
-            : "The request could not be completed."),
-      r.status,
-    );
-  }
-  if (r.status === 204) return undefined as T;
-  return r.json();
+  return client.request<T>(path, options);
 }
+
 export type User = {
   id: string;
   username: string;

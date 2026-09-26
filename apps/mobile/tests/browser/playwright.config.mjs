@@ -18,7 +18,7 @@ export default {
   ],
   outputDir: "test-results",
   use: {
-    baseURL: "http://localhost:5174",
+    baseURL: process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174",
     viewport: { width: 390, height: 844 },
     screenshot: "only-on-failure",
     trace: "retain-on-failure",

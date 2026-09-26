@@ -4,9 +4,17 @@
  * records stay in memory; the explicitly selected emergency copy uses SecureStore.
  * Keep session-generation guards and picker/background transitions when editing.
  */
+import { patientStyles as s } from "./src/patient/styles";
+import { patientColors, formatDate } from "./src/patient/theme";
+import {
+  PatientButton,
+  PatientText,
+  PatientCard,
+  PatientRecordCard,
+} from "./src/patient/presentation";
 import { EcosystemWorkspace } from "./src/EcosystemWorkspace";
 import { CareWorkspace } from "./src/CareWorkspace";
-import { provenanceLines } from "../shared/care-model";
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -69,10 +77,6 @@ const pages: Page[] = [
   "Sharing",
   "Connections",
 ];
-const formatDate = (value: string) => {
-  const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? value : d.toLocaleString();
-};
 
 export default function App() {
   const [ecoMode, setEcoMode] = useState(false);
@@ -138,25 +142,7 @@ export default function App() {
   // Invalidate pending loads when leaving/locking a session so old responses cannot repopulate records.
   const sessionGeneration = useRef(0);
   const biometricPrompt = useRef(false);
-  const colors = dark
-    ? {
-        bg: "#111c20",
-        card: "#1b2b30",
-        ink: "#f0f5f2",
-        muted: "#b0c5c4",
-        line: "#3a5054",
-        accent: "#7fd4bf",
-        button: "#276b5f",
-      }
-    : {
-        bg: "#f4f6f2",
-        card: "#ffffff",
-        ink: "#153d39",
-        muted: "#58706b",
-        line: "#dce5df",
-        accent: "#236958",
-        button: "#236958",
-      };
+  const colors = patientColors(dark);
   // Clear in-memory clinical state separately from the explicitly opted-in SecureStore emergency copy.
   const clearData = () => {
     setRecords([]);
@@ -598,74 +584,27 @@ export default function App() {
     const listener = BackHandler.addEventListener("hardwareBackPress", goBack);
     return () => listener.remove();
   }, [goBack]);
+  // Keep local call sites compact; reusable components own rendering and accessibility.
   const button = (label: string, action: () => void, secondary = false) => (
-    <Pressable
-      accessibilityRole="button"
-      disabled={busy}
+    <PatientButton
+      label={label}
       onPress={action}
-      style={({ pressed }) => [
-        s.button,
-        {
-          backgroundColor: secondary ? colors.card : colors.button,
-          borderColor: colors.line,
-          opacity: busy || pressed ? 0.6 : 1,
-        },
-      ]}
-    >
-      <Text style={[s.buttonText, { color: secondary ? colors.ink : "#fff" }]}>
-        {label}
-      </Text>
-    </Pressable>
+      secondary={secondary}
+      busy={busy}
+      colors={colors}
+    />
   );
   const copy = (text: string, muted = false) => (
-    <Text style={[s.copy, { color: muted ? colors.muted : colors.ink }]}>
-      {text}
-    </Text>
+    <PatientText text={text} muted={muted} colors={colors} />
   );
   const card = (title: string, children: React.ReactNode, key?: string) => (
-    <View
-      key={key || title}
-      style={[
-        s.card,
-        { backgroundColor: colors.card, borderColor: colors.line },
-      ]}
-    >
-      <Text
-        accessibilityRole="header"
-        style={[s.cardTitle, { color: colors.ink }]}
-      >
-        {title}
-      </Text>
+    <PatientCard key={key || title} title={title} colors={colors}>
       {children}
-    </View>
+    </PatientCard>
   );
-  const entry = (record: Entry) =>
-    card(
-      record.title,
-      <>
-        {copy(
-          `${record.kind.toLowerCase().replaceAll("_", " ")} · record ${record.status}`,
-          true,
-        )}
-        {copy(record.details)}
-        {copy(`${record.source} · ${formatDate(record.createdAt)}`, true)}
-        {record.clinicalStatus &&
-          copy(`Clinical status: ${record.clinicalStatus}`, true)}
-        {provenanceLines(
-          Object.fromEntries(
-            Object.entries(record).map(([k, v]) => [
-              k.replace(/[A-Z]/g, (c) => "_" + c.toLowerCase()),
-              v,
-            ]),
-          ),
-        ).map((line, i) => (
-          <Text key={i} style={{ fontSize: 12, color: colors.muted }}>
-            {line}
-          </Text>
-        ))}
-      </>,
-      record.id,
-    );
+  const entry = (record: Entry) => (
+    <PatientRecordCard key={record.id} record={record} colors={colors} />
+  );
   const medicines = records.filter((r) =>
     ["medication", "prescription"].includes(r.kind),
   );
@@ -1751,96 +1690,3 @@ export default function App() {
     </PhotoActivityContext.Provider>
   );
 }
-const s = StyleSheet.create({
-  root: { flex: 1 },
-  brand: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 20,
-    borderBottomWidth: 0,
-  },
-  logo: {
-    width: 39,
-    height: 39,
-    borderRadius: 13,
-    backgroundColor: "#236958",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  plus: { color: "#fff", fontSize: 30, lineHeight: 34 },
-  brandName: { fontSize: 19, fontWeight: "700" },
-  caption: { fontSize: 12, marginTop: 3 },
-  content: { padding: 20, paddingBottom: 50, gap: 16 },
-  title: {
-    fontSize: 32,
-    lineHeight: 39,
-    fontWeight: "600",
-    letterSpacing: -0.7,
-  },
-  pilot: { fontSize: 10, letterSpacing: 1.6, fontWeight: "700" },
-  copy: { fontSize: 15, lineHeight: 23, marginVertical: 3 },
-  card: { borderWidth: 1, borderRadius: 18, padding: 18, gap: 8 },
-  cardTitle: { fontSize: 19, fontWeight: "600", marginBottom: 4 },
-  label: { fontSize: 14, fontWeight: "600", marginTop: 6 },
-  input: {
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 13,
-    fontSize: 16,
-    minHeight: 48,
-  },
-  button: {
-    padding: 14,
-    borderRadius: 11,
-    borderWidth: 1,
-    alignItems: "center",
-    marginTop: 6,
-    minHeight: 48,
-  },
-  buttonText: { fontSize: 15, fontWeight: "700" },
-  error: {
-    color: "#b7402d",
-    backgroundColor: "#fff0e9",
-    padding: 14,
-    borderRadius: 10,
-    fontSize: 15,
-  },
-  tabs: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  tab: {
-    paddingHorizontal: 15,
-    paddingVertical: 14,
-    borderWidth: 1,
-    borderRadius: 25,
-    minHeight: 44,
-  },
-  passport: {
-    backgroundColor: "#174f45",
-    borderRadius: 20,
-    padding: 25,
-    gap: 14,
-  },
-  passportLabel: {
-    color: "#bde5d6",
-    fontSize: 10,
-    fontWeight: "700",
-    letterSpacing: 1.7,
-  },
-  passportName: { color: "#fff", fontSize: 26, fontWeight: "600" },
-  healthId: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "500",
-    letterSpacing: 1,
-  },
-  passportNote: { color: "#c1dacf", fontSize: 12, lineHeight: 19 },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 16,
-    minHeight: 48,
-  },
-  footer: { textAlign: "center", fontSize: 12, marginTop: 20 },
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-});

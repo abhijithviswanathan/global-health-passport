@@ -93,3 +93,9 @@ The GitHub Pages presentation now shares in-tab state across doctor, nurse, pati
 The full web, native and shared API workflow owners were inspected (`CareWorkspace`, `care-model`, `ecosystem-model`, `CareApi`, `ClinicalOperationsApi`). Their persisted behavior and authentication contracts are unchanged by this presentation-only revision. Public-demo consent and role controls are illustrative and do not replace server checks. GitHub Pages does not run the Java backend, the Expo application, native notifications or account storage. Phone-sized Chromium checks are responsive-browser evidence only, not physical-device or cross-client persistence evidence.
 
 See [demo verification](DEMO_VERIFICATION.md) and the [presenter walkthrough](DEMO_WALKTHROUGH.md).
+
+## September 26 architecture refactor
+
+Web and native clients now use one HTTP transport with separate platform strategies: browser session-cached CSRF versus a fresh token for every native write. Cookie credentials, raw versus shallow-camelCase fields, multipart upload boundaries, release HTTPS enforcement and error status handling remain compatible. Both clients consume the same modular care/ecosystem form factories through stable facade exports. Their patient presentation components have been extracted from the session shells; session and background privacy guards stay in place.
+
+Clinician HTTP mapping, scheduling rules, SOAP values and appointment persistence are separated on the shared backend. Role, current consent, version, retry and locking boundaries remain enforced there. The Pages demo separately uses a model, controller, pure role views and atomic command handlers. See [refactor verification](REFACTOR_VERIFICATION.md) for executed checks and platform limitations.

@@ -51,7 +51,9 @@ test("doctor books, reschedules, resumes a draft and files one encounter", async
 }) => {
   await doctor(page);
   const me = await (await page.request.get("/api/me")).json();
-  const p = await request.newContext({ baseURL: "http://localhost:5173" });
+  const p = await request.newContext({
+    baseURL: process.env.PASSPORT_TEST_WEB_URL || "http://localhost:5173",
+  });
   const username =
       "docui" + crypto.randomUUID().replaceAll("-", "").slice(0, 12),
     name = "Synthetic visit " + username;

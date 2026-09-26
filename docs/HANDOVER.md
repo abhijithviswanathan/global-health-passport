@@ -63,7 +63,9 @@ Open `http://localhost:5180`. Changes to sample tasks disappear on refresh. This
 
 ## 3. Read the code in this order
 
-1. [`apps/web/lib/api.ts`](../apps/web/lib/api.ts) and [`apps/mobile/src/api.ts`](../apps/mobile/src/api.ts): session cookies, CSRF, errors and the difference in row naming.
+Use the [code architecture guide](CODE_ARCHITECTURE.md) for dependency boundaries, design patterns and extension examples.
+
+1. [`apps/web/lib/api.ts`](../apps/web/lib/api.ts) and [`apps/mobile/src/api.ts`](../apps/mobile/src/api.ts): platform adapters for the shared `apps/shared/http-client.ts`; cookie/CSRF strategies, errors and row naming.
 2. [`PassportApi.java`](../apps/backend/src/main/java/org/healthpassport/PassportApi.java): `user()`, `allowed()`, `require()`, `create()` and the consent routes. These explain the core trust boundary.
 3. [`TenantService.java`](../apps/backend/src/main/java/org/healthpassport/TenantService.java) and [`CareApi.java`](../apps/backend/src/main/java/org/healthpassport/CareApi.java): organization identity, employment, assignment, transactions and versions.
 4. The shared [`care-model.ts`](../apps/shared/care-model.ts) and [`ecosystem-model.ts`](../apps/shared/ecosystem-model.ts), followed by the corresponding web and native workspaces. Most staff forms are described once and rendered twice.
@@ -78,7 +80,7 @@ Do not begin by splitting the largest files solely to make them smaller. They co
 | Health ID generation/lookup | `HealthIds`, `PassportApi`, identity endpoints | Web `page.tsx`; mobile `App.tsx` |
 | Login, session, recovery or MFA | `IdentityApi`, `IdentityService`, `PasskeyApi`, `PasskeyService` | Web `account-entry`, `security-panel`, `lib/passkeys`; mobile `App.tsx` for supported flows |
 | Patient records and sharing | `PassportApi`, `RecordProvenance` | Web `page.tsx`; mobile `App.tsx` |
-| Doctor agenda/bookings/drafts | `ClinicianApi`, shared `agenda.ts` | Web/native `ClinicianWorkspace`; native `clinician-model.ts` |
+| Doctor agenda/bookings/drafts | `ClinicianApi` → `ClinicianService` → appointment repository/policy/scheduler; shared `agenda.ts` | Web/native `ClinicianWorkspace`; native `clinician-model.ts` |
 | Intake, tasks, messages, assignments | `CareApi`, shared `care-model.ts` | Web/native `CareWorkspace` |
 | Organizations, staff and shifts | `EcosystemApi`, `TenantService`, shared `ecosystem-model.ts` | Web/native `EcosystemWorkspace` |
 | Orders, nursing and handoffs | `ClinicalOperationsApi`, `CareApi` | Shared ecosystem forms and both ecosystem workspaces |
@@ -87,7 +89,7 @@ Do not begin by splitting the largest files solely to make them smaller. They co
 | Clinical file upload/download | `DocumentApi`, `DocumentService` | Web `documents-panel`; consult the parity matrix before assuming mobile support |
 | Exports and educational examples | `FhirMapper`, `OrganizationFhirApi`, `MedicationPassportApi`, `LearningApi` | Relevant web panels; mobile support varies |
 | App navigation/home/back | Server role from `/me` | Web `page.tsx`; mobile `App.tsx` and workspace back/discard handlers |
-| Public demo presentation | `docs/demo/store.mjs` and `data.mjs` | `docs/index.html`, `docs/demo/app.mjs`, `styles.css`; illustrated `demo-guide.html` |
+| Public demo presentation | `docs/demo/model.mjs`, `workflow/` and `data.mjs` | `docs/index.html`, `docs/demo/app.mjs`, `ui/`, `styles.css`; illustrated `demo-guide.html` |
 
 The [source map](SOURCE_MAP.md) links directly to each module and explains its responsibility. Generic web controls live under `apps/web/components/ui`; feature-specific styling is beside its workspace or in the app styles. Starter build code under `apps/web/build` is tooling, not the clinical backend.
 
@@ -108,7 +110,7 @@ care-model.actions() defines endpoint + fields + fixed context
 
 For organization work, `ecosystem-model.context()` loads supporting choices, `rows()` loads the section, and `actions()` supplies the forms. `ClinicalOperationsApi` and `InsuranceApi` handle their domain-specific requests. The UI model describes the form; it never grants permission.
 
-**Example: adding a field to a nursing action.** Find the action in `ecosystem-model.ts`; check how `payload()` represents it; add validation/persistence to the relevant Java endpoint; add a new Flyway migration if storage changes; check both renderers support the field type; exercise valid, missing, unauthorized and stale submissions. A purely visual label may need no migration or new test.
+**Example: adding a field to a nursing action.** Find the action in `apps/shared/ecosystem/actions/clinical.ts` (exported through `ecosystem-model.ts`); check how `payload()` represents it; add validation/persistence to the relevant Java endpoint; add a new Flyway migration if storage changes; check both renderers support the field type; exercise valid, missing, unauthorized and stale submissions. A purely visual label may need no migration or new test.
 
 ## 6. Data conventions that are easy to miss
 
@@ -169,7 +171,7 @@ The hosted CI workflow verifies Java/PostgreSQL, web types/lint/build and mobile
 
 Work on a branch, commit a focused change, and have the other developer review its diff. Start from the latest `main`; preserve unrelated work. A useful review explains the changed behavior, both-client impact and actual checks.
 
-The public demo is deployed separately by GitHub Pages from **`main` → `/docs`**. Keep `docs/.nojekyll`, `docs/index.html` and the relative `docs/demo/` assets. No backend keys or environment variables are required. Fixtures live in `data.mjs`; `store.mjs` owns pure state transitions and notifications; `app.mjs` renders all role views; `styles.css` supplies responsive and print styles. The [presenter walkthrough](DEMO_WALKTHROUGH.md) describes the connected tour and exact verification commands. Run its Node tests and browser checks for desktop and narrow layouts, then check the Pages deployment and live URL. No dependency build is needed for the static files. Use a local HTTP server because browsers restrict ES module imports from `file://`.
+The public demo is deployed separately by GitHub Pages from **`main` → `/docs`**. Keep `docs/.nojekyll`, `docs/index.html` and the relative `docs/demo/` assets. No backend keys or environment variables are required. Fixtures live in `data.mjs`; `store.mjs` preserves the pure dispatch facade; `model.mjs` owns per-tab state; `workflow/commands/` owns transitions and notifications; `app.mjs` composes the application controller in `ui/` and pure role views in `ui/views/`; `styles.css` supplies responsive and print styles. The [presenter walkthrough](DEMO_WALKTHROUGH.md) describes the connected tour and exact verification commands. Run its Node tests and browser checks for desktop and narrow layouts, then check the Pages deployment and live URL. No dependency build is needed for the static files. Use a local HTTP server because browsers restrict ES module imports from `file://`.
 
 For a full local-app change, use the normal CI workflow and setup instructions. Publishing source to GitHub does not start Java, a database or a mobile service. The repository still has explicit production and native-device limitations in [PORTFOLIO_REVIEW.md](PORTFOLIO_REVIEW.md).
 

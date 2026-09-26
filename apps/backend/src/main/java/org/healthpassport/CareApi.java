@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.*;
 class CareApi {
   final PassportApi api;
   final RecordProvenance provenance;
-  final ClinicianApi clinician;
+  final AppointmentScheduler scheduler;
   static final Set<String> STAFF =
       Set.of(
           "doctor", "nurse", "reception", "lab", "diagnostic", "coordinator", "admin", "pharmacy");
   static final Set<String> OPERATIONS = Set.of("reception", "coordinator", "admin");
 
-  CareApi(PassportApi api, RecordProvenance provenance, ClinicianApi clinician) {
+  CareApi(PassportApi api, RecordProvenance provenance, AppointmentScheduler scheduler) {
     this.api = api;
     this.provenance = provenance;
-    this.clinician = clinician;
+    this.scheduler = scheduler;
   }
 
   @PostConstruct
@@ -1387,8 +1387,8 @@ class CareApi {
           if (!same(u, doctor) || !api.role(doctor).equals("doctor"))
             throw error(403, "Choose a doctor in your clinic");
           access(doctor, p, "encounter");
-          clinician.lockDoctor(doctor);
-          long starts = clinician.timestamp(b);
+          scheduler.lockDoctor(doctor);
+          long starts = scheduler.timestamp(b);
           int duration = api.number(b, "duration", 5, 180, 30);
           String mode = api.field(b, "mode", 20);
           if (!Set.of("in_person", "video").contains(mode)) throw error(400, "Invalid visit mode");
@@ -1403,7 +1403,7 @@ class CareApi {
               throw error(409, "Booking key already used");
             return a;
           }
-          clinician.slot(doctor, starts, duration, "");
+          scheduler.slot(doctor, starts, duration, "");
           String aid = id();
           api.db.update(
               "insert into"

@@ -236,7 +236,9 @@ def main():
     workspace = admin.call("/ecosystem/workspace")
     start = now.replace(hour=12, minute=0, second=0, microsecond=0)
     end = start + datetime.timedelta(hours=10)
-    if end < now:
+    # A shift still being open does not make its earlier appointment bookable.
+    # Keep the whole fixture window in the future when setup runs later in the day.
+    if start < now:
         start += datetime.timedelta(days=1)
         end += datetime.timedelta(days=1)
     for username in [

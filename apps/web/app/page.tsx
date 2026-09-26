@@ -5,6 +5,14 @@
  * responses from replacing current state. This is separate from docs/index.html.
  */
 "use client";
+import {
+  Brand,
+  Empty,
+  Pick,
+  RecordIcon,
+  RecordRow,
+} from "@/components/patient/presentation";
+import { titles, nav, homeView, type View } from "@/lib/navigation/workspaces";
 import { EcosystemWorkspace } from "@/components/ecosystem-workspace";
 import { CareWorkspace } from "@/components/care-workspace";
 import { provenanceLines } from "../../shared/care-model";
@@ -26,7 +34,6 @@ import {
   useCallback,
   useRef,
   type FormEvent,
-  type ReactNode,
 } from "react";
 import {
   HeartPulse,
@@ -35,13 +42,9 @@ import {
   ShieldCheck,
   Globe2,
   LockKeyhole,
-  LayoutDashboard,
-  Clock3,
   Pill,
-  FileText,
   Users,
   Activity,
-  Settings2,
   Search,
   Plus,
   LogOut,
@@ -63,7 +66,7 @@ import {
   CalendarDays,
   ArrowLeft,
 } from "lucide-react";
-import Link from "next/link";
+
 import {
   ClinicianWorkspace,
   type ClinicianView,
@@ -89,13 +92,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+
 import {
   SidebarProvider,
   Sidebar,
@@ -132,193 +129,6 @@ import {
   type AccessRequest,
   type Audit,
 } from "@/lib/api";
-
-type View =
-  | ClinicianView
-  | "care"
-  | "hospital"
-  | "overview"
-  | "timeline"
-  | "medications"
-  | "documents"
-  | "sharing"
-  | "activity"
-  | "security"
-  | "labs"
-  | "learning"
-  | "organization"
-  | "profile";
-const titles: Record<View, string> = {
-  hospital: "Hospital workspace",
-  care: "Care team",
-  profile: "Profile",
-  today: "Today",
-  patients: "Patients",
-  appointments: "Appointments",
-  overview: "Your health, in perspective",
-  timeline: "Medical timeline",
-  medications: "Medication Passport",
-  documents: "Clinical documents",
-  sharing: "Sharing & permissions",
-  activity: "Access history",
-  security: "Account security",
-  labs: "Laboratory & imaging",
-  learning: "Clinical learning",
-  organization: "Organization administration",
-};
-const nav = [
-  { id: "hospital", label: "Hospital workspace", icon: LayoutDashboard },
-  { id: "care", label: "Care team", icon: Users },
-  { id: "today", label: "Today", icon: LayoutDashboard },
-  { id: "patients", label: "Patients", icon: Users },
-  { id: "appointments", label: "Appointments", icon: CalendarDays },
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "timeline", label: "Medical timeline", icon: Clock3 },
-  { id: "medications", label: "Medication Passport", icon: Pill },
-  { id: "labs", label: "Labs & imaging", icon: FlaskConical },
-  { id: "documents", label: "Clinical documents", icon: FileText },
-  { id: "sharing", label: "Sharing & permissions", icon: Users },
-  { id: "activity", label: "Access history", icon: Activity },
-  { id: "security", label: "Account security", icon: Settings2 },
-  { id: "learning", label: "Clinical learning", icon: Search },
-  { id: "organization", label: "Organization", icon: Users },
-] as const;
-function Brand({ onHome }: { onHome?: () => void }) {
-  return (
-    <Link
-      className="brand"
-      href="/"
-      aria-label="Health Passport home"
-      onClick={
-        onHome
-          ? (e) => {
-              e.preventDefault();
-              onHome();
-            }
-          : undefined
-      }
-    >
-      <span className="brand-mark">
-        <HeartPulse size={25} />
-      </span>
-      <span>
-        Health Passport<small>GLOBAL HEALTH RECORDS</small>
-      </span>
-    </Link>
-  );
-}
-function Empty({
-  icon: Icon = FileText,
-  title,
-  children,
-}: {
-  icon?: typeof FileText;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="empty-state">
-      <span>
-        <Icon size={25} />
-      </span>
-      <h3>{title}</h3>
-      <p>{children}</p>
-    </div>
-  );
-}
-function Pick({
-  value,
-  onChange,
-  options,
-  label,
-  id,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  options: { value: string; label: string }[];
-  label: string;
-  id?: string;
-}) {
-  return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="select-field" aria-label={label} id={id}>
-        <SelectValue placeholder={label} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map((o) => (
-          <SelectItem key={o.value} value={o.value}>
-            {o.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
-function RecordIcon({ kind }: { kind: string }) {
-  const Icon = kind.includes("lab")
-    ? FlaskConical
-    : kind === "allergy"
-      ? AlertCircle
-      : kind === "condition"
-        ? HeartPulse
-        : ["medication", "prescription", "dispense"].includes(kind)
-          ? Pill
-          : kind === "encounter"
-            ? Stethoscope
-            : FileText;
-  return (
-    <span className={`record-icon ${kind}`}>
-      <Icon size={19} />
-    </span>
-  );
-}
-function RecordRow({
-  record,
-  onOpen,
-}: {
-  record: ClinicalRecord;
-  onOpen: (r: ClinicalRecord) => void;
-}) {
-  return (
-    <button className="record-row" onClick={() => onOpen(record)}>
-      <RecordIcon kind={record.kind} />
-      <span className="record-main">
-        <strong>{record.title}</strong>
-        <span>
-          {kinds[record.kind] || record.kind} <span aria-hidden>·</span>{" "}
-          {record.source}
-        </span>
-      </span>
-      <span className="record-date">
-        {String(record.freshness_label || "Observation date unknown")}
-        <br />
-        Entered {date(record.created_at)}
-      </span>
-      <ChevronRight size={16} />
-    </button>
-  );
-}
-
-function homeView(u: User): View {
-  if (["billing", "insurer", "security"].includes(u.role)) return "hospital";
-  if (
-    [
-      "nurse",
-      "reception",
-      "diagnostic",
-      "coordinator",
-      "admin",
-      "lab",
-      "pharmacy",
-    ].includes(u.role)
-  )
-    return "care";
-  return u.role === "doctor"
-    ? "today"
-    : ["admin", "security"].includes(u.role)
-      ? "activity"
-      : "overview";
-}
 export default function Home() {
   const [loginPortal, setLoginPortal] = useState("patient");
   const unsaved = useRef(false);

@@ -53,11 +53,11 @@ The full local web and Expo applications use a separate Java API and database. T
 
 - `docs/index.html`: accessible shell and relative asset links.
 - `docs/demo/data.mjs`: public fictional patients, roles, medicines and report fixtures.
-- `docs/demo/store.mjs`: pure transitions, consent simulation, notifications and derived tour progress. Every write uses a fresh copy so rejected actions cannot partially update state.
-- `docs/demo/app.mjs`: shared cards, role views, dialogs and navigation.
+- `docs/demo/store.mjs`: stable pure dispatch facade for tests and callers. `model.mjs` owns each tab’s state; `workflow/commands/` contains transitions, `transaction.mjs` keeps writes atomic, and `journey.mjs` derives tour progress.
+- `docs/demo/app.mjs`: composition root. `ui/application.mjs` controls events and dialogs; `ui/navigation.mjs` owns history; `ui/views/` and `ui/components.mjs` render detached snapshots.
 - `docs/demo/styles.css`: responsive styling and sample print rules.
 - `docs/demo-guide.html`: illustrated guide; keep its steps aligned with this document.
 - `scripts/tests/demo.test.mjs`: Node workflow regression tests.
 - `scripts/tests/demo-ui.mjs`: desktop and phone browser checks, screenshots and sampled accessibility scans.
 
-Run the pure checks with `node --test scripts/tests/demo.test.mjs`. For browser checks, install the existing web dependencies (`npm ci` in `apps/web`) and Playwright Chromium (`npx playwright install chromium` there). Serve `docs` locally using `python3 -m http.server 5181 --bind 127.0.0.1 --directory docs`, then run `node scripts/tests/demo-ui.mjs` from the repository root. `DEMO_BASE_URL` selects another served URL; optional `DEMO_SCREENSHOTS` selects a screenshot output directory. Browser checks use only fictional demo actions.
+Run the pure checks with `node --test scripts/tests/demo*.test.mjs`. For browser checks, install the existing web dependencies (`npm ci` in `apps/web`) and Playwright Chromium (`npx playwright install chromium` there). Serve `docs` locally using `python3 -m http.server 5181 --bind 127.0.0.1 --directory docs`, then run `node scripts/tests/demo-ui.mjs` from the repository root. `DEMO_BASE_URL` selects another served URL; optional `DEMO_SCREENSHOTS` selects a screenshot output directory. Browser checks use only fictional demo actions.

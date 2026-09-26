@@ -1,8 +1,4 @@
-import {
-  test,
-  expect,
-  request as contexts,
-} from "@playwright/test";
+import { test, expect, request as contexts } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 const root = path.resolve(__dirname, "../../..");
@@ -30,7 +26,7 @@ test("mobile nurse acknowledges and completes a doctor-assigned task across clie
   page,
 }) => {
   const doctor = await contexts.newContext({
-    baseURL: "http://localhost:5174",
+    baseURL: process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174",
   });
   await post(doctor, "/auth/login", {
     username: "doctor",

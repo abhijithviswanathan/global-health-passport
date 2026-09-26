@@ -765,7 +765,7 @@ class EcosystemApi {
           continue;
         try {
           api.tenants.available(doctor, t, 30, "");
-          care.clinician.slot(doctor, t.toEpochMilli(), 30, "");
+          care.scheduler.slot(doctor, t.toEpochMilli(), 30, "");
           slots.add(
               Map.of(
                   "doctorId",

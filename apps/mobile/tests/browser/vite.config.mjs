@@ -1,5 +1,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+const mobileUrl =
+  process.env.PASSPORT_TEST_MOBILE_URL || "http://localhost:5174";
 const root = path.dirname(fileURLToPath(import.meta.url));
 export default {
   root,
@@ -28,11 +30,11 @@ export default {
   },
   define: {
     __DEV__: true,
-    "process.env.EXPO_PUBLIC_API_URL": JSON.stringify("http://localhost:5174"),
+    "process.env.EXPO_PUBLIC_API_URL": JSON.stringify(mobileUrl),
   },
   server: {
     host: "127.0.0.1",
-    port: 5174,
+    port: Number(new URL(mobileUrl).port) || 5174,
     strictPort: true,
     fs: { allow: [path.resolve(root, "../../../..")] },
     proxy: { "/api": { target: "http://localhost:8080" } },

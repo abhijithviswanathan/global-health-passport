@@ -1,5 +1,7 @@
 # Connected GitHub Pages demo — change and verification report
 
+Historical report: 19 September 2026. The subsequent cross-platform architecture refactor and current checks are documented in [REFACTOR_VERIFICATION.md](REFACTOR_VERIFICATION.md).
+
 Date: 19 September 2026. Scope: the public fictional presentation under `docs/` and its documentation/tests. The full Java, web and Expo application source is unchanged.
 
 ## What changed

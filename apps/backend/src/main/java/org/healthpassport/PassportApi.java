@@ -664,7 +664,11 @@ public class PassportApi {
   synchronized Map<String, Object> create(
       @RequestBody Map<String, Object> b, HttpServletRequest r) {
     csrf(r);
-    var u = user(r);
+    return createForActor(b, user(r));
+  }
+
+  /** Internal entry for server-authenticated actors; all record permissions are still checked below. */
+  synchronized Map<String, Object> createForActor(Map<String, Object> b, Map<String, Object> u) {
     String p = field(b, "patientId", 36),
         k = field(b, "kind", 40),
         title = field(b, "title", 200),

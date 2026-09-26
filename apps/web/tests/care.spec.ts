@@ -68,7 +68,9 @@ test("nurse enters dated vital values and doctor sees authorship, history, and f
       ["critical", "serious"].includes(v.impact || ""),
     ),
   ).toEqual([]);
-  const doc = await contexts.newContext({ baseURL: "http://localhost:5173" });
+  const doc = await contexts.newContext({
+    baseURL: process.env.PASSPORT_TEST_WEB_URL || "http://localhost:5173",
+  });
   const csrf = await (await doc.get("/api/csrf")).json();
   await doc.post("/api/auth/login", {
     data: { username: "doctor", password: env.DEMO_PASSWORD },
